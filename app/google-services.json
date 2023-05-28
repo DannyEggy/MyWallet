@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "501621074857",
+    "project_id": "mywallet-94a61",
+    "storage_bucket": "mywallet-94a61.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:501621074857:android:f0a92535fe0e433de532b8",
+        "android_client_info": {
+          "package_name": "com.tdtu.mywallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "501621074857-2jdrfjgsthg7b20165nkgtaivstf48pv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tdtu.mywallet",
+            "certificate_hash": "11b16615b62680e8185cda6538ece2708fed372b"
+          }
+        },
+        {
+          "client_id": "501621074857-tf6pp5jbm2nktvmftstt3nr2puhobon0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXNrQijNjIMEwd4dPpiFasYHe9VXEhCy8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "501621074857-tf6pp5jbm2nktvmftstt3nr2puhobon0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
