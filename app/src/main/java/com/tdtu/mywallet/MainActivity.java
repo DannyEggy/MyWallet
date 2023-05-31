@@ -1,5 +1,7 @@
 package com.tdtu.mywallet;
 
+import static com.tdtu.mywallet.SignInActitvity.REMEMBER_ME;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -11,6 +13,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -27,6 +31,8 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.tdtu.mywallet.fragment.HomeFragment;
 import com.tdtu.mywallet.transformer.DepthPageTransformer;
 import com.tdtu.mywallet.transformer.SlidePageTransformer;
@@ -38,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager2 viewPager2;
     private static final int FRAGMENT_HOME = 0;
     private static final int FRAGMENT_ANALYSIS = 1;
-
     private static final int FRAGMENT_USER = 2;
     private static final int FRAGMENT_SETTING = 3;
     private int currentFragment = FRAGMENT_HOME;
@@ -69,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         selectionAvatar = findViewById(R.id.selectionAvatar);
 
 //        avatarUser = ;  GET userAvatar from FireBase
+        //setting the avatar selection of user
         switch (avatarUser) {
             case "avatar0":
                 selectionAvatar.setBackgroundResource(R.drawable.user);
@@ -123,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
                 int id = item.getItemId();
                 if(id == R.id.nav_home){
                     if(currentFragment != FRAGMENT_HOME){
@@ -149,10 +154,7 @@ public class MainActivity extends AppCompatActivity {
                         currentFragment = FRAGMENT_SETTING;
                     }
                 }
-
-
                 return true;
-
             }
         });
 
@@ -198,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
+    //  ***TOOL BAR OPTION***
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -208,10 +210,22 @@ public class MainActivity extends AppCompatActivity {
             viewPager2.setPageTransformer(new DepthPageTransformer());
         }
         else if(id == R.id.normal){
+            // reset to normal
             MyViewPage2Adapter myViewPage2Adapter = new MyViewPage2Adapter(this);
             viewPager2.setAdapter(myViewPage2Adapter);
             viewPager2.setPageTransformer(null);
+        }else if(id == R.id.signOut){
+            // when sign out, clear all the shared preferences and sign out firebase authentication
+            SharedPreferences sharedPreferencesRememberMe = getSharedPreferences(REMEMBER_ME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferencesRememberMe.edit();
+            editor.clear();
+            editor.apply();
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(this,SignInActitvity.class);
+            startActivity(intent);
         }
+
+
         return true;
     }
 
@@ -223,7 +237,8 @@ public class MainActivity extends AppCompatActivity {
             // Back button. This calls finish() on this activity and pops the back stack.
             finishAffinity();
             super.onBackPressed();
-        } else {
+        }
+        else {
             // Otherwise, select the previous step.
             viewPager2.setCurrentItem(viewPager2.getCurrentItem() - 1);
         }
@@ -236,8 +251,8 @@ public class MainActivity extends AppCompatActivity {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.layout_dialog_adding_activity);
-
         Window window = dialog.getWindow();
+
         if(window == null){
             return;
         }
@@ -252,17 +267,13 @@ public class MainActivity extends AppCompatActivity {
         btnIncome = dialog.findViewById(R.id.btnIncome);
 
         btnSpending.setOnClickListener((View view)->{
-
-
             Toast toast = Toast.makeText(this,"Spending", Toast.LENGTH_SHORT);
-
             toast.setGravity(Gravity.CENTER_VERTICAL,0, 0);
             toast.show();
             dialog.dismiss();
         });
 
         btnIncome.setOnClickListener((View view)->{
-
             Toast toast = Toast.makeText(this, "Income", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER_VERTICAL,0, 0);
             toast.show();
@@ -270,11 +281,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //  ***AVATAR SELECTION***
     private void openSelectionDialog(int gravity) {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.layout_avatar_selection);
-
         Window window = dialog.getWindow();
         if (window == null) {
             return;
@@ -348,10 +359,6 @@ public class MainActivity extends AppCompatActivity {
             selectionAvatar.setBackgroundResource(R.drawable.avatar_woman_3);
             dialog.dismiss();
         });
-
-
-
-
 
     }
 

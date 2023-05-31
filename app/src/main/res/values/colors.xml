@@ -7,4 +7,6 @@
     <color name="orange">#FF5722</color>
     <color name="yellow">#FFEB3B</color>
     <color name="green">#4CAF50</color>
+    <color name="yellow_light">#fef886</color>
+    <color name="blue_deep">#002365</color>
 </resources>

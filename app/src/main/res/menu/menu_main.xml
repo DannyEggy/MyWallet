@@ -10,4 +10,7 @@
     <item
         android:id="@+id/normal"
         android:title="Reset to Normal" />
+    <item
+        android:id="@+id/signOut"
+        android:title="Sign Out" />
 </menu>

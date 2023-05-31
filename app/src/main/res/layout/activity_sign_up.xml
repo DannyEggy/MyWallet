@@ -1,52 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/blue_deep"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+
     tools:context=".SignUpActivity">
-    <ImageView
-        android:id="@+id/imageView2"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:srcCompat="@drawable/common_google_signin_btn_icon_dark_normal" />
+        android:layout_height="300dp"
+        android:layout_alignParentTop="true"
 
-    <TextView
-        android:id="@+id/accountSignUp"
+        android:id="@+id/layoutSignUpTop">
+        <TextView
+            android:id="@+id/welcomeToMyWallet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/breeserif_regular"
+            android:text="Welcome to My Wallet"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/moneyManagement"
+            android:layout_below="@+id/welcomeToMyWallet"
+            android:text="Let Us Help You To Manage Money"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:fontFamily="@font/breeserif_regular"
+            android:layout_marginLeft="16dp"/>
+    </RelativeLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Email" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layoutSignUpTop"
+        android:background="@drawable/bg_white_yellow_light_top"
+        android:padding="16dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_signUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:fontFamily="@font/breeserif_regular"
+            android:text="Sign Up" />
 
-    <EditText
-        android:id="@+id/emailUserSignUp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textEmailAddress"
-        android:maxLength="100"
-        android:text="Email" />
 
-    <TextView
-        android:id="@+id/passwordSignUp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Password" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutEmailSignUp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:focusedByDefault="false"
+            app:endIconMode="clear_text"
+            app:placeholderText="ex: abc@def.com">
 
-    <EditText
-        android:id="@+id/passwordUserSignUp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailUserSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/icon_email_small"
+                android:drawablePadding="10dp"
+                android:hint="Email" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/btnSignUp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:maxLength="100"
-        android:text="Sign Up" />
 
-</LinearLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:id="@+id/textInputLayoutPasswordSignUp"
+            app:helperText="Please Input Strong Password"
+            app:helperTextTextColor="#673AB7"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordUserSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/icon_lock_small"
+                android:drawablePadding="10dp"
+                android:hint="Password"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        <Button
+            android:id="@+id/btnSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:maxLength="100"
+            android:text="Sign Up" />
+    </LinearLayout>
+
+
+
+</RelativeLayout>
