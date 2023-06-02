@@ -31,8 +31,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.SignInMethodQueryResult;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tdtu.mywallet.model.User;
 
 import java.util.List;
@@ -45,8 +48,12 @@ public class SignInActitvity extends AppCompatActivity {
     private TextInputEditText passwordUser;
     private TextInputLayout textInputLayoutPassword;
     private CheckBox checkBoxRememberMe;
-    public static final String REMEMBER_ME = "rememberMe";
+    private String userNameSignIn = "Eggy";
+    private int avatarResIDSignIn = 0;
 
+    public static final String REMEMBER_ME = "rememberMe";
+//    private String userName ="Eggy";
+//    private int  avatarResID;
 
     private FirebaseAuth mAuth;
     @SuppressLint("ClickableViewAccessibility")
@@ -54,6 +61,10 @@ public class SignInActitvity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        // get Data from Firebase
+        // then push data from Splash Activity to another Activity
+
 
 
 
@@ -122,13 +133,12 @@ public class SignInActitvity extends AppCompatActivity {
 
                     } else {
                         // Email is not registered
-                        // Xử lí tại đây
+
                         textInputLayoutEmail.setError("You Haven't Registered Your Account Yet");
                     }
                 } else {
-                    // Đã xảy ra lỗi trong quá trình kiểm tra
+                    // Error when checking email
                     Exception exception = task.getException();
-                    // Xử lí lỗi tại đây
 
                 }
             }
@@ -147,46 +157,73 @@ public class SignInActitvity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-//                            if(user.isEmailVerified()){
-                                // create shared preference to save login state of user
-                                // true when user check and false when user doesn't check
+                            // checking the checkbox
+                            if(checkBoxRememberMe.isChecked()){
+                                // create shared preference when checkbox is checked: true
+                                Toast.makeText(getApplication(),"Save state", Toast.LENGTH_LONG).show();
+                                SharedPreferences sharedPreferencesRememberMe = getSharedPreferences(REMEMBER_ME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferencesRememberMe.edit();
+                                editor.putBoolean("isLoggedIn", true);
+                                editor.apply();
+                            }else{
+                                // create shared preference when checkbox is not checked: false
+                                Toast.makeText(getApplication(),"Don't Save", Toast.LENGTH_LONG).show();
+                                SharedPreferences sharedPreferencesRememberMe = getSharedPreferences(REMEMBER_ME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferencesRememberMe.edit();
+                                editor.putBoolean("isLoggedIn", false);
+                                editor.apply();
+                            }
 
-                                if(checkBoxRememberMe.isChecked()){
-                                    Toast.makeText(getApplication(),"Save state", Toast.LENGTH_LONG).show();
-                                    SharedPreferences sharedPreferencesRememberMe = getSharedPreferences(REMEMBER_ME, MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = sharedPreferencesRememberMe.edit();
-                                    editor.putBoolean("isLoggedIn", true);
-                                    editor.apply();
-                                }else{
-                                    Toast.makeText(getApplication(),"Don't Save", Toast.LENGTH_LONG).show();
-                                    SharedPreferences sharedPreferencesRememberMe = getSharedPreferences(REMEMBER_ME, MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = sharedPreferencesRememberMe.edit();
-                                    editor.putBoolean("isLoggedIn", false);
-                                    editor.apply();
+                            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                            FirebaseDatabase db = FirebaseDatabase.getInstance();
+                            DatabaseReference reference = db.getReference(currentUser.getUid().toString());
+
+                            // get user name from firebase
+                            reference.child("User Detail").child("userName").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    // change the name on toolbar
+                                    userNameSignIn = snapshot.getValue().toString();
+                                    // get userAvatar from firebase
+                                    reference.child("User Detail").child("userAvatar").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            // change the avatar on toolbar
+                                            avatarResIDSignIn = Integer.parseInt(snapshot.getValue().toString());
+                                            // intent to pass data
+                                            Intent intentMove = new Intent(SignInActitvity.this, MainActivity.class);
+                                            intentMove.putExtra("userNameSignIn", userNameSignIn);
+                                            intentMove.putExtra("avatarResIDSignIn", avatarResIDSignIn);
+                                            startActivity(intentMove);
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
                                 }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                                //intent to move to MainActivity
-
-                                Intent intent = new Intent(SignInActitvity.this, MainActivity.class);
-                                intent.putExtra("email", email);
-                                intent.putExtra("password", password);
-                                SignInActitvity.this.startActivity(intent);
-                            }
-                            else{
-                                Toast.makeText(getApplicationContext(), "Please verify your email", Toast.LENGTH_LONG).show();
-                            }
+                                }
+                            });
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(), "Sign In Failed !!!", Toast.LENGTH_LONG).show();
+                            textInputLayoutPassword.setError("Wrong Password !!!");
+                        }
 //                        } else {
 //                            // If sign in fails, displ  ay a message to the user.
 //                            Log.w(TAG, "signInWithEmail:failure", task.getException());
 ////
-//                            textInputLayoutPassword.setError("Wrong Password !!!");
+//
 //
 //                        }
                     }
                 });
     }
+
+
 
     @Override
     public void onBackPressed() {

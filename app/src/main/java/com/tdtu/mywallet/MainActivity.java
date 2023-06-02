@@ -1,5 +1,6 @@
 package com.tdtu.mywallet;
 
+import static android.content.ContentValues.TAG;
 import static com.tdtu.mywallet.SignInActitvity.REMEMBER_ME;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,12 +29,18 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tdtu.mywallet.fragment.HomeFragment;
 import com.tdtu.mywallet.transformer.DepthPageTransformer;
 import com.tdtu.mywallet.transformer.SlidePageTransformer;
@@ -52,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnIncome;
     private ImageView selectionAvatar;
     private String avatarUser ="avatar0";
+    private TextView tv_name_main_activity;
 
     private Toolbar toolbar;
 
@@ -72,38 +81,36 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         selectionAvatar = findViewById(R.id.selectionAvatar);
+        tv_name_main_activity = findViewById(R.id.name_main_activity);
 
-//        avatarUser = ;  GET userAvatar from FireBase
-        //setting the avatar selection of user
-        switch (avatarUser) {
-            case "avatar0":
-                selectionAvatar.setBackgroundResource(R.drawable.user);
-                break;
-            case "avatar1":
-                selectionAvatar.setBackgroundResource(R.drawable.avatar_man);
-                break;
-            case "avatar2":
-                selectionAvatar.setBackgroundResource(R.drawable.avatar_man_1);
-                break;
-            case "avatar3":
-                selectionAvatar.setBackgroundResource(R.drawable.avatar_man_2);
-                break;
-            case "avatar4":
-                selectionAvatar.setBackgroundResource(R.drawable.avatar_man_3);
-                break;
-            case "avatar5":
-                selectionAvatar.setBackgroundResource(R.drawable.avatar_woman);
-                break;
-            case "avatar6":
-                selectionAvatar.setBackgroundResource(R.drawable.avatar_woman_1);
-                break;
-            case "avatar7":
-                selectionAvatar.setBackgroundResource(R.drawable.avatar_woman_2);
-                break;
-            case "avatar8":
-                selectionAvatar.setBackgroundResource(R.drawable.avatar_woman_3);
-                break;
+
+
+        // get data from SplashActivity
+        // the code can replace by only one key userName instead of userName and userNameSignIn
+        Intent intent = getIntent();
+        if (intent != null) {
+            String userName ="";
+            int userAvatar =0;
+            if(intent.hasExtra("userName") && intent.hasExtra("avatarResID")) {
+                userName = intent.getStringExtra("userName");
+                Log.d(TAG, "userName " + userName);
+                userAvatar = intent.getIntExtra("avatarResID", R.drawable.user);
+            }
+            else {
+                userName = intent.getStringExtra("userNameSignIn");
+                Log.d(TAG, "userNameSignIn " + userName);
+                userAvatar = intent.getIntExtra("avatarResIDSignIn", R.drawable.user);
+            }
+
+            // Use the retrieved data as needed
+            tv_name_main_activity.setText(userName);
+            selectionAvatar.setBackgroundResource(userAvatar);
+        }else{
+            Log.d(TAG, "failed");
         }
+
+
+
 
         selectionAvatar.setOnClickListener((View view)->{
             openSelectionDialog(Gravity.CENTER);
@@ -306,56 +313,62 @@ public class MainActivity extends AppCompatActivity {
         ImageView avatar7 = dialog.findViewById(R.id.avatar7);
         ImageView avatar8 = dialog.findViewById(R.id.avatar8);
 
+        // firebase connection
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference reference = db.getReference(currentUser.getUid().toString());
+
         avatar0.setOnClickListener((View view)->{
-            avatarUser = "avatar0";
+            reference.child("User Detail").child("userAvatar").setValue(R.drawable.user);
             selectionAvatar.setBackgroundResource(R.drawable.user);
+
             dialog.dismiss();
         });
 
         avatar1.setOnClickListener((View view)->{
-            avatarUser = "avatar1";
+            reference.child("User Detail").child("userAvatar").setValue(R.drawable.avatar_man);
             selectionAvatar.setBackgroundResource(R.drawable.avatar_man);
             dialog.dismiss();
         });
 
         avatar2.setOnClickListener((View view)->{
-            avatarUser = "avatar2";
+            reference.child("User Detail").child("userAvatar").setValue(R.drawable.avatar_man_1);;
             selectionAvatar.setBackgroundResource(R.drawable.avatar_man_1);
             dialog.dismiss();
         });
 
         avatar3.setOnClickListener((View view)->{
-            avatarUser = "avatar3";
+            reference.child("User Detail").child("userAvatar").setValue(R.drawable.avatar_man_2);
             selectionAvatar.setBackgroundResource(R.drawable.avatar_man_2);
             dialog.dismiss();
         });
 
         avatar4.setOnClickListener((View view)->{
-            avatarUser = "avatar4";
+            reference.child("User Detail").child("userAvatar").setValue(R.drawable.avatar_man_3);
             selectionAvatar.setBackgroundResource(R.drawable.avatar_man_3);
             dialog.dismiss();
         });
 
         avatar5.setOnClickListener((View view)->{
-            avatarUser = "avatar5";
+            reference.child("User Detail").child("userAvatar").setValue(R.drawable.avatar_woman);
             selectionAvatar.setBackgroundResource(R.drawable.avatar_woman);
             dialog.dismiss();
         });
 
         avatar6.setOnClickListener((View view)->{
-            avatarUser = "avatar6";
+            reference.child("User Detail").child("userAvatar").setValue(R.drawable.avatar_woman_1);
             selectionAvatar.setBackgroundResource(R.drawable.avatar_woman_1);
             dialog.dismiss();
         });
 
         avatar7.setOnClickListener((View view)->{
-            avatarUser = "avatar7";
+            reference.child("User Detail").child("userAvatar").setValue(R.drawable.avatar_woman_2);
             selectionAvatar.setBackgroundResource(R.drawable.avatar_woman_2);
             dialog.dismiss();
         });
 
         avatar8.setOnClickListener((View view)->{
-            avatarUser = "avatar8";
+            reference.child("User Detail").child("userAvatar").setValue(R.drawable.avatar_woman_3);
             selectionAvatar.setBackgroundResource(R.drawable.avatar_woman_3);
             dialog.dismiss();
         });

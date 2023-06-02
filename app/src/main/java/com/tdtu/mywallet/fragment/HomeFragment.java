@@ -5,10 +5,12 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +31,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tdtu.mywallet.AutoCompleteIconAdapter;
 import com.tdtu.mywallet.R;
 import com.tdtu.mywallet.RecyclerViewAdapter_activity;
@@ -129,6 +138,7 @@ public class HomeFragment extends Fragment {
     }
 
     TextView card_category_addMore;
+    int userBalance;
 
 
     @Override
@@ -136,6 +146,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        TextView home_totalBalance = view.findViewById(R.id.home_totalBalance);
 
         //  ***HANDLE CLICK ACTIVITY***
         card_category_addMore = view.findViewById(R.id.card_category_addMore);
@@ -143,8 +154,26 @@ public class HomeFragment extends Fragment {
             openAddingCategoryDialog(Gravity.CENTER);
         });
 
-        TextView home_totalBalance = view.findViewById(R.id.home_totalBalance);
-        home_totalBalance.setText(" "+" VND");
+        // get balance of user and show it in Home
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        String uid = user.getUid().toString();
+        DatabaseReference reference= firebaseDatabase.getReference(uid);
+        reference.child("User Detail").child("userBalance").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userBalance = Integer.parseInt(snapshot.getValue().toString());
+                String displayMoney = String.valueOf(userBalance) + " VND";
+                home_totalBalance.setText(displayMoney);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
 
         //  ***GET LIST***
         List<Activity> activityList = getActivityList();

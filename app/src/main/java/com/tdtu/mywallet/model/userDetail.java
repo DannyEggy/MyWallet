@@ -2,6 +2,7 @@ package com.tdtu.mywallet.model;
 
 import com.tdtu.mywallet.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class userDetail {
@@ -10,6 +11,15 @@ public class userDetail {
     private int userAvatar;
     private float userBalance;
     private List<Activity> activityList;
+
+    public userDetail(String userAccount) {
+        int avatarResID = R.drawable.user;
+        this.userAccount = userAccount;
+        this.userName = "User";
+        this.activityList = new ArrayList<Activity>();
+        this.userAvatar = avatarResID;
+        this.userBalance = 0;
+    }
 
     public userDetail(String userAccount, String userName, List<Activity> activityList) {
         int avatarResID = R.drawable.user;

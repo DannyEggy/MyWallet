@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tdtu.mywallet.model.User;
+import com.tdtu.mywallet.model.userDetail;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -115,6 +116,9 @@ public class SignUpActivity extends AppCompatActivity {
         }else if(TextUtils.isEmpty(password)){
             textInputLayoutPasswordSignUp.setError("Please Input Password");
             return;
+        }else if(password.length() <8){
+            textInputLayoutPasswordSignUp.setError("Enter At Least 8 Characters");
+            return;
         }
 
 
@@ -129,9 +133,15 @@ public class SignUpActivity extends AppCompatActivity {
                             DatabaseReference reference = db.getReference();
                             String[] words = email.split("@");
                             User userRegister = new User(email, password);
-                            reference.child(words[0]).setValue(userRegister);
                             Log.d(TAG, "createUserWithEmail:success");
+
+                            // push user and userDetail to firebase database
                             FirebaseUser user = mAuth.getCurrentUser();
+                            // push user, with key is UID of User
+                            reference.child(user.getUid().toString()).setValue(userRegister);
+                            // push default userDetail
+                            userDetail detail = new userDetail(user.getEmail().toString());
+                            reference.child(user.getUid().toString()).child("User Detail").setValue(detail);
                             Intent intent = new Intent(SignUpActivity.this, SignInActitvity.class);
                             startActivity(intent);
                             finishAffinity();
