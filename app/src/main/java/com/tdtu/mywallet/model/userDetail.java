@@ -12,6 +12,9 @@ public class userDetail {
     private float userBalance;
     private List<Activity> activityList;
 
+    public userDetail() {
+    }
+
     public userDetail(String userAccount) {
         int avatarResID = R.drawable.user;
         this.userAccount = userAccount;

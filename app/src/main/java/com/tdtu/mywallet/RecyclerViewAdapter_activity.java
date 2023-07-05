@@ -12,7 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.tdtu.mywallet.model.Activity;
 import com.tdtu.mywallet.model.Category;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 public class RecyclerViewAdapter_activity extends RecyclerView.Adapter<ActivityViewHolder> {
     private List<Activity> activityList;
@@ -38,29 +43,50 @@ public class RecyclerViewAdapter_activity extends RecyclerView.Adapter<ActivityV
     public void onBindViewHolder(@NonNull ActivityViewHolder holder, int position) {
         Activity activity =this.activityList.get(position);
         Category category = activity.getActivityCategory();
-
+        String type = activity.getActivityType();
         holder.item_icon_category.setBackgroundResource(category.getIconResID());
 
         holder.item_name_Actitvity.setText(activity.getActivityName());
         String time_date = activity.getActivityTimeDate();
         holder.item_time_date_Actitvity.setText(time_date);
-        String money = String.valueOf(activity.getActivityMoney()+ " VND");
-        holder.item_money_Activity.setText(money);
+        String place = activity.getActivityPlace();
+        holder.item_place_Activity.setText(place);
+
+
+        if(type.equals("Spending")){
+            // change format to 2,000 ₫
+            BigDecimal amount = new BigDecimal(activity.getActivityMoney());
+            DecimalFormat decimalFormat = new DecimalFormat("#,##0 ₫");
+            decimalFormat.setCurrency(Currency.getInstance("VND"));
+            String formattedAmount = decimalFormat.format(amount);
+            String displayMoney = "-"+String.valueOf(formattedAmount);
+
+            holder.item_money_Activity.setText(displayMoney);
+        }else{
+            // change format to 2,000 ₫
+            BigDecimal amount = new BigDecimal(activity.getActivityMoney());
+            DecimalFormat decimalFormat = new DecimalFormat("#,##0 ₫");
+            decimalFormat.setCurrency(Currency.getInstance("VND"));
+            String formattedAmount = decimalFormat.format(amount);
+            String displayMoney = "+"+String.valueOf(formattedAmount);
+            holder.item_money_Activity.setText(displayMoney);
+        }
+
 
         String color = category.getCategoryColor();
-        if(color.equals("black")){
-            holder.card_icon_category.setCardBackgroundColor(ContextCompat.getColor(context,R.color.black));
-        } else if(color.equals("white")){
+        if(color.equals("Black")){
+            holder.card_icon_category.setCardBackgroundColor(ContextCompat.getColor(context,R.color.gray));
+        } else if(color.equals("White")){
             holder.card_icon_category.setCardBackgroundColor(ContextCompat.getColor(context,R.color.white));
-        }if(color.equals("red")){
+        }if(color.equals("Red")){
             holder.card_icon_category.setCardBackgroundColor(ContextCompat.getColor(context,R.color.red));
-        }if(color.equals("green")){
+        }if(color.equals("Green")){
             holder.card_icon_category.setCardBackgroundColor(ContextCompat.getColor(context,R.color.green));
-        }if(color.equals("blue")){
+        }if(color.equals("Blue")){
             holder.card_icon_category.setCardBackgroundColor(ContextCompat.getColor(context,R.color.blue));
-        }if(color.equals("orange")){
+        }if(color.equals("Orange")){
             holder.card_icon_category.setCardBackgroundColor(ContextCompat.getColor(context,R.color.orange));
-        }if(color.equals("yellow")){
+        }if(color.equals("Yellow")){
             holder.card_icon_category.setCardBackgroundColor(ContextCompat.getColor(context,R.color.yellow));
         }
     }

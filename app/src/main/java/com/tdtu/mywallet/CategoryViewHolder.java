@@ -3,12 +3,14 @@ package com.tdtu.mywallet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class CategoryViewHolder extends RecyclerView.ViewHolder {
+    private RecyclerViewInterface recyclerViewInterface;
 
     public ImageView icon_category;
     public TextView name_category;
@@ -23,4 +25,10 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         this.cardView = itemView.findViewById(R.id.color_category);
 
     }
+
+    public void setRecyclerViewInterface(RecyclerViewInterface recyclerViewInterface) {
+        this.recyclerViewInterface = recyclerViewInterface;
+    }
+
+
 }

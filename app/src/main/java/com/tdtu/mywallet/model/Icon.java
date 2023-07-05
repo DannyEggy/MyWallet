@@ -4,6 +4,9 @@ public class Icon {
     private String iconName;
     private int iconResID;
 
+    public Icon() {
+    }
+
     public Icon(String iconName, int iconResID) {
         this.iconName = iconName;
         this.iconResID = iconResID;

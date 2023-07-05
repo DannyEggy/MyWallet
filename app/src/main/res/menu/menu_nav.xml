@@ -5,19 +5,20 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/icon_home"
-        android:title="" />
+        android:title="Home" />
     <item
         android:id="@+id/nav_analysis"
         android:icon="@drawable/icon_analysis"
-        android:title="" />
-    <item android:id="@+id/fab" />
+        android:title="Analysis" />
+
+        />
     <item
         android:id="@+id/nav_user"
         android:icon="@drawable/icon_user"
 
-        android:title="" />
+        android:title="User" />
     <item
         android:id="@+id/nav_setting"
         android:icon="@drawable/icon_setting"
-        android:title="" />
+        android:title="Setting" />
 </menu>

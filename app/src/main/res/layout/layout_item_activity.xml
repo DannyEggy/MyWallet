@@ -4,21 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="70dp"
     android:layout_margin="5dp"
+    android:background="@color/white"
     >
 
 
 
     <androidx.cardview.widget.CardView
-        android:layout_width="50dp"
+        android:layout_width="60dp"
         android:id="@+id/card_icon_category"
-        app:cardCornerRadius="25dp"
+        app:cardCornerRadius="30dp"
         app:cardBackgroundColor="@color/green"
         android:layout_centerVertical="true"
         android:layout_marginEnd="10dp"
-        android:layout_marginStart="5dp"
-        android:layout_height="50dp">
+        android:layout_marginStart="15dp"
+        android:layout_height="60dp">
         <ImageView
-
+            android:layout_gravity="center"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:id="@+id/item_icon_category"
@@ -67,6 +68,7 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:text="120,000 VND" />

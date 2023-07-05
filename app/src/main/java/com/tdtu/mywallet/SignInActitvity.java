@@ -112,8 +112,10 @@ public class SignInActitvity extends AppCompatActivity {
         } else if (!email.contains("@")) {
             textInputLayoutEmail.setError("This is not Email");
             return;
-        }
-        else if(TextUtils.isEmpty(password)){
+        } else if (password.length() <= 7 && password.length()>=1)  {
+            textInputLayoutPassword.setError("Please Input Enough Password");
+            return;
+        } else if(TextUtils.isEmpty(password)){
             textInputLayoutPassword.setError("Please Input Password");
             return;
         }

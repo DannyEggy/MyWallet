@@ -9,6 +9,9 @@ public class User {
 
     private String userRole;
 
+    public User() {
+    }
+
     public User(String userAccount, String userPassword) {
         this.userAccount = userAccount;
         this.userPassword = userPassword;

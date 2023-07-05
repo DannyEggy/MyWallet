@@ -9,4 +9,9 @@
     <color name="green">#4CAF50</color>
     <color name="yellow_light">#fef886</color>
     <color name="blue_deep">#002365</color>
+    <color name="black_bg">#2c2c2e</color>
+    <color name="gray_bg">#48484a</color>
+    <color name="green_deep">#194a40</color>
+    <color name="yellow_deep">#fdae37</color>
+    <color name="gray">#989A9E</color>
 </resources>

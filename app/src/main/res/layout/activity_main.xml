@@ -93,47 +93,32 @@
             </androidx.viewpager2.widget.ViewPager2>
 
 
-            <com.google.android.material.bottomappbar.BottomAppBar
+            <nl.joery.animatedbottombar.AnimatedBottomBar
+                android:id="@+id/bottom_bar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-
-                android:id="@+id/bottomAppbar"
-                android:background="#FF5722"
+                android:background="@color/white"
                 android:layout_gravity="bottom"
-                app:fabCradleMargin="20dp"
-                app:fabCradleVerticalOffset="10dp"
-                app:fabCradleRoundedCornerRadius="50dp"
-               >
+                app:abb_selectedTabType="icon"
+                app:abb_indicatorHeight="4dp"
+                app:abb_indicatorAppearance="round"
+                app:abb_selectedIndex="0"
+                app:abb_tabs="@menu/menu_nav">
 
-                <com.google.android.material.bottomnavigation.BottomNavigationView
-                    android:id="@+id/bottomNavigationView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="20dp"
-                    android:background="@drawable/background_transparent"
-                    app:itemIconTint="@color/custom_bottom_nav"
-
-                    app:itemTextColor="@color/black"
-                    app:menu="@menu/menu_nav">
-
-                </com.google.android.material.bottomnavigation.BottomNavigationView>
-            </com.google.android.material.bottomappbar.BottomAppBar>
-
+            </nl.joery.animatedbottombar.AnimatedBottomBar>
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#FF5722"
-                app:layout_anchor="@id/bottomNavigationView"
-
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="40dp"
                 android:id="@+id/fab_adding"
                 android:src="@drawable/baseline_add_24"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerCircle"
-
-                >
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerCircle">
 
             </com.google.android.material.floatingactionbutton.FloatingActionButton>
-
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
 
 

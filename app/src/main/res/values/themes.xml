@@ -6,4 +6,8 @@
     </style>
 
     <style name="Theme.MyWallet" parent="Base.Theme.MyWallet" />
+    <style name="anim2">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter_animation</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit_animation</item>
+    </style>
 </resources>

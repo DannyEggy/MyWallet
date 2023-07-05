@@ -5,6 +5,9 @@ public class Category {
     private String categoryColor;
     private int iconResID;
 
+    public Category() {
+    }
+
     public Category(String categoryName, String categoryColor, int iconResID) {
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;
@@ -39,5 +42,10 @@ public class Category {
 
     public void setIconResID(int iconResID) {
         this.iconResID = iconResID;
+    }
+
+    @Override
+    public String toString() {
+        return categoryName;
     }
 }

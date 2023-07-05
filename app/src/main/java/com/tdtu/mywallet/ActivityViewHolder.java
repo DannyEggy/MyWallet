@@ -18,6 +18,7 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
     public TextView item_money_Activity;
 
     public CardView card_icon_category;
+    public TextView item_place_Activity;
 
     public ActivityViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -27,5 +28,6 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
         this.item_time_date_Actitvity = itemView.findViewById(R.id.item_time_date_Activity);
         this.item_money_Activity = itemView.findViewById(R.id.item_money_Activity);
         this.card_icon_category = itemView.findViewById(R.id.card_icon_category);
+        this.item_place_Activity = itemView.findViewById(R.id.item_place_Activity);
     }
 }

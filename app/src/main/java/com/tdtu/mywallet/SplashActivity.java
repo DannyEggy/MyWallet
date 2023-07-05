@@ -33,8 +33,10 @@ public class SplashActivity extends AppCompatActivity {
 
         // get Data from Firebase
         // then push data from Splash Activity to another Activity
+
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase db = FirebaseDatabase.getInstance();
+
         if(currentUser != null){
             String uid = currentUser.getUid().toString();
             DatabaseReference reference = db.getReference(uid);

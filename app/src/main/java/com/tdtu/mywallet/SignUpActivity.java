@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -27,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.tdtu.mywallet.model.Category;
 import com.tdtu.mywallet.model.User;
 import com.tdtu.mywallet.model.userDetail;
 
@@ -142,6 +144,18 @@ public class SignUpActivity extends AppCompatActivity {
                             // push default userDetail
                             userDetail detail = new userDetail(user.getEmail().toString());
                             reference.child(user.getUid().toString()).child("User Detail").setValue(detail);
+
+                            // default user
+                            // create the activityListCount default = 0 and categoryListCount default =1 (have 1 default category)
+                            reference.child(user.getUid().toString()).child("User Detail").child("userActivityCount").setValue(0);
+                            reference.child(user.getUid().toString()).child("User Detail").child("userCategoryCount").setValue(1);
+
+                            // create the first category
+                            Resources resources = getResources();
+                            int categoryIcon = resources.getIdentifier("money","drawable", getPackageName());
+                            Category category = new Category("Money", "Red", categoryIcon);
+                            reference.child(user.getUid().toString()).child("User Detail").child("userCategory").child("0").setValue(category);
+
                             Intent intent = new Intent(SignUpActivity.this, SignInActitvity.class);
                             startActivity(intent);
                             finishAffinity();

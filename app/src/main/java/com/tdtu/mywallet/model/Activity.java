@@ -11,7 +11,10 @@ public class Activity {
     private Category activityCategory;
     private String activityType;
 
-    public Activity(String activityID, String activityName, int activityMoney,  Category activityCategory, String activityType, String activityTimeDate, String activityPlace) {
+    public Activity() {
+    }
+
+    public Activity(String activityID, String activityName, int activityMoney, Category activityCategory, String activityType, String activityTimeDate, String activityPlace) {
         this.activityID = activityID;
         this.activityName = activityName;
         this.activityMoney = activityMoney;

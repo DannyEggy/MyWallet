@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_height="wrap_content">
     <TextView
@@ -8,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Adding Your Category"
+        android:textSize="24sp"
         android:padding="12dp"
         android:textColor="@color/black"
         android:textStyle="bold"
@@ -28,7 +30,16 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:layout_marginHorizontal="10dp"
-
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxStrokeColor="@color/green_deep"
+            app:boxStrokeWidth="2dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:boxBackgroundColor="@color/white"
+            android:id="@+id/layout_nameCategory"
+            app:hintTextColor="@color/green_deep"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -48,14 +59,21 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:hint="Choose Your Color"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxStrokeColor="@color/green_deep"
+            app:boxStrokeWidth="2dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:boxBackgroundColor="@color/white"
+            android:id="@+id/layout_colorCategory"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
             <AutoCompleteTextView
                 android:id="@+id/et_colorCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-
-
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -66,7 +84,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxStrokeColor="@color/green_deep"
+            app:boxStrokeWidth="2dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:boxBackgroundColor="@color/white"
+            android:id="@+id/layout_iconCategory"
             android:hint="Choose Icon"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
@@ -86,6 +112,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="10dp"
+            android:backgroundTint="@color/green_deep"
             android:text="Save" />
     </LinearLayout>
 
