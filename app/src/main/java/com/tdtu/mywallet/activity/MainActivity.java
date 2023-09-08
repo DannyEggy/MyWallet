@@ -1,20 +1,15 @@
-package com.tdtu.mywallet;
+package com.tdtu.mywallet.activity;
 
 import static android.content.ContentValues.TAG;
-import static com.tdtu.mywallet.SignInActitvity.REMEMBER_ME;
+import static com.tdtu.mywallet.activity.SignInActitvity.REMEMBER_ME;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.viewpager2.widget.CompositePageTransformer;
-import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -23,14 +18,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.transition.Explode;
-import android.transition.Slide;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -50,7 +41,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -62,17 +52,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.tdtu.mywallet.fragment.HomeFragment;
+import com.tdtu.mywallet.AutoCompleteAdapter.AutoCompleteCategoryAdapter;
+import com.tdtu.mywallet.viewpager2.MyViewPage2Adapter;
+import com.tdtu.mywallet.R;
 import com.tdtu.mywallet.model.Activity;
 import com.tdtu.mywallet.model.Category;
-import com.tdtu.mywallet.model.Icon;
 import com.tdtu.mywallet.transformer.DepthPageTransformer;
-import com.tdtu.mywallet.transformer.SlidePageTransformer;
 import com.tdtu.mywallet.transformer.ZoomOutPageTransformer;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
@@ -113,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     private TextInputEditText et_moneyActivity;
     private String activityID;
     private String activityName;
-    private int activityMoney;
+    private String activityMoney;
     private String activityTimeDate;
     private String activityPlace;
     private Category activityCategory;
@@ -238,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
             editor.clear();
             editor.apply();
             FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(this,SignInActitvity.class);
+            Intent intent = new Intent(this, SignInActitvity.class);
             startActivity(intent);
         }
 
@@ -266,21 +256,26 @@ public class MainActivity extends AppCompatActivity {
     //  ***DIALOG HANDLING***
     @SuppressLint("ClickableViewAccessibility")
     private void openAddingDialog(int gravity) {
-        final Dialog dialog = new Dialog(this);
+        Dialog dialog = new Dialog(this);
 //        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.layout_dialog_adding_activity);
 
         Window window = dialog.getWindow();
         if(window == null){
             return;
+        }else{
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            window.setGravity(gravity);
+
+            window.setWindowAnimations(R.style.DialogAnimation);
+
+            dialog.show();
         }
         //  ***DIALOG***
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        window.setGravity(gravity);
-        window.setWindowAnimations(0);
 
-        window.setWindowAnimations(R.style.anim2);
+
+//        window.setWindowAnimations(R.style.anim1);
 //        window.getAttributes().windowAnimations = R.style.DialogAnimation;
 
 //        window.setWindowAnimations(R.style.anim2);
@@ -288,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
 //        window.setWindowAnimations(R.style.anim1);
 
 //        window.getAttributes().windowAnimations = R.style.anim2;
-        dialog.show();
+
 
         //  Binding view
         layout_nameActivity = dialog.findViewById(R.id.layout_nameActivity);
@@ -500,7 +495,7 @@ public class MainActivity extends AppCompatActivity {
                     activityID = snapshot.getValue().toString();
                     int count = Integer.parseInt(activityID) + 1;
                     activityName = et_nameActivity.getText().toString();
-                    activityMoney = Integer.parseInt(et_moneyActivity.getText().toString().replaceAll("[^0-9]", ""));
+                    activityMoney = et_moneyActivity.getText().toString().replaceAll("[^0-9]", "");
                     activityTimeDate = et_timeActivity.getText().toString() +" "+ et_dateActivity.getText().toString();
                     activityPlace = et_placeActivity.getText().toString();
                     activityType = "Spending";
@@ -521,9 +516,11 @@ public class MainActivity extends AppCompatActivity {
             reference.child("User Detail").child("userBalance").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    int currentBalance = Integer.parseInt(snapshot.getValue().toString());
-                    int spendingMoney = Integer.parseInt(et_moneyActivity.getText().toString().replaceAll("[^0-9]", ""));
-                    int totalBalance = currentBalance - spendingMoney;
+                    BigInteger currentBalance = new BigInteger(snapshot.getValue().toString());
+                    BigInteger spendingMoney = new BigInteger(et_moneyActivity.getText().toString().replaceAll("[^0-9]", ""));
+//                    BigInteger totalBalance = currentBalance - spendingMoney;
+                    String totalBalance = (currentBalance.subtract(spendingMoney)).toString();
+
                     reference.child("User Detail").child("userBalance").setValue(totalBalance);
                 }
 
@@ -566,7 +563,7 @@ public class MainActivity extends AppCompatActivity {
                     activityID = snapshot.getValue().toString();
                     int count = Integer.parseInt(activityID) + 1;
                     activityName = et_nameActivity.getText().toString();
-                    activityMoney = Integer.parseInt(et_moneyActivity.getText().toString().replaceAll("[^0-9]", ""));
+                    activityMoney = et_moneyActivity.getText().toString().replaceAll("[^0-9]", "");
                     activityTimeDate = et_timeActivity.getText().toString() +" "+ et_dateActivity.getText().toString();
                     activityPlace = et_placeActivity.getText().toString();
                     activityType = "Income";
@@ -587,9 +584,9 @@ public class MainActivity extends AppCompatActivity {
             reference.child("User Detail").child("userBalance").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    int currentBalance = Integer.parseInt(snapshot.getValue().toString());
-                    int incomeMoney = Integer.parseInt(et_moneyActivity.getText().toString().replaceAll("[^0-9]", ""));
-                    int totalBalance = currentBalance + incomeMoney;
+                    BigInteger currentBalance = new BigInteger(snapshot.getValue().toString());
+                    BigInteger incomeMoney = new BigInteger(et_moneyActivity.getText().toString().replaceAll("[^0-9]", ""));
+                    String totalBalance = (currentBalance.add(incomeMoney)).toString();
                     reference.child("User Detail").child("userBalance").setValue(totalBalance);
                 }
 

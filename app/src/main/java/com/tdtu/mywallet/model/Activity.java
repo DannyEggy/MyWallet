@@ -1,20 +1,23 @@
 package com.tdtu.mywallet.model;
 
+import java.math.BigInteger;
 import java.util.Calendar;
 
 public class Activity {
     private String activityID;
     private String activityName;
-    private int activityMoney;
+    private String activityMoney;
     private String activityTimeDate;
     private String activityPlace;
     private Category activityCategory;
     private String activityType;
 
+    private boolean isUndo;
+
     public Activity() {
     }
 
-    public Activity(String activityID, String activityName, int activityMoney, Category activityCategory, String activityType, String activityTimeDate, String activityPlace) {
+    public Activity(String activityID, String activityName, String activityMoney, Category activityCategory, String activityType, String activityTimeDate, String activityPlace) {
         this.activityID = activityID;
         this.activityName = activityName;
         this.activityMoney = activityMoney;
@@ -22,15 +25,19 @@ public class Activity {
         this.activityPlace = activityPlace;
         this.activityCategory = activityCategory;
         this.activityType = activityType;
+
+        this.isUndo = false;
     }
 
-    public Activity(String activityID, String activityName, int activityMoney, Category activityCategory, String activityType) {
+    public Activity(String activityID, String activityName, String activityMoney, Category activityCategory, String activityType) {
         this.activityID = activityID;
         this.activityName = activityName;
         this.activityMoney = activityMoney;
         this.activityCategory = activityCategory;
         this.activityType = activityType;
         this.activityPlace = null;
+
+        this.isUndo = false;
 //        this.activityTimeDate =null;
 
         // only use for example activity
@@ -46,9 +53,19 @@ public class Activity {
         this.activityTimeDate = currentTimeAndDate;
     }
 
+    public boolean isUndo() {
+        return isUndo;
+    }
+
+    public void setUndo(boolean undo) {
+        isUndo = undo;
+    }
+
     public String getActivityID() {
         return activityID;
     }
+
+
 
     public void setActivityID(String activityID) {
         this.activityID = activityID;
@@ -62,11 +79,11 @@ public class Activity {
         this.activityName = activityName;
     }
 
-    public int getActivityMoney() {
+    public String getActivityMoney() {
         return activityMoney;
     }
 
-    public void setActivityMoney(int activityMoney) {
+    public void setActivityMoney(String activityMoney) {
         this.activityMoney = activityMoney;
     }
 

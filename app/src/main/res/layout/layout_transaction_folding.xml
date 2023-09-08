@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+    <com.ramotion.foldingcell.FoldingCell
+        android:id="@+id/folding_cell"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backSideColor="@color/white"
+        tools:ignore="MissingConstraints">
+
+        <FrameLayout
+            android:id="@+id/cell_content_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:orientation="horizontal">
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="60dp"
+                        android:id="@+id/card_icon_category_edit"
+                        app:cardCornerRadius="30dp"
+                        app:cardBackgroundColor="@color/green"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_height="60dp">
+                        <ImageView
+                            android:layout_gravity="center"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:id="@+id/item_icon_category_edit"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@drawable/icon_food" />
+                    </androidx.cardview.widget.CardView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layout_nameActivity_edit"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="15dp"
+                        android:animateLayoutChanges="true"
+                        android:hint="Name Of Activity"
+                        android:textColorHint="@color/green_deep"
+                        app:boxBackgroundColor="@color/white"
+                        app:boxCornerRadiusBottomEnd="16dp"
+                        app:boxCornerRadiusBottomStart="16dp"
+                        app:boxCornerRadiusTopEnd="16dp"
+                        app:boxCornerRadiusTopStart="16dp"
+                        app:boxStrokeColor="@color/green_deep"
+                        app:boxStrokeWidth="2dp"
+                        app:boxStrokeWidthFocused="2dp"
+                        app:hintTextColor="@color/green_deep">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_nameActivity_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="140dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/layout_categoryActivity_edit"
+                        android:layout_marginVertical="2dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginStart="15dp"
+                        app:boxCornerRadiusBottomStart="16dp"
+                        app:boxCornerRadiusBottomEnd="16dp"
+                        app:boxCornerRadiusTopStart="16dp"
+                        app:boxCornerRadiusTopEnd="16dp"
+                        app:boxStrokeColor="@color/black"
+                        app:boxStrokeWidth="2dp"
+                        app:boxStrokeWidthFocused="2dp"
+                        app:boxBackgroundColor="@color/white"
+                        android:animateLayoutChanges="true"
+                        app:hintTextColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:hint="Category"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                        <AutoCompleteTextView
+                            android:layout_width="match_parent"
+                            android:id="@+id/et_categoryActivity_edit"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/layout_moneyActivity_edit"
+                        android:layout_marginVertical="2dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        app:boxCornerRadiusBottomStart="16dp"
+                        app:boxCornerRadiusBottomEnd="16dp"
+                        app:boxCornerRadiusTopStart="16dp"
+                        app:boxCornerRadiusTopEnd="16dp"
+                        app:boxStrokeColor="@color/green_deep"
+                        app:boxStrokeWidth="2dp"
+                        app:boxStrokeWidthFocused="2dp"
+                        app:boxBackgroundColor="@color/white"
+                        android:animateLayoutChanges="true"
+                        app:hintTextColor="@color/green_deep"
+                        android:hint="Money"
+                        android:textColorHint="@color/green_deep"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_moneyActivity_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:inputType="number"
+                            android:textColor="@color/black" />
+
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/layout_timeActivity_edit"
+                        android:layout_marginVertical="2dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="5dp"
+                        app:boxCornerRadiusBottomStart="16dp"
+                        app:boxCornerRadiusBottomEnd="16dp"
+                        app:boxCornerRadiusTopStart="16dp"
+                        app:boxCornerRadiusTopEnd="16dp"
+                        app:boxStrokeColor="@color/black"
+                        app:boxStrokeWidth="2dp"
+                        app:boxStrokeWidthFocused="2dp"
+                        app:boxBackgroundColor="@color/white"
+                        android:animateLayoutChanges="true"
+                        app:hintTextColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:hint=" Time "
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="80dp"
+                            android:id="@+id/et_timeActivity_edit"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:focusable="false"
+
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/layout_dateActivity_edit"
+                        android:layout_marginVertical="2dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="15dp"
+                        app:boxCornerRadiusBottomStart="16dp"
+                        app:boxCornerRadiusBottomEnd="16dp"
+                        app:boxCornerRadiusTopStart="16dp"
+                        app:boxCornerRadiusTopEnd="16dp"
+                        app:boxStrokeColor="@color/black"
+                        app:boxStrokeWidth="2dp"
+                        app:boxStrokeWidthFocused="2dp"
+                        app:boxBackgroundColor="@color/white"
+                        android:animateLayoutChanges="true"
+                        app:hintTextColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:hint="Date"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:id="@+id/et_dateActivity_edit"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:focusable="false"
+
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/layout_placeActivity_edit"
+                    android:layout_marginVertical="2dp"
+                    android:layout_marginHorizontal="15dp"
+                    app:boxCornerRadiusBottomStart="16dp"
+                    app:boxCornerRadiusBottomEnd="16dp"
+                    app:boxCornerRadiusTopStart="16dp"
+                    app:boxCornerRadiusTopEnd="16dp"
+                    app:boxStrokeColor="@color/black"
+                    app:boxStrokeWidth="2dp"
+                    app:boxStrokeWidthFocused="2dp"
+                    app:boxBackgroundColor="@color/white"
+                    android:animateLayoutChanges="true"
+                    app:hintTextColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:hint="Place"
+
+
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:id="@+id/et_placeActivity_edit"
+                        android:layout_height="wrap_content"
+                        android:lines="1"
+                        android:textColor="@color/black"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btnEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginBottom="3dp"
+                    android:backgroundTint="@color/green_deep"
+                    android:text="Edit" />
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/cell_title_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="60dp"
+                    android:id="@+id/card_icon_category"
+                    app:cardCornerRadius="30dp"
+                    app:cardBackgroundColor="@color/green"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_height="60dp">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/item_icon_category"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/icon_food" />
+                </androidx.cardview.widget.CardView>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/card_icon_category"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/item_name_Activity"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+
+                        android:text="Com Tam" />
+
+                    <TextView
+                        android:id="@+id/item_time_date_Activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="18:11 - 24/5/2023" />
+
+                    <TextView
+                        android:id="@+id/item_place_Activity"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+
+                        android:text="180 Ly Chinh Thang" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/item_money_Activity"
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="15dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:text="120,000 VND" />
+            </RelativeLayout>
+
+
+    </com.ramotion.foldingcell.FoldingCell>
+</androidx.constraintlayout.widget.ConstraintLayout>

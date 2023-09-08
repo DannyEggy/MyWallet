@@ -1,4 +1,4 @@
-package com.tdtu.mywallet;
+package com.tdtu.mywallet.AutoCompleteAdapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.tdtu.mywallet.R;
 import com.tdtu.mywallet.model.Icon;
 
 import java.util.List;

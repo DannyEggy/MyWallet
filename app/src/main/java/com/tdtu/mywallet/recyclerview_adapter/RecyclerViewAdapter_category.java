@@ -1,4 +1,4 @@
-package com.tdtu.mywallet;
+package com.tdtu.mywallet.recyclerview_adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.tdtu.mywallet.CategoryViewHolder;
+import com.tdtu.mywallet.R;
+import com.tdtu.mywallet.RecyclerViewInterface;
 import com.tdtu.mywallet.model.Category;
 
 import java.util.List;

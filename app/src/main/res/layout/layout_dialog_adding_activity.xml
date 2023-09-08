@@ -54,43 +54,14 @@
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/layout_moneyActivity"
-            android:layout_marginVertical="5dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxStrokeColor="@color/green_deep"
-            app:boxStrokeWidth="2dp"
-            app:boxStrokeWidthFocused="2dp"
-            app:boxBackgroundColor="@color/white"
-            android:animateLayoutChanges="true"
-            app:hintTextColor="@color/green_deep"
-            android:hint="Money"
-            android:textColorHint="@color/green_deep"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_moneyActivity"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="number"
-                android:textColor="@color/black" />
-
-
-        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/layout_categoryActivity"
                 android:layout_marginVertical="5dp"
@@ -107,7 +78,7 @@
                 android:animateLayoutChanges="true"
                 app:hintTextColor="@color/black"
                 android:textColorHint="@color/black"
-                android:hint="Choose Category"
+                android:hint="Category"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
                 <AutoCompleteTextView
@@ -117,6 +88,37 @@
                     android:inputType="none"
                     />
             </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/layout_moneyActivity"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxStrokeColor="@color/green_deep"
+                app:boxStrokeWidth="2dp"
+                app:boxStrokeWidthFocused="2dp"
+                app:boxBackgroundColor="@color/white"
+                android:animateLayoutChanges="true"
+                app:hintTextColor="@color/green_deep"
+                android:hint="Money"
+                android:textColorHint="@color/green_deep"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_moneyActivity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number"
+                    android:textColor="@color/black" />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
 
         </LinearLayout>

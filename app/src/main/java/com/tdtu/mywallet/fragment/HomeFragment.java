@@ -1,21 +1,21 @@
 package com.tdtu.mywallet.fragment;
 
-import static android.content.Context.INPUT_METHOD_SERVICE;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,6 +40,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,24 +51,22 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.tdtu.mywallet.AutoCompleteIconAdapter;
-import com.tdtu.mywallet.CategoryListHolder;
+import com.tdtu.mywallet.AutoCompleteAdapter.AutoCompleteIconAdapter;
 import com.tdtu.mywallet.R;
-import com.tdtu.mywallet.RecyclerViewAdapter_activity;
-import com.tdtu.mywallet.RecyclerViewAdapter_category;
+import com.tdtu.mywallet.recyclerview_adapter.RecyclerViewAdapter_category;
 import com.tdtu.mywallet.RecyclerViewInterface;
+import com.tdtu.mywallet.recyclerview_adapter.TransactionAdapter;
 import com.tdtu.mywallet.model.Activity;
 import com.tdtu.mywallet.model.Category;
 import com.tdtu.mywallet.model.Icon;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
-import java.util.Locale;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -137,7 +136,8 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     private TextView home_totalBalance;
     private List<Category> categoryList = new ArrayList<Category>();
     private List<Activity> activityList = new ArrayList<Activity>();
-    private ImageView info;
+    private ImageView info_category;
+    private ImageView info_transaction;
     private List<Icon> getIconList(){
         List<Icon> iconList = new ArrayList<Icon>();
         iconList.add(new Icon("Icon 1", R.drawable.cart));
@@ -163,11 +163,10 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         card_category_addMore = view.findViewById(R.id.card_category_addMore);
         recyclerView_category = view.findViewById(R.id.recyclerView_category);
         recyclerView = view.findViewById(R.id.recyclerView_recent_activity);
-        info = view.findViewById(R.id.info);
-//        imageView4 = findViewById(R.id.imageView4);
-//        imageView4.setOnClickListener((View view)->{
-//            openAddingDialog(Gravity.CENTER);
-//        });
+        info_category = view.findViewById(R.id.info_category);
+        info_transaction = view.findViewById(R.id.info_transaction);
+
+
 
 
         // handling all of logical event from view
@@ -175,15 +174,40 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         // get balance of user and show it in Home
         getHomeBalance();
         // adding data to categoryList and update the adapter
+        categoryList.clear();
         getCategoryList();
-        // info about category
+        // info about category and transactions
         getMoreAboutCategory();
+        getMoreAboutTransaction();
 
         return view;
     }
 
+    private void getMoreAboutTransaction() {
+        info_transaction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("More About Transaction");  // Tiêu đề của Dialog
+                builder.setMessage("+You can swipe to delete a transaction \n" +
+                        "+You can edit by holding the transaction");  // Nội dung của Dialog
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Xử lý khi người dùng bấm nút OK
+                        dialog.dismiss();  // Đóng Dialog
+                    }
+                });
+
+                // Tạo và hiển thị Dialog
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+    }
+
     private void getMoreAboutCategory() {
-        info.setOnClickListener(new View.OnClickListener() {
+        info_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -208,7 +232,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         getActivityList();
 //        List<Category> categoryList = new ArrayList<Category>();
         card_category_addMore.setOnClickListener((View mView)->{
-            openAddingCategoryDialog(Gravity.CENTER);
+            openAddingCategoryDialog(Gravity.BOTTOM);
         });
 
         //  ***RECYCLER_VIEW***
@@ -221,13 +245,95 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         recyclerView_category.setLayoutManager(linearLayoutManager_category);
 
 
+
         //  **RECYCLER_VIEW_RECENT_ACTIVITY**
-        recyclerView.setAdapter(new RecyclerViewAdapter_activity(activityList, getActivity()));
+        recyclerView.setAdapter(new TransactionAdapter(activityList, getActivity()));
+//        recyclerView.setAdapter(new RecyclerViewAdapter_activity(activityList, getActivity()));
+
         LinearLayoutManager linearLayoutManager_recent_activity = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager_recent_activity);
         DividerItemDecoration mDividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 linearLayoutManager_recent_activity.getOrientation());
         recyclerView.addItemDecoration(mDividerItemDecoration);
+        swipeDelete();
+
+
+    }
+
+    private void swipeDelete() {
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                final int position = viewHolder.getAdapterPosition();
+
+                switch (direction){
+                    case ItemTouchHelper.LEFT:
+                        //todo
+                        Activity deleteActivity = activityList.get(position);
+                        String deActivityID = deleteActivity.getActivityID();
+                        String deActivityName = deleteActivity.getActivityName();
+
+                        //delete
+                        activityList.remove(deleteActivity);
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                        String uid = user.getUid().toString();
+                        DatabaseReference reference= firebaseDatabase.getReference(uid);
+                        reference.child("User Detail").child("userActivityList").child(deActivityID).removeValue();
+                        recyclerView.getAdapter().notifyItemRemoved(position);
+//
+
+
+                        // undo
+                        Snackbar.make(recyclerView, deActivityName, Snackbar.LENGTH_LONG)
+                                .setAction("Undo", new View.OnClickListener() {
+                                    @Override
+                                    public  void onClick(View view) {
+//
+                                        //todo
+                                        // set undo to true then add the activity back to firebase and recyclerview
+                                        // then update the key undo of activity to false to avoid duplicate when adding the activity to recyclerview
+                                        deleteActivity.setUndo(true);
+                                        activityList.add(position, deleteActivity);
+
+//
+                                        reference.child("User Detail").child("userActivityList").child(deActivityID).setValue(deleteActivity);
+
+                                        recyclerView.getAdapter().notifyItemInserted(position);
+                                        recyclerView.scrollToPosition(position);
+                                        reference.child("User Detail").child("userActivityList").child(deActivityID).child("undo").setValue(false);
+
+                                    }
+                                }).show();
+
+                        break;
+
+                }
+
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                        .addSwipeLeftBackgroundColor(ContextCompat.getColor(getActivity(),R.color.red))
+                        .addSwipeLeftActionIcon(R.drawable.baseline_delete_24)
+                        .addSwipeRightBackgroundColor(ContextCompat.getColor(getActivity(),R.color.green))
+                        .addSwipeRightActionIcon(R.drawable.baseline_done_24)
+
+
+                        .create()
+                        .decorate();
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper_Transaction = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper_Transaction.attachToRecyclerView(recyclerView);
     }
 
 
@@ -259,6 +365,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         String uid = user.getUid().toString();
         DatabaseReference reference= firebaseDatabase.getReference(uid);
+        categoryList.clear();
         reference.child("User Detail").child("userCategory").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -301,7 +408,14 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Activity activity = snapshot.getValue(Activity.class);
                 if(activity != null){
-                    activityList.add(0, activity);
+                    //todo
+                    // if undo is false then you add the activity to recyclerview
+                    if(!activity.isUndo()){
+                        activityList.add(0, activity);
+                    }
+
+
+
                 }
                 recyclerView.getAdapter().notifyDataSetChanged();
             }
@@ -332,28 +446,30 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
 
     @SuppressLint("ClickableViewAccessibility")
     private void openAddingCategoryDialog(int gravity) {
-        final Dialog dialog = new Dialog(getActivity());
+        Dialog dialog1 = new Dialog(getActivity());
 //        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.layout_dialog_adding_category);
+        dialog1.setContentView(R.layout.layout_dialog_adding_category);
 
-        Window window = dialog.getWindow();
-        if(window == null){
+        Window window1 = dialog1.getWindow();
+        if(window1 == null){
             return;
+        }else{
+            window1.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            window1.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            window1.setGravity(gravity);
+            window1.setWindowAnimations(R.style.DialogAnimation);
+            dialog1.show();
         }
-        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        window.setGravity(gravity);
-        window.setWindowAnimations(R.style.anim2);
-        dialog.show();
+
 
         //  Binding View
-        layout_nameCategory = dialog.findViewById(R.id.layout_nameCategory);
-        layout_colorCategory = dialog.findViewById(R.id.layout_colorCategory);
-        layout_iconCategory = dialog.findViewById(R.id.layout_iconCategory);
-        nameTextInputEditText = dialog.findViewById(R.id.et_nameCatogory);
-        colorAutoCompleteTextView = dialog.findViewById(R.id.et_colorCategory);
-        iconAutoCompleteTextView = dialog.findViewById(R.id.et_iconCategory);
-        Button btnSaveCategory = dialog.findViewById(R.id.btnSaveCategory);
+        layout_nameCategory = dialog1.findViewById(R.id.layout_nameCategory);
+        layout_colorCategory = dialog1.findViewById(R.id.layout_colorCategory);
+        layout_iconCategory = dialog1.findViewById(R.id.layout_iconCategory);
+        nameTextInputEditText = dialog1.findViewById(R.id.et_nameCatogory);
+        colorAutoCompleteTextView = dialog1.findViewById(R.id.et_colorCategory);
+        iconAutoCompleteTextView = dialog1.findViewById(R.id.et_iconCategory);
+        Button btnSaveCategory = dialog1.findViewById(R.id.btnSaveCategory);
 
         //Reset error text when click again
         nameTextInputEditText.addTextChangedListener(new TextWatcher() {
@@ -507,10 +623,13 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
 
 
 
-            dialog.dismiss();
+            dialog1.dismiss();
         });
 
     }
+
+
+
 
     @Override
     public void onItemLongClick(int position) {

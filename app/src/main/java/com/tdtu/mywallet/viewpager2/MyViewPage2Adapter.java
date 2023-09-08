@@ -1,4 +1,4 @@
-package com.tdtu.mywallet;
+package com.tdtu.mywallet.viewpager2;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
