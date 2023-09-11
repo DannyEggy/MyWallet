@@ -120,16 +120,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // start initiate UX UI
         // Create a function to get data from SplashActivity
-
+        // Optimize the time to retrieve and display data
         initUI();
         getDataFromSplashActivity();
 
 
     }
 
-    private void getDataFromSplashActivity() {
 
+    private void getDataFromSplashActivity() {
+        // Get data from SplashActivity or SignInActivity intent
+        // If user already log in, get data from SplashActivity including name and avatar of user.
+        // If user are not log in, get data from SignInActivity including default name and avatar of new user.
         Intent intent = getIntent();
         if (intent != null) {
             String userName ="";
@@ -149,8 +153,8 @@ public class MainActivity extends AppCompatActivity {
             tv_name_main_activity.setText(userName);
 
             int imageResID = getResources().getIdentifier(userAvatar, "drawable", getPackageName());
-//            selectionAvatar.setBackgroundResource(imageResID);
 
+            // Checking imageResID exist or not.
             if(imageResID != 0){
                 selectionAvatar.setBackgroundResource(imageResID);
             }else{
@@ -164,6 +168,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initUI(){
+        // This section including Toolbar, ViewPager2, Bottom Navigation View
+
 
         //  ***TOOLBAR***
         toolbar = findViewById(R.id.toolbar);
