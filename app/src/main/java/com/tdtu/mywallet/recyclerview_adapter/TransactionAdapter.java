@@ -226,7 +226,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         String color = category.getCategoryColor();
         setColorCategory(color, holder.card_icon_category);
         // set card background for Tittle View
-        holder.item_icon_category.setBackgroundResource(category.getIconResID());
+        int imageResID = holder.itemView.getResources().getIdentifier(category.getIconResID(), "drawable", context.getPackageName());
+        if(imageResID != 0){
+            holder.item_icon_category.setBackgroundResource(imageResID);
+        }else{
+            Toast.makeText(context, "Something Wrong!!!", Toast.LENGTH_LONG).show();
+        }
+
 
         //______________________________________________________________________________________________________________________________________________________________________________________
         // ***ContentView section***
@@ -256,7 +262,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         //set the current Category
         setColorCategory(color, holder.cardEdit);
-        holder.itemIconEdit.setBackgroundResource(category.getIconResID());
+        if(imageResID != 0){
+            holder.itemIconEdit.setBackgroundResource(imageResID);
+        }else{
+            Toast.makeText(context, "Something Wrong!!!", Toast.LENGTH_LONG).show();
+        }
+
+//        holder.itemIconEdit.setBackgroundResource(category.getIconResID());
 
         holder.et_categoryActivity_edit.setText(category.getCategoryName());
 
@@ -283,11 +295,17 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
                 Category selectedCategory = (Category) adapterView.getItemAtPosition(i);
                 String categoryName = selectedCategory.getCategoryName();
-                int categoryIcon = selectedCategory.getIconResID();
+                String categoryIcon = selectedCategory.getIconResID();
                 Toast.makeText(context, "success", Toast.LENGTH_SHORT).show();
 
                 // when select, set the icon and background category
-                holder.itemIconEdit.setBackgroundResource(categoryIcon);
+                int imageResIDEdit = holder.itemView.getResources().getIdentifier(categoryIcon, "drawable", context.getPackageName());
+                if(imageResID != 0){
+                    holder.itemIconEdit.setBackgroundResource(imageResIDEdit);
+                }else{
+                    Toast.makeText(context, "Something Wrong!!!", Toast.LENGTH_LONG).show();
+                }
+
                 String color = selectedCategory.getCategoryColor();
                 setColorCategory(color, holder.cardEdit);
 
@@ -365,7 +383,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                     if (task.isSuccessful()) {
                         // Update successfully
                         // Update Category on Tittle View
-                        holder.item_icon_category.setBackgroundResource(activityCategory.getIconResID());
+                        int imageResID = holder.itemView.getResources().getIdentifier(activityCategory.getIconResID(), "drawable", context.getPackageName());
+                        if(imageResID != 0){
+                            holder.item_icon_category.setBackgroundResource(imageResID);
+                        }else{
+                            Toast.makeText(context, "Something Wrong!!!", Toast.LENGTH_LONG).show();
+                        }
+
                         String color = activityCategory.getCategoryColor();
                         // set card background for tittle view
                         setColorCategory(color, holder.card_icon_category);

@@ -28,7 +28,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/icon_food" />
+            android:background="@drawable/icon6" />
     </androidx.cardview.widget.CardView>
 
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -46,7 +47,13 @@ public class RecyclerViewAdapter_activity extends RecyclerView.Adapter<ActivityV
         Activity activity = this.activityList.get(position);
         Category category = activity.getActivityCategory();
         String type = activity.getActivityType();
-        holder.item_icon_category.setBackgroundResource(category.getIconResID());
+        int imageResID = holder.itemView.getResources().getIdentifier(category.getIconResID(),"drawable",context.getPackageName());
+        if(imageResID != 0){
+            holder.item_icon_category.setBackgroundResource(imageResID);
+        }else{
+            Toast.makeText(context, "Something Wrong!!!", Toast.LENGTH_LONG).show();
+        }
+
         holder.item_name_Actitvity.setText(activity.getActivityName());
         String time_date = activity.getActivityTimeDate();
         holder.item_time_date_Actitvity.setText(time_date);

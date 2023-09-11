@@ -121,7 +121,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     public RecyclerView recyclerView_category;
     private String categoryColor;
     private String categoryName;
-    private int categoryIcon;
+    private String categoryIcon;
     private String categoryIconName;
     private TextInputLayout layout_nameCategory;
     private TextInputLayout layout_colorCategory;
@@ -140,18 +140,16 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     private ImageView info_transaction;
     private List<Icon> getIconList(){
         List<Icon> iconList = new ArrayList<Icon>();
-        iconList.add(new Icon("Icon 1", R.drawable.cart));
-        iconList.add(new Icon("Icon 2", R.drawable.bubble_tea));
-        iconList.add(new Icon("Icon 3", R.drawable.coffee_cup));
-        iconList.add(new Icon("Icon 4", R.drawable.console));
-        iconList.add(new Icon("Icon 5", R.drawable.money));
-        iconList.add(new Icon("Icon 6", R.drawable.video));
-        iconList.add(new Icon("Icon 7", R.drawable.icon_food));
+        iconList.add(new Icon("Icon 1", "icon0"));
+        iconList.add(new Icon("Icon 2", "icon1"));
+        iconList.add(new Icon("Icon 3", "icon2"));
+        iconList.add(new Icon("Icon 4", "icon3"));
+        iconList.add(new Icon("Icon 5", "icon4"));
+        iconList.add(new Icon("Icon 6", "icon5"));
+        iconList.add(new Icon("Icon 7", "icon6"));
 
         return iconList;
     }
-
-
 
 
     @Override

@@ -51,7 +51,13 @@ public class RecyclerViewAdapter_category extends RecyclerView.Adapter<CategoryV
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
         Category category = categoryList.get(position);
-        holder.icon_category.setBackgroundResource(category.getIconResID());
+        int imageResID = holder.itemView.getResources().getIdentifier(category.getIconResID(),"drawable", context.getPackageName());
+        if(imageResID != 0){
+            holder.icon_category.setBackgroundResource(imageResID);
+        }else{
+            Toast.makeText(context, "Something Wrong!!!", Toast.LENGTH_LONG).show();
+        }
+
         holder.name_category.setText(category.getCategoryName());
 
         String color = category.getCategoryColor();

@@ -25,7 +25,7 @@ import com.tdtu.mywallet.activity.SignInActitvity;
 public class SplashActivity extends AppCompatActivity {
 
     private String userName;
-    private int  avatarResID;
+    private String  avatarResID;
     private int userBalance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +59,7 @@ public class SplashActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     // change the name on toolbar
-                    avatarResID = Integer.parseInt(snapshot.getValue().toString());
+                    avatarResID = snapshot.getValue().toString();
                 }
 
                 @Override

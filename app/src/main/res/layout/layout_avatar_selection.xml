@@ -27,21 +27,21 @@
             android:id="@+id/avatar0"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@drawable/user"
+            android:background="@drawable/avatar0"
              />
 
         <ImageView
             android:id="@+id/avatar1"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@drawable/avatar_man"
+            android:background="@drawable/avatar1"
              />
 
         <ImageView
             android:id="@+id/avatar2"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@drawable/avatar_man_1" />
+            android:background="@drawable/avatar2" />
 
     </LinearLayout>
 
@@ -55,19 +55,19 @@
             android:id="@+id/avatar3"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@drawable/avatar_man_2" />
+            android:background="@drawable/avatar3" />
 
         <ImageView
             android:id="@+id/avatar4"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@drawable/avatar_man_3" />
+            android:background="@drawable/avatar4" />
 
         <ImageView
             android:id="@+id/avatar5"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@drawable/avatar_woman" />
+            android:background="@drawable/avatar5" />
     </LinearLayout>
 
     <LinearLayout
@@ -80,18 +80,18 @@
             android:id="@+id/avatar6"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@drawable/avatar_woman_1" />
+            android:background="@drawable/avatar6" />
 
         <ImageView
             android:id="@+id/avatar7"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@drawable/avatar_woman_2" />
+            android:background="@drawable/avatar7" />
 
         <ImageView
             android:id="@+id/avatar8"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@drawable/avatar_woman_3" />
+            android:background="@drawable/avatar8" />
     </LinearLayout>
 </LinearLayout>

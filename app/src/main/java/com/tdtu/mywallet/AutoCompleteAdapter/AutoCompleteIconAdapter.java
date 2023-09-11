@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,7 +37,13 @@ public class AutoCompleteIconAdapter extends ArrayAdapter<Icon> {
         Icon icon = getItem(position);
 
         ImageView imageView = view.findViewById(R.id.icon_category_item);
-        imageView.setBackgroundResource(icon.getIconResID());
+        int imageResID = view.getResources().getIdentifier(icon.getIconResID(),"drawable", getContext().getPackageName());
+        if(imageResID != 0){
+            imageView.setBackgroundResource(imageResID);
+        }else{
+            Toast.makeText(getContext(), "Something Wrong!!!", Toast.LENGTH_LONG).show();
+        }
+
         // Ánh xạ TextView trong layout
         TextView textView = view.findViewById(R.id.name_icon);
 

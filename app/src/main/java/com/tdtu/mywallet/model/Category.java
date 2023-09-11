@@ -3,18 +3,18 @@ package com.tdtu.mywallet.model;
 public class Category {
     private String categoryName;
     private String categoryColor;
-    private int iconResID;
+    private String iconResID;
 
     public Category() {
     }
 
-    public Category(String categoryName, String categoryColor, int iconResID) {
+    public Category(String categoryName, String categoryColor, String iconResID) {
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;
         this.iconResID = iconResID;
     }
 
-    public Category(String categoryName, int iconResID) {
+    public Category(String categoryName, String iconResID) {
         this.categoryName = categoryName;
         this.iconResID = iconResID;
         this.categoryColor = "white";
@@ -36,11 +36,11 @@ public class Category {
         this.categoryColor = categoryColor;
     }
 
-    public int getIconResID() {
+    public String getIconResID() {
         return iconResID;
     }
 
-    public void setIconResID(int iconResID) {
+    public void setIconResID(String iconResID) {
         this.iconResID = iconResID;
     }
 

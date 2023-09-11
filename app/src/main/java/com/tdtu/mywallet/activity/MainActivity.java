@@ -110,8 +110,10 @@ public class MainActivity extends AppCompatActivity {
     private String activityType;
 
     private String categoryName ;
-    private int categoryIcon ;
+    private String categoryIcon ;
     private ImageView imageView4;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,21 +131,30 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null) {
             String userName ="";
-            int userAvatar =0;
+            String userAvatar = "avatar0";
             if(intent.hasExtra("userName") && intent.hasExtra("avatarResID")) {
                 userName = intent.getStringExtra("userName");
                 Log.d(TAG, "userName " + userName);
-                userAvatar = intent.getIntExtra("avatarResID", R.drawable.user);
+                userAvatar = intent.getStringExtra("avatarResID");
             }
             else {
                 userName = intent.getStringExtra("userNameSignIn");
                 Log.d(TAG, "userNameSignIn " + userName);
-                userAvatar = intent.getIntExtra("avatarResIDSignIn", R.drawable.user);
+                userAvatar = intent.getStringExtra("avatarResIDSignIn");
             }
 
             // Use the retrieved data as needed
             tv_name_main_activity.setText(userName);
-            selectionAvatar.setBackgroundResource(userAvatar);
+
+            int imageResID = getResources().getIdentifier(userAvatar, "drawable", getPackageName());
+//            selectionAvatar.setBackgroundResource(imageResID);
+
+            if(imageResID != 0){
+                selectionAvatar.setBackgroundResource(imageResID);
+            }else{
+                Toast.makeText(this, "Something Wrong!!!", Toast.LENGTH_LONG).show();
+            }
+
         }else{
             Log.d(TAG, "failed");
         }
@@ -273,16 +284,6 @@ public class MainActivity extends AppCompatActivity {
             dialog.show();
         }
         //  ***DIALOG***
-
-
-//        window.setWindowAnimations(R.style.anim1);
-//        window.getAttributes().windowAnimations = R.style.DialogAnimation;
-
-//        window.setWindowAnimations(R.style.anim2);
-
-//        window.setWindowAnimations(R.style.anim1);
-
-//        window.getAttributes().windowAnimations = R.style.anim2;
 
 
         //  Binding view
@@ -670,57 +671,56 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference reference = db.getReference(currentUser.getUid().toString());
 
         avatar0.setOnClickListener((View view)->{
-            reference.child("User Detail").child("userAvatar").setValue(R.drawable.user);
-            selectionAvatar.setBackgroundResource(R.drawable.user);
-
+            reference.child("User Detail").child("userAvatar").setValue("avatar0");
+            selectionAvatar.setBackgroundResource(R.drawable.avatar0);
             dialog.dismiss();
         });
 
         avatar1.setOnClickListener((View view)->{
-            reference.child("User Detail").child("userAvatar").setValue(R.drawable.avatar_man);
-            selectionAvatar.setBackgroundResource(R.drawable.avatar_man);
+            reference.child("User Detail").child("userAvatar").setValue("avatar1");
+            selectionAvatar.setBackgroundResource(R.drawable.avatar1);
             dialog.dismiss();
         });
 
         avatar2.setOnClickListener((View view)->{
-            reference.child("User Detail").child("userAvatar").setValue(R.drawable.avatar_man_1);;
-            selectionAvatar.setBackgroundResource(R.drawable.avatar_man_1);
+            reference.child("User Detail").child("userAvatar").setValue("avatar2");;
+            selectionAvatar.setBackgroundResource(R.drawable.avatar2);
             dialog.dismiss();
         });
 
         avatar3.setOnClickListener((View view)->{
-            reference.child("User Detail").child("userAvatar").setValue(R.drawable.avatar_man_2);
-            selectionAvatar.setBackgroundResource(R.drawable.avatar_man_2);
+            reference.child("User Detail").child("userAvatar").setValue("avatar3");
+            selectionAvatar.setBackgroundResource(R.drawable.avatar3);
             dialog.dismiss();
         });
 
         avatar4.setOnClickListener((View view)->{
-            reference.child("User Detail").child("userAvatar").setValue(R.drawable.avatar_man_3);
-            selectionAvatar.setBackgroundResource(R.drawable.avatar_man_3);
+            reference.child("User Detail").child("userAvatar").setValue("avatar4");
+            selectionAvatar.setBackgroundResource(R.drawable.avatar4);
             dialog.dismiss();
         });
 
         avatar5.setOnClickListener((View view)->{
-            reference.child("User Detail").child("userAvatar").setValue(R.drawable.avatar_woman);
-            selectionAvatar.setBackgroundResource(R.drawable.avatar_woman);
+            reference.child("User Detail").child("userAvatar").setValue("avatar5");
+            selectionAvatar.setBackgroundResource(R.drawable.avatar5);
             dialog.dismiss();
         });
 
         avatar6.setOnClickListener((View view)->{
-            reference.child("User Detail").child("userAvatar").setValue(R.drawable.avatar_woman_1);
-            selectionAvatar.setBackgroundResource(R.drawable.avatar_woman_1);
+            reference.child("User Detail").child("userAvatar").setValue("avatar6");
+            selectionAvatar.setBackgroundResource(R.drawable.avatar6);
             dialog.dismiss();
         });
 
         avatar7.setOnClickListener((View view)->{
-            reference.child("User Detail").child("userAvatar").setValue(R.drawable.avatar_woman_2);
-            selectionAvatar.setBackgroundResource(R.drawable.avatar_woman_2);
+            reference.child("User Detail").child("userAvatar").setValue("avatar7");
+            selectionAvatar.setBackgroundResource(R.drawable.avatar7);
             dialog.dismiss();
         });
 
         avatar8.setOnClickListener((View view)->{
-            reference.child("User Detail").child("userAvatar").setValue(R.drawable.avatar_woman_3);
-            selectionAvatar.setBackgroundResource(R.drawable.avatar_woman_3);
+            reference.child("User Detail").child("userAvatar").setValue("avatar8");
+            selectionAvatar.setBackgroundResource(R.drawable.avatar8);
             dialog.dismiss();
         });
 

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,7 +58,13 @@ public class AutoCompleteCategoryAdapter extends ArrayAdapter<Category> {
 
 
         ImageView imageView = view.findViewById(R.id.icon_category_selection);
-        imageView.setBackgroundResource(category.getIconResID());
+        int imageResID = view.getResources().getIdentifier(category.getIconResID(), "drawable", getContext().getPackageName());
+        if(imageResID != 0){
+            imageView.setBackgroundResource(imageResID);
+        }else{
+            Toast.makeText(getContext(), "Something Wrong!!!", Toast.LENGTH_LONG).show();
+        }
+
         // Ánh xạ TextView trong layout
         TextView textView = view.findViewById(R.id.name_category_selection);
 

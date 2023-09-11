@@ -151,8 +151,8 @@ public class SignUpActivity extends AppCompatActivity {
 
                             // create the first category
                             Resources resources = getResources();
-                            int categoryIcon = resources.getIdentifier("money","drawable", getPackageName());
-                            Category category = new Category("Money", "Red", categoryIcon);
+//                            int categoryIcon = resources.getIdentifier("money","drawable", getPackageName());
+                            Category category = new Category("Money", "Red", "avatar0");
                             reference.child(user.getUid().toString()).child("User Detail").child("userCategory").child("0").setValue(category);
 
                             Intent intent = new Intent(SignUpActivity.this, SignInActitvity.class);

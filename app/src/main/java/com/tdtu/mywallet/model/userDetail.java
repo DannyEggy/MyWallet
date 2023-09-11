@@ -16,7 +16,7 @@ public class userDetail {
     }
 
     public userDetail(String userAccount) {
-        int avatarResID = R.drawable.user;
+        int avatarResID = R.drawable.avatar0;
         this.userAccount = userAccount;
         this.userName = "User";
         this.activityList = new ArrayList<Activity>();
@@ -25,7 +25,7 @@ public class userDetail {
     }
 
     public userDetail(String userAccount, String userName, List<Activity> activityList) {
-        int avatarResID = R.drawable.user;
+        int avatarResID = R.drawable.avatar0;
         this.userAccount = userAccount;
         this.userName = userName;
         this.activityList = activityList;

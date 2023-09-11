@@ -40,7 +40,7 @@ public class SignInActitvity extends AppCompatActivity {
     private TextInputLayout textInputLayoutPassword;
     private CheckBox checkBoxRememberMe;
     private String userNameSignIn = "Eggy";
-    private int avatarResIDSignIn = 0;
+    private String avatarResIDSignIn = "avatar0";
 
     public static final String REMEMBER_ME = "rememberMe";
 //    private String userName ="Eggy";
@@ -182,7 +182,7 @@ public class SignInActitvity extends AppCompatActivity {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                                             // change the avatar on toolbar
-                                            avatarResIDSignIn = Integer.parseInt(snapshot.getValue().toString());
+                                            avatarResIDSignIn = snapshot.getValue().toString();
                                             // intent to pass data
                                             Intent intentMove = new Intent(SignInActitvity.this, MainActivity.class);
                                             intentMove.putExtra("userNameSignIn", userNameSignIn);
