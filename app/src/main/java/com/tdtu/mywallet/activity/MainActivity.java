@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSpending;
     private Button btnIncome;
     private ImageView selectionAvatar;
-    private String avatarUser ="avatar0";
+    private String avatarUser = "avatar0";
     private TextView tv_name_main_activity;
     private Toolbar toolbar;
     private List<Category> categoryList = new ArrayList<Category>();
@@ -109,10 +109,9 @@ public class MainActivity extends AppCompatActivity {
     private Category activityCategory;
     private String activityType;
 
-    private String categoryName ;
-    private String categoryIcon ;
+    private String categoryName;
+    private String categoryIcon;
     private ImageView imageView4;
-
 
 
     @Override
@@ -136,14 +135,13 @@ public class MainActivity extends AppCompatActivity {
         // If user are not log in, get data from SignInActivity including default name and avatar of new user.
         Intent intent = getIntent();
         if (intent != null) {
-            String userName ="";
+            String userName = "";
             String userAvatar = "avatar0";
-            if(intent.hasExtra("userName") && intent.hasExtra("avatarResID")) {
+            if (intent.hasExtra("userName") && intent.hasExtra("avatarResID")) {
                 userName = intent.getStringExtra("userName");
                 Log.d(TAG, "userName " + userName);
                 userAvatar = intent.getStringExtra("avatarResID");
-            }
-            else {
+            } else {
                 userName = intent.getStringExtra("userNameSignIn");
                 Log.d(TAG, "userNameSignIn " + userName);
                 userAvatar = intent.getStringExtra("avatarResIDSignIn");
@@ -155,92 +153,78 @@ public class MainActivity extends AppCompatActivity {
             int imageResID = getResources().getIdentifier(userAvatar, "drawable", getPackageName());
 
             // Checking imageResID exist or not.
-            if(imageResID != 0){
+            if (imageResID != 0) {
                 selectionAvatar.setBackgroundResource(imageResID);
-            }else{
+            } else {
                 Toast.makeText(this, "Something Wrong!!!", Toast.LENGTH_LONG).show();
             }
 
-        }else{
+        } else {
             Log.d(TAG, "failed");
         }
     }
 
 
-    private void initUI(){
+    private void initUI() {
         // This section including Toolbar, ViewPager2, Bottom Navigation View
-
 
         //  ***TOOLBAR***
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        // Turn off title of Toolbar to customize
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+
+        // There is a imageView allow user to choose avatar and a textView display name
         selectionAvatar = findViewById(R.id.selectionAvatar);
         tv_name_main_activity = findViewById(R.id.name_main_activity);
 
-        selectionAvatar.setOnClickListener((View view)->{
+        selectionAvatar.setOnClickListener((View view) -> {
             openSelectionDialog(Gravity.CENTER);
         });
 
+        // _______________________________________________________________________________________________________________________________________________
         //   ***VIEWPAGER2***
+        // Configure for viewpager2
         viewPager2 = findViewById(R.id.content_frame);
         MyViewPage2Adapter myViewPage2Adapter = new MyViewPage2Adapter(this);
         viewPager2.setAdapter(myViewPage2Adapter);
         viewPager2.setCurrentItem(0);
 
+        // _______________________________________________________________________________________________________________________________________________
         //  ***BOTTOM_NAVIGATION_VIEW***
+        // Bottom navigation including bottom bar and floating action button: for adding Transaction
         AnimatedBottomBar bottomBar = findViewById(R.id.bottom_bar);
         bottomBar.setupWithViewPager2(viewPager2);
 
         FloatingActionButton fab = findViewById(R.id.fab_adding);
-        fab.setOnClickListener((View view)->{
+        fab.setOnClickListener((View view) -> {
             openAddingDialog(Gravity.BOTTOM);
-
-//            getWindow().setEnterTransition(new Slide());
-//            Intent intent = new Intent(MainActivity.this, AddingTransaction.class);
-
-            // Thực hiện hiệu ứng trượt từ dưới lên
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                Slide slide = new Slide(Gravity.START);
-//                slide.setDuration(100);
-//                getWindow().setExitTransition(slide);
-//                getWindow().setEnterTransition(slide);
-//            }
-//            getWindow().setWindowAnimations(R.style.anim1);
-//            Slide slide = new Slide();
-//            slide.setSlideEdge(Gravity.LEFT);
-//            slide.setDuration(100);
-//            getWindow().setEnterTransition(slide);
-//            startActivity(intent);
-//            overridePendingTransition(R.anim.dialog_enter_animation, R.anim.dialog_exit_animation);
-
         });
     }
 
 
-
-    //  ***BOTTOM NAVIGATION***
+    //  ***BOTTOM NAVIGATION OPTION MENU***
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
+
     //  ***TOOL BAR OPTION***
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.zoom){
+        if (id == R.id.zoom) {
             viewPager2.setPageTransformer(new ZoomOutPageTransformer());
-        }else if(id == R.id.depth){
+        } else if (id == R.id.depth) {
             viewPager2.setPageTransformer(new DepthPageTransformer());
-        }
-        else if(id == R.id.normal){
+        } else if (id == R.id.normal) {
             // reset to normal
             MyViewPage2Adapter myViewPage2Adapter = new MyViewPage2Adapter(this);
             viewPager2.setAdapter(myViewPage2Adapter);
             viewPager2.setPageTransformer(null);
-        }else if(id == R.id.signOut){
+        } else if (id == R.id.signOut) {
             // when sign out, clear all the shared preferences and sign out firebase authentication
             SharedPreferences sharedPreferencesRememberMe = getSharedPreferences(REMEMBER_ME, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferencesRememberMe.edit();
@@ -257,19 +241,17 @@ public class MainActivity extends AppCompatActivity {
 
     //  ***LOGICAL HANDLING
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         if (viewPager2.getCurrentItem() == 0) {
             // If the user is currently looking at the first step, allow the system to handle the
             // Back button. This calls finish() on this activity and pops the back stack.
             finishAffinity();
             super.onBackPressed();
-        }
-        else {
+        } else {
             // Otherwise, select the previous step.
             viewPager2.setCurrentItem(viewPager2.getCurrentItem() - 1);
         }
     }
-
 
 
     //  ***DIALOG HANDLING***
@@ -280,20 +262,19 @@ public class MainActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.layout_dialog_adding_activity);
 
         Window window = dialog.getWindow();
-        if(window == null){
+        if (window == null) {
             return;
-        }else{
+        } else {
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
             window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             window.setGravity(gravity);
-
             window.setWindowAnimations(R.style.DialogAnimation);
 
             dialog.show();
         }
         //  ***DIALOG***
 
-
+        // _______________________________________________________________________________________________________________________________________________
         //  Binding view
         layout_nameActivity = dialog.findViewById(R.id.layout_nameActivity);
         et_nameActivity = dialog.findViewById(R.id.et_nameActivity);
@@ -311,6 +292,7 @@ public class MainActivity extends AppCompatActivity {
         btnSpending = dialog.findViewById(R.id.btnSpending);
         btnIncome = dialog.findViewById(R.id.btnIncome);
 
+        // _______________________________________________________________________________________________________________________________________________
         // Reset name_layout and money_layout and category_layout to original state when clicked
         et_nameActivity.addTextChangedListener(new TextWatcher() {
             @Override
@@ -329,8 +311,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // _______________________________________________________________________________________________________________________________________________
+        // If user enters data, remove error line
+        // When the user enters data, convert it to money format. for example 100000 -> 100,000 VND
         et_moneyActivity.addTextChangedListener(new TextWatcher() {
             private String current = "";
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -344,18 +330,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!s.toString().equals(current)) {
+                    // Turn off to edit text, avoid repeating infinitely
                     et_moneyActivity.removeTextChangedListener(this);
 
 //                    String cleanString = s.toString().replaceAll("[,.]", "");
+
                     String text = s.toString().replaceAll("[^0-9]", "");
                     BigDecimal amount = new BigDecimal(text);
+                    // Format number to money. Ex: 1000 -> 1,000
                     DecimalFormat decimalFormat = new DecimalFormat("#,##0");
+                    // Format currency for this data
                     decimalFormat.setCurrency(Currency.getInstance("VND"));
                     String formatted = decimalFormat.format(amount);
 
                     et_moneyActivity.setText(formatted);
+                    // Position the cursor at the end of the string, allow user continue enter data
                     et_moneyActivity.setSelection(formatted.length());
-
+                    // Turn on after edit successfully
                     et_moneyActivity.addTextChangedListener(this);
                 }
             }
@@ -379,10 +370,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
         // get categoryList from database then setting autocomplete textview
         getCategoryList();
         adapterCategory = new AutoCompleteCategoryAdapter(this, categoryList);
@@ -404,7 +391,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Category selectedCategory = (Category) adapterView.getItemAtPosition(i);
                 categoryName = selectedCategory.getCategoryName();
-                categoryIcon =selectedCategory.getIconResID();
+                categoryIcon = selectedCategory.getIconResID();
                 Toast.makeText(MainActivity.this, "success", Toast.LENGTH_SHORT).show();
                 activityCategory = selectedCategory;
 
@@ -473,28 +460,27 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // handling button Spending
-        btnSpending.setOnClickListener((View view)->{
-            Toast toast = Toast.makeText(this,"Spending", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER_VERTICAL,0, 0);
+        btnSpending.setOnClickListener((View view) -> {
+            Toast toast = Toast.makeText(this, "Spending", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
             toast.show();
             //handling when user ignore name and category and money text box
-            if(TextUtils.isEmpty(et_nameActivity.getText().toString())){
+            if (TextUtils.isEmpty(et_nameActivity.getText().toString())) {
                 layout_nameActivity.setError("Missing!!!");
                 return;
-            }else if(TextUtils.isEmpty(et_moneyActivity.getText().toString())){
+            } else if (TextUtils.isEmpty(et_moneyActivity.getText().toString())) {
                 layout_moneyActivity.setError("Missing!!!");
                 return;
-            }else if(TextUtils.isEmpty(et_categoryActivity.getText().toString())){
+            } else if (TextUtils.isEmpty(et_categoryActivity.getText().toString())) {
                 layout_categoryActivity.setError("Missing!!!");
                 return;
             }
 
 
-
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
             String uid = user.getUid().toString();
-            DatabaseReference reference= firebaseDatabase.getReference(uid);
+            DatabaseReference reference = firebaseDatabase.getReference(uid);
 
             // adding new activity base on activityCount
             // update activityCount +=1 after adding
@@ -505,7 +491,7 @@ public class MainActivity extends AppCompatActivity {
                     int count = Integer.parseInt(activityID) + 1;
                     activityName = et_nameActivity.getText().toString();
                     activityMoney = et_moneyActivity.getText().toString().replaceAll("[^0-9]", "");
-                    activityTimeDate = et_timeActivity.getText().toString() +" "+ et_dateActivity.getText().toString();
+                    activityTimeDate = et_timeActivity.getText().toString() + " " + et_dateActivity.getText().toString();
                     activityPlace = et_placeActivity.getText().toString();
                     activityType = "Spending";
 
@@ -544,19 +530,19 @@ public class MainActivity extends AppCompatActivity {
 
         // handling button Income
 
-        btnIncome.setOnClickListener((View view)->{
+        btnIncome.setOnClickListener((View view) -> {
             Toast toast = Toast.makeText(this, "Income", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER_VERTICAL,0, 0);
+            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
             toast.show();
 
             //handling when user ignore name and category and money text box
-            if(TextUtils.isEmpty(et_nameActivity.getText().toString())){
+            if (TextUtils.isEmpty(et_nameActivity.getText().toString())) {
                 layout_nameActivity.setError("Missing!!!");
                 return;
-            }else if(TextUtils.isEmpty(et_moneyActivity.getText().toString())){
+            } else if (TextUtils.isEmpty(et_moneyActivity.getText().toString())) {
                 layout_moneyActivity.setError("Missing!!!");
                 return;
-            }else if(TextUtils.isEmpty(et_categoryActivity.getText().toString())){
+            } else if (TextUtils.isEmpty(et_categoryActivity.getText().toString())) {
                 layout_categoryActivity.setError("Missing!!!");
                 return;
             }
@@ -564,7 +550,7 @@ public class MainActivity extends AppCompatActivity {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
             String uid = user.getUid().toString();
-            DatabaseReference reference= firebaseDatabase.getReference(uid);
+            DatabaseReference reference = firebaseDatabase.getReference(uid);
 
             reference.child("User Detail").child("userActivityCount").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -573,7 +559,7 @@ public class MainActivity extends AppCompatActivity {
                     int count = Integer.parseInt(activityID) + 1;
                     activityName = et_nameActivity.getText().toString();
                     activityMoney = et_moneyActivity.getText().toString().replaceAll("[^0-9]", "");
-                    activityTimeDate = et_timeActivity.getText().toString() +" "+ et_dateActivity.getText().toString();
+                    activityTimeDate = et_timeActivity.getText().toString() + " " + et_dateActivity.getText().toString();
                     activityPlace = et_placeActivity.getText().toString();
                     activityType = "Income";
 
@@ -610,17 +596,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void getCategoryList(){
+    private void getCategoryList() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         String uid = user.getUid().toString();
-        DatabaseReference reference= firebaseDatabase.getReference(uid);
+        DatabaseReference reference = firebaseDatabase.getReference(uid);
         categoryList.clear();
         reference.child("User Detail").child("userCategory").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Category category = snapshot.getValue(Category.class);
-                if(category != null){
+                if (category != null) {
                     categoryList.add(category);
                 }
                 adapterCategory.notifyDataSetChanged();
@@ -678,55 +664,56 @@ public class MainActivity extends AppCompatActivity {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference reference = db.getReference(currentUser.getUid().toString());
 
-        avatar0.setOnClickListener((View view)->{
+        avatar0.setOnClickListener((View view) -> {
             reference.child("User Detail").child("userAvatar").setValue("avatar0");
             selectionAvatar.setBackgroundResource(R.drawable.avatar0);
             dialog.dismiss();
         });
 
-        avatar1.setOnClickListener((View view)->{
+        avatar1.setOnClickListener((View view) -> {
             reference.child("User Detail").child("userAvatar").setValue("avatar1");
             selectionAvatar.setBackgroundResource(R.drawable.avatar1);
             dialog.dismiss();
         });
 
-        avatar2.setOnClickListener((View view)->{
-            reference.child("User Detail").child("userAvatar").setValue("avatar2");;
+        avatar2.setOnClickListener((View view) -> {
+            reference.child("User Detail").child("userAvatar").setValue("avatar2");
+            ;
             selectionAvatar.setBackgroundResource(R.drawable.avatar2);
             dialog.dismiss();
         });
 
-        avatar3.setOnClickListener((View view)->{
+        avatar3.setOnClickListener((View view) -> {
             reference.child("User Detail").child("userAvatar").setValue("avatar3");
             selectionAvatar.setBackgroundResource(R.drawable.avatar3);
             dialog.dismiss();
         });
 
-        avatar4.setOnClickListener((View view)->{
+        avatar4.setOnClickListener((View view) -> {
             reference.child("User Detail").child("userAvatar").setValue("avatar4");
             selectionAvatar.setBackgroundResource(R.drawable.avatar4);
             dialog.dismiss();
         });
 
-        avatar5.setOnClickListener((View view)->{
+        avatar5.setOnClickListener((View view) -> {
             reference.child("User Detail").child("userAvatar").setValue("avatar5");
             selectionAvatar.setBackgroundResource(R.drawable.avatar5);
             dialog.dismiss();
         });
 
-        avatar6.setOnClickListener((View view)->{
+        avatar6.setOnClickListener((View view) -> {
             reference.child("User Detail").child("userAvatar").setValue("avatar6");
             selectionAvatar.setBackgroundResource(R.drawable.avatar6);
             dialog.dismiss();
         });
 
-        avatar7.setOnClickListener((View view)->{
+        avatar7.setOnClickListener((View view) -> {
             reference.child("User Detail").child("userAvatar").setValue("avatar7");
             selectionAvatar.setBackgroundResource(R.drawable.avatar7);
             dialog.dismiss();
         });
 
-        avatar8.setOnClickListener((View view)->{
+        avatar8.setOnClickListener((View view) -> {
             reference.child("User Detail").child("userAvatar").setValue("avatar8");
             selectionAvatar.setBackgroundResource(R.drawable.avatar8);
             dialog.dismiss();
