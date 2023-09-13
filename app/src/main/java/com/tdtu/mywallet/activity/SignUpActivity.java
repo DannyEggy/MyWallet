@@ -87,10 +87,8 @@ public class SignUpActivity extends AppCompatActivity {
                         textInputLayoutPasswordSignUp.setHelperText(null);
                         textInputLayoutPasswordSignUp.setError("Weak Password");
                     }
-
-
                 }else{
-                    textInputLayoutPasswordSignUp.setHelperText("Enter At Least 8 Characters");
+                    textInputLayoutPasswordSignUp.setHelperText("Enter At Least 8 Characters !!!");
                 }
             }
 

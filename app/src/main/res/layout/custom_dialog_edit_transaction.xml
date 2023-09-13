@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="@color/black"
-        android:text="Edit Transaction Successfully"
+        android:text="Action Complete Successfully"
         android:textSize="24sp"
         android:textStyle="bold" />
     <LinearLayout

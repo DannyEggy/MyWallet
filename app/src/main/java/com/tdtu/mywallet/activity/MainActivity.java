@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
             window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             window.setGravity(gravity);
-            window.setWindowAnimations(R.style.DialogAnimation);
+            window.setWindowAnimations(R.style.anim1);
 
             dialog.show();
         }

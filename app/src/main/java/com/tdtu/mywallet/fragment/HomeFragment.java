@@ -76,7 +76,6 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 public class HomeFragment extends Fragment implements RecyclerViewInterface {
 
 
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -138,7 +137,8 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     private List<Activity> activityList = new ArrayList<Activity>();
     private ImageView info_category;
     private ImageView info_transaction;
-    private List<Icon> getIconList(){
+
+    private List<Icon> getIconList() {
         List<Icon> iconList = new ArrayList<Icon>();
         iconList.add(new Icon("Icon 1", "icon0"));
         iconList.add(new Icon("Icon 2", "icon1"));
@@ -163,8 +163,6 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         recyclerView = view.findViewById(R.id.recyclerView_recent_activity);
         info_category = view.findViewById(R.id.info_category);
         info_transaction = view.findViewById(R.id.info_transaction);
-
-
 
 
         // handling all of logical event from view
@@ -226,10 +224,10 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         });
     }
 
-    private void handleLogic(){
+    private void handleLogic() {
         getActivityList();
 //        List<Category> categoryList = new ArrayList<Category>();
-        card_category_addMore.setOnClickListener((View mView)->{
+        card_category_addMore.setOnClickListener((View mView) -> {
             openAddingCategoryDialog(Gravity.BOTTOM);
         });
 
@@ -237,11 +235,10 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         //  **RECYCLER_VIEW_CATEGORY**
 //        CategoryListHolder.getInstance().updateUserList();
 //        categoryList = CategoryListHolder.getInstance().getCategoryList();
-        RecyclerViewAdapter_category categoryAdapter = new RecyclerViewAdapter_category(categoryList, getActivity(),this);
+        RecyclerViewAdapter_category categoryAdapter = new RecyclerViewAdapter_category(categoryList, getActivity(), this);
         recyclerView_category.setAdapter(categoryAdapter);
         LinearLayoutManager linearLayoutManager_category = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView_category.setLayoutManager(linearLayoutManager_category);
-
 
 
         //  **RECYCLER_VIEW_RECENT_ACTIVITY**
@@ -269,7 +266,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 final int position = viewHolder.getAdapterPosition();
 
-                switch (direction){
+                switch (direction) {
                     case ItemTouchHelper.LEFT:
                         //todo
                         Activity deleteActivity = activityList.get(position);
@@ -281,7 +278,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
                         String uid = user.getUid().toString();
-                        DatabaseReference reference= firebaseDatabase.getReference(uid);
+                        DatabaseReference reference = firebaseDatabase.getReference(uid);
                         reference.child("User Detail").child("userActivityList").child(deActivityID).removeValue();
                         recyclerView.getAdapter().notifyItemRemoved(position);
 //
@@ -291,7 +288,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                         Snackbar.make(recyclerView, deActivityName, Snackbar.LENGTH_LONG)
                                 .setAction("Undo", new View.OnClickListener() {
                                     @Override
-                                    public  void onClick(View view) {
+                                    public void onClick(View view) {
 //
                                         //todo
                                         // set undo to true then add the activity back to firebase and recyclerview
@@ -318,9 +315,9 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
             @Override
             public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-                        .addSwipeLeftBackgroundColor(ContextCompat.getColor(getActivity(),R.color.red))
+                        .addSwipeLeftBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red))
                         .addSwipeLeftActionIcon(R.drawable.baseline_delete_24)
-                        .addSwipeRightBackgroundColor(ContextCompat.getColor(getActivity(),R.color.green))
+                        .addSwipeRightBackgroundColor(ContextCompat.getColor(getActivity(), R.color.green))
                         .addSwipeRightActionIcon(R.drawable.baseline_done_24)
 
 
@@ -335,11 +332,11 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     }
 
 
-    private void getHomeBalance(){
+    private void getHomeBalance() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         String uid = user.getUid().toString();
-        DatabaseReference reference= firebaseDatabase.getReference(uid);
+        DatabaseReference reference = firebaseDatabase.getReference(uid);
         reference.child("User Detail").child("userBalance").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -358,17 +355,17 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         });
     }
 
-    private void getCategoryList(){
+    private void getCategoryList() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         String uid = user.getUid().toString();
-        DatabaseReference reference= firebaseDatabase.getReference(uid);
+        DatabaseReference reference = firebaseDatabase.getReference(uid);
         categoryList.clear();
         reference.child("User Detail").child("userCategory").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Category category = snapshot.getValue(Category.class);
-                if(category != null){
+                if (category != null) {
                     categoryList.add(category);
                 }
                 recyclerView_category.getAdapter().notifyDataSetChanged();
@@ -396,22 +393,21 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         });
     }
 
-    private void getActivityList(){
+    private void getActivityList() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         String uid = user.getUid().toString();
-        DatabaseReference reference= firebaseDatabase.getReference(uid);
+        DatabaseReference reference = firebaseDatabase.getReference(uid);
         reference.child("User Detail").child("userActivityList").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Activity activity = snapshot.getValue(Activity.class);
-                if(activity != null){
+                if (activity != null) {
                     //todo
                     // if undo is false then you add the activity to recyclerview
-                    if(!activity.isUndo()){
+                    if (!activity.isUndo()) {
                         activityList.add(0, activity);
                     }
-
 
 
                 }
@@ -440,7 +436,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         });
     }
 
-    String[] colors = {"White","Red","Blue","Green", "Yellow", "Orange"};
+    String[] colors = {"White", "Red", "Blue", "Green", "Yellow", "Orange"};
 
     @SuppressLint("ClickableViewAccessibility")
     private void openAddingCategoryDialog(int gravity) {
@@ -449,13 +445,13 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         dialog1.setContentView(R.layout.layout_dialog_adding_category);
 
         Window window1 = dialog1.getWindow();
-        if(window1 == null){
+        if (window1 == null) {
             return;
-        }else{
+        } else {
             window1.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
             window1.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             window1.setGravity(gravity);
-            window1.setWindowAnimations(R.style.DialogAnimation);
+            window1.setWindowAnimations(R.style.anim1);
             dialog1.show();
         }
 
@@ -522,10 +518,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         });
 
 
-
-
-
-            // **ColorInput**
+        // **ColorInput**
 
         adapterColors = new ArrayAdapter<String>(getActivity(), R.layout.layout_color_selection, colors);
         colorAutoCompleteTextView.setAdapter(adapterColors);
@@ -551,7 +544,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
             }
         });
 
-            //  **IconInput**
+        //  **IconInput**
 
         adapterIcons = new AutoCompleteIconAdapter(getActivity(), getIconList());
         iconAutoCompleteTextView.setAdapter(adapterIcons);
@@ -567,45 +560,43 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         });
 
 
-
         iconAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 Icon selectedIcon = (Icon) adapterView.getItemAtPosition(i);
                 categoryIconName = selectedIcon.getIconName();
-                categoryIcon =selectedIcon.getIconResID();
+                categoryIcon = selectedIcon.getIconResID();
                 Toast.makeText(getActivity(), "success", Toast.LENGTH_SHORT).show();
 
             }
         });
 
 
-        btnSaveCategory.setOnClickListener((View view)->{
-            Toast.makeText(getActivity(),"Adding Category Successfully", Toast.LENGTH_SHORT).show();
+        btnSaveCategory.setOnClickListener((View view) -> {
+            Toast.makeText(getActivity(), "Adding Category Successfully", Toast.LENGTH_SHORT).show();
             categoryName = nameTextInputEditText.getText().toString();
 
-            if(TextUtils.isEmpty(categoryName)){
+            if (TextUtils.isEmpty(categoryName)) {
                 layout_nameCategory.setError("Please Input Name");
                 return;
-            }else if(TextUtils.isEmpty(categoryColor)){
+            } else if (TextUtils.isEmpty(categoryColor)) {
                 layout_colorCategory.setError("Please Choose Color");
                 return;
-            }else if(TextUtils.isEmpty(categoryIconName)){
+            } else if (TextUtils.isEmpty(categoryIconName)) {
                 layout_iconCategory.setError("Please Choose Icon");
                 return;
-
             }
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
             String uid = user.getUid().toString();
-            DatabaseReference reference= firebaseDatabase.getReference(uid);
+            DatabaseReference reference = firebaseDatabase.getReference(uid);
             reference.child("User Detail").child("userCategoryCount").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     String categoryID = snapshot.getValue().toString();
-                    int count = Integer.parseInt(categoryID)+1;
+                    int count = Integer.parseInt(categoryID) + 1;
                     Category category = new Category(categoryName, categoryColor, categoryIcon);
                     reference.child("User Detail").child("userCategory").child(categoryID).setValue(category);
                     reference.child("User Detail").child("userCategoryCount").setValue(count);
@@ -618,15 +609,10 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
             });
 
 
-
-
-
             dialog1.dismiss();
         });
 
     }
-
-
 
 
     @Override
@@ -635,7 +621,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         String uid = user.getUid().toString();
-        DatabaseReference reference= firebaseDatabase.getReference(uid);
+        DatabaseReference reference = firebaseDatabase.getReference(uid);
         Category category = categoryList.get(position);
         String deleteCategory = category.getCategoryName();
         reference.child("User Detail").child("userCategory").child(deleteCategory).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -658,7 +644,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
 
     }
 
-    public RecyclerView getRecyclerView_category(){
-        return  recyclerView_category;
+    public RecyclerView getRecyclerView_category() {
+        return recyclerView_category;
     }
 }
