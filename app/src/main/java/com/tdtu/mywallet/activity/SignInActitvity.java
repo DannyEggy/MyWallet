@@ -53,11 +53,8 @@ public class SignInActitvity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        // get Data from Firebase
-        // then push data from Splash Activity to another Activity
-
-
-
+        // Get Data from Firebase
+        // Then push data from Splash Activity to another Activity
 
 
         emailUser = findViewById(R.id.emailUser);

@@ -55,7 +55,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdtu.mywallet.AutoCompleteAdapter.AutoCompleteCategoryAdapter;
-import com.tdtu.mywallet.CurrentAvatarViewModel;
+import com.tdtu.mywallet.viewmodel.CurrentAvatarViewModel;
 import com.tdtu.mywallet.viewpager2.MyViewPage2Adapter;
 import com.tdtu.mywallet.R;
 import com.tdtu.mywallet.model.Activity;
@@ -123,17 +123,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // start initiate UX UI
-        // Create a function to get data from SplashActivity
+        // Start initiate UX UI
+        // Call function to get data from SplashActivity
+        // Call function to get data from Setting Fragment
         // Optimize the time to retrieve and display data
         initUI();
         getDataFromSplashActivity();
-        viewModel = new ViewModelProvider(this).get(CurrentAvatarViewModel.class);
+        getDataFromSettingFragment();
 
+
+    }
+
+    private void getDataFromSettingFragment() {
+        // USing Live Data to get imageID user choose from Setting Fragment
+        viewModel = new ViewModelProvider(this).get(CurrentAvatarViewModel.class);
         final Observer<String> avatarObserver = new Observer<String>() {
             @Override
             public void onChanged(@Nullable final String imageID) {
-                // Update the UI, in this case, a TextView.
+                // Update the UI, in this case, an ImageView.
                 Toast.makeText(getApplicationContext(), imageID, Toast.LENGTH_SHORT).show();
                 int imageResID = getResources().getIdentifier(imageID, "drawable", getPackageName());
                 // Checking imageResID exist or not.
@@ -144,15 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-
         viewModel.getCurrentAvatarLiveData().observe(this, avatarObserver);
-
-
-
-    }
-
-    private void getDataFromSettingFragment(){
-
     }
 
     private void getDataFromSplashActivity() {
@@ -163,34 +162,28 @@ public class MainActivity extends AppCompatActivity {
         if (intent != null) {
             String userName = "";
             String userAvatar = "avatar0";
-            if(intent.getStringExtra("activity").equals("splashActivity")){
-                if (intent.hasExtra("userName") && intent.hasExtra("avatarResID")) {
-                    userName = intent.getStringExtra("userName");
-                    Log.d(TAG, "userName " + userName);
-                    userAvatar = intent.getStringExtra("avatarResID");
-                } else {
-                    userName = intent.getStringExtra("userNameSignIn");
-                    Log.d(TAG, "userNameSignIn " + userName);
-                    userAvatar = intent.getStringExtra("avatarResIDSignIn");
-                }
 
-                // Use the retrieved data as needed
-                tv_name_main_activity.setText(userName);
-
-                int imageResID = getResources().getIdentifier(userAvatar, "drawable", getPackageName());
-
-                // Checking imageResID exist or not.
-                if (imageResID != 0) {
-                    selectionAvatar.setBackgroundResource(imageResID);
-                } else {
-                    Toast.makeText(this, "Something Wrong!!!", Toast.LENGTH_LONG).show();
-                }
-
-
+            if (intent.hasExtra("userName") && intent.hasExtra("avatarResID")) {
+                userName = intent.getStringExtra("userName");
+                Log.d(TAG, "userName " + userName);
+                userAvatar = intent.getStringExtra("avatarResID");
+            } else {
+                userName = intent.getStringExtra("userNameSignIn");
+                Log.d(TAG, "userNameSignIn " + userName);
+                userAvatar = intent.getStringExtra("avatarResIDSignIn");
             }
 
+            // Use the retrieved data as needed
+            tv_name_main_activity.setText(userName);
 
+            int imageResID = getResources().getIdentifier(userAvatar, "drawable", getPackageName());
 
+            // Checking imageResID exist or not.
+            if (imageResID != 0) {
+                selectionAvatar.setBackgroundResource(imageResID);
+            } else {
+                Toast.makeText(this, "Something Wrong!!!", Toast.LENGTH_LONG).show();
+            }
 
 
         } else {
@@ -291,6 +284,7 @@ public class MainActivity extends AppCompatActivity {
     //  ***DIALOG HANDLING***
     @SuppressLint("ClickableViewAccessibility")
     private void openAddingDialog(int gravity) {
+        // Create a dialog to allow user to add Transaction from Toolbar
         Dialog dialog = new Dialog(this);
 //        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.layout_dialog_adding_activity);
@@ -404,7 +398,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        // get categoryList from database then setting autocomplete textview
+        // Get categoryList from database then configure autocomplete textview
         getCategoryList();
         adapterCategory = new AutoCompleteCategoryAdapter(this, categoryList);
         et_categoryActivity.setAdapter(adapterCategory);
@@ -422,7 +416,7 @@ public class MainActivity extends AppCompatActivity {
         et_categoryActivity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                // When user choose a category from autocomplete textview, set current Category.
                 Category selectedCategory = (Category) adapterView.getItemAtPosition(i);
                 categoryName = selectedCategory.getCategoryName();
                 categoryIcon = selectedCategory.getIconResID();
@@ -432,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // handling time edit text
+        // Handling time edit text
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
@@ -462,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // handling date edit text
+        // Handling date edit text
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -493,12 +487,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // handling button Spending
+        // Handling button Spending
         btnSpending.setOnClickListener((View view) -> {
             Toast toast = Toast.makeText(this, "Spending", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
             toast.show();
-            //handling when user ignore name and category and money text box
+            // Handling when user ignore name and category and money text box
             if (TextUtils.isEmpty(et_nameActivity.getText().toString())) {
                 layout_nameActivity.setError("Missing!!!");
                 return;
@@ -510,14 +504,15 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-
+            // Get current user and database
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
             String uid = user.getUid().toString();
             DatabaseReference reference = firebaseDatabase.getReference(uid);
 
-            // adding new activity base on activityCount
-            // update activityCount +=1 after adding
+            // Adding new activity base on activityCount
+            // Calculate the id for Transaction by counting Transaction in this account
+            // Update activityCount +=1 after adding
             reference.child("User Detail").child("userActivityCount").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -541,7 +536,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            // calculate the total balance
+            // Calculate the total balance and update to firebase
             reference.child("User Detail").child("userBalance").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -562,14 +557,14 @@ public class MainActivity extends AppCompatActivity {
             dialog.dismiss();
         });
 
-        // handling button Income
+        // Handling button Income
 
         btnIncome.setOnClickListener((View view) -> {
             Toast toast = Toast.makeText(this, "Income", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
             toast.show();
 
-            //handling when user ignore name and category and money text box
+            // Handling when user ignore name and category and money text box
             if (TextUtils.isEmpty(et_nameActivity.getText().toString())) {
                 layout_nameActivity.setError("Missing!!!");
                 return;
@@ -581,11 +576,15 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
+            // Get current user and database
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
             String uid = user.getUid().toString();
             DatabaseReference reference = firebaseDatabase.getReference(uid);
 
+            // Adding new activity base on activityCount
+            // Calculate the id for Transaction by counting Transaction in this account
+            // Update activityCount +=1 after adding
             reference.child("User Detail").child("userActivityCount").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -609,7 +608,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            // calculate the total balance
+            // Calculate the total balance
             reference.child("User Detail").child("userBalance").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -670,6 +669,7 @@ public class MainActivity extends AppCompatActivity {
 
     //  ***AVATAR SELECTION***
     private void openSelectionDialog(int gravity) {
+        // Create a dialog allow user to choose avatar from toolbar
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.layout_avatar_selection);

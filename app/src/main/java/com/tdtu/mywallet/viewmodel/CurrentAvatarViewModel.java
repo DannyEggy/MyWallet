@@ -1,4 +1,4 @@
-package com.tdtu.mywallet;
+package com.tdtu.mywallet.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

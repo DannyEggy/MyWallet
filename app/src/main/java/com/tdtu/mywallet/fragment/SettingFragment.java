@@ -2,7 +2,6 @@ package com.tdtu.mywallet.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -39,8 +38,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdtu.mywallet.R;
-import com.tdtu.mywallet.activity.MainActivity;
-import com.tdtu.mywallet.CurrentAvatarViewModel;
+import com.tdtu.mywallet.viewmodel.CurrentAvatarViewModel;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
