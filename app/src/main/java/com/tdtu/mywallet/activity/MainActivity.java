@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
@@ -53,6 +55,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdtu.mywallet.AutoCompleteAdapter.AutoCompleteCategoryAdapter;
+import com.tdtu.mywallet.CurrentAvatarViewModel;
 import com.tdtu.mywallet.viewpager2.MyViewPage2Adapter;
 import com.tdtu.mywallet.R;
 import com.tdtu.mywallet.model.Activity;
@@ -112,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     private String categoryName;
     private String categoryIcon;
     private ImageView imageView4;
+    private CurrentAvatarViewModel viewModel;
 
 
     @Override
@@ -124,10 +128,32 @@ public class MainActivity extends AppCompatActivity {
         // Optimize the time to retrieve and display data
         initUI();
         getDataFromSplashActivity();
+        viewModel = new ViewModelProvider(this).get(CurrentAvatarViewModel.class);
+
+        final Observer<String> avatarObserver = new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable final String imageID) {
+                // Update the UI, in this case, a TextView.
+                Toast.makeText(getApplicationContext(), imageID, Toast.LENGTH_SHORT).show();
+                int imageResID = getResources().getIdentifier(imageID, "drawable", getPackageName());
+                // Checking imageResID exist or not.
+                if (imageResID != 0) {
+                    selectionAvatar.setBackgroundResource(imageResID);
+                } else {
+                    return;
+                }
+            }
+        };
+
+        viewModel.getCurrentAvatarLiveData().observe(this, avatarObserver);
+
 
 
     }
 
+    private void getDataFromSettingFragment(){
+
+    }
 
     private void getDataFromSplashActivity() {
         // Get data from SplashActivity or SignInActivity intent
@@ -137,27 +163,35 @@ public class MainActivity extends AppCompatActivity {
         if (intent != null) {
             String userName = "";
             String userAvatar = "avatar0";
-            if (intent.hasExtra("userName") && intent.hasExtra("avatarResID")) {
-                userName = intent.getStringExtra("userName");
-                Log.d(TAG, "userName " + userName);
-                userAvatar = intent.getStringExtra("avatarResID");
-            } else {
-                userName = intent.getStringExtra("userNameSignIn");
-                Log.d(TAG, "userNameSignIn " + userName);
-                userAvatar = intent.getStringExtra("avatarResIDSignIn");
+            if(intent.getStringExtra("activity").equals("splashActivity")){
+                if (intent.hasExtra("userName") && intent.hasExtra("avatarResID")) {
+                    userName = intent.getStringExtra("userName");
+                    Log.d(TAG, "userName " + userName);
+                    userAvatar = intent.getStringExtra("avatarResID");
+                } else {
+                    userName = intent.getStringExtra("userNameSignIn");
+                    Log.d(TAG, "userNameSignIn " + userName);
+                    userAvatar = intent.getStringExtra("avatarResIDSignIn");
+                }
+
+                // Use the retrieved data as needed
+                tv_name_main_activity.setText(userName);
+
+                int imageResID = getResources().getIdentifier(userAvatar, "drawable", getPackageName());
+
+                // Checking imageResID exist or not.
+                if (imageResID != 0) {
+                    selectionAvatar.setBackgroundResource(imageResID);
+                } else {
+                    Toast.makeText(this, "Something Wrong!!!", Toast.LENGTH_LONG).show();
+                }
+
+
             }
 
-            // Use the retrieved data as needed
-            tv_name_main_activity.setText(userName);
 
-            int imageResID = getResources().getIdentifier(userAvatar, "drawable", getPackageName());
 
-            // Checking imageResID exist or not.
-            if (imageResID != 0) {
-                selectionAvatar.setBackgroundResource(imageResID);
-            } else {
-                Toast.makeText(this, "Something Wrong!!!", Toast.LENGTH_LONG).show();
-            }
+
 
         } else {
             Log.d(TAG, "failed");

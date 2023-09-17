@@ -50,6 +50,9 @@ dependencies {
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.4'
     implementation 'com.ramotion.foldingcell:folding-cell:1.2.3'
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.3.0"
+    implementation "androidx.lifecycle:lifecycle-livedata:2.3.0"
+
 
 
 

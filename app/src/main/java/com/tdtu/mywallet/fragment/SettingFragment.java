@@ -2,12 +2,14 @@ package com.tdtu.mywallet.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.text.Editable;
 import android.text.TextUtils;
@@ -24,12 +26,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,6 +39,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdtu.mywallet.R;
+import com.tdtu.mywallet.activity.MainActivity;
+import com.tdtu.mywallet.CurrentAvatarViewModel;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -59,6 +61,9 @@ public class SettingFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private CurrentAvatarViewModel viewModel;
+
 
     public SettingFragment() {
         // Required empty public constructor
@@ -89,6 +94,8 @@ public class SettingFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        viewModel = new ViewModelProvider(requireActivity()).get(CurrentAvatarViewModel.class);
+
     }
 
     private ImageView userAvatarSetting;
@@ -97,8 +104,11 @@ public class SettingFragment extends Fragment {
     private Button editPassword;
     private Button editCustomization;
     private Button editAbout;
+
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private String email;
+
+
 
     private void getUser() {
         email = user.getEmail();
@@ -217,6 +227,7 @@ public class SettingFragment extends Fragment {
             // Validate
             // Notify user when 3 editTexts are empty.
             // Notify user when Confirm password is not the same as New Password
+            // Notify user when Current password and New password is the same.
 
             if(TextUtils.isEmpty(currentPassword)){
                 layoutCurrentPassword.setError("Please Enter Current Password");
@@ -244,6 +255,7 @@ public class SettingFragment extends Fragment {
     }
 
     private void changePassword(TextInputLayout layoutCurrentPassword, String currentPassword, String newPassword,Dialog dialogPassword ) {
+        // Check Current password is correct or not
         AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPassword);
         user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -281,6 +293,115 @@ public class SettingFragment extends Fragment {
         });
     }
 
+    private void openSelectionDialog(int gravity, CurrentAvatarViewModel viewModel) {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.layout_avatar_selection);
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        window.setGravity(gravity);
+        dialog.show();
+
+        ImageView avatar0 = dialog.findViewById(R.id.avatar0);
+        ImageView avatar1 = dialog.findViewById(R.id.avatar1);
+        ImageView avatar2 = dialog.findViewById(R.id.avatar2);
+        ImageView avatar3 = dialog.findViewById(R.id.avatar3);
+        ImageView avatar4 = dialog.findViewById(R.id.avatar4);
+        ImageView avatar5 = dialog.findViewById(R.id.avatar5);
+        ImageView avatar6 = dialog.findViewById(R.id.avatar6);
+        ImageView avatar7 = dialog.findViewById(R.id.avatar7);
+        ImageView avatar8 = dialog.findViewById(R.id.avatar8);
+
+        // firebase connection
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference reference = db.getReference(currentUser.getUid().toString());
+
+        avatar0.setOnClickListener((View view) -> {
+            reference.child("User Detail").child("userAvatar").setValue("avatar0");
+            userAvatarSetting.setBackgroundResource(R.drawable.avatar0);
+            viewModel.setCurrentAvatarLiveData("avatar0");
+
+            dialog.dismiss();
+        });
+
+        avatar1.setOnClickListener((View view) -> {
+            reference.child("User Detail").child("userAvatar").setValue("avatar1");
+            userAvatarSetting.setBackgroundResource(R.drawable.avatar1);
+            viewModel.setCurrentAvatarLiveData("avatar1");
+            dialog.dismiss();
+        });
+
+        avatar2.setOnClickListener((View view) -> {
+            reference.child("User Detail").child("userAvatar").setValue("avatar2");
+            userAvatarSetting.setBackgroundResource(R.drawable.avatar2);
+            viewModel.setCurrentAvatarLiveData("avatar2");
+            dialog.dismiss();
+        });
+
+        avatar3.setOnClickListener((View view) -> {
+            reference.child("User Detail").child("userAvatar").setValue("avatar3");
+            userAvatarSetting.setBackgroundResource(R.drawable.avatar3);
+            viewModel.setCurrentAvatarLiveData("avatar3");
+            dialog.dismiss();
+        });
+
+        avatar4.setOnClickListener((View view) -> {
+            reference.child("User Detail").child("userAvatar").setValue("avatar4");
+            userAvatarSetting.setBackgroundResource(R.drawable.avatar4);
+            viewModel.setCurrentAvatarLiveData("avatar4");
+            dialog.dismiss();
+        });
+
+        avatar5.setOnClickListener((View view) -> {
+            reference.child("User Detail").child("userAvatar").setValue("avatar5");
+            userAvatarSetting.setBackgroundResource(R.drawable.avatar5);
+            viewModel.setCurrentAvatarLiveData("avatar5");
+            dialog.dismiss();
+        });
+
+        avatar6.setOnClickListener((View view) -> {
+            reference.child("User Detail").child("userAvatar").setValue("avatar6");
+            userAvatarSetting.setBackgroundResource(R.drawable.avatar6);
+            viewModel.setCurrentAvatarLiveData("avatar6");
+            dialog.dismiss();
+        });
+
+        avatar7.setOnClickListener((View view) -> {
+            reference.child("User Detail").child("userAvatar").setValue("avatar7");
+            userAvatarSetting.setBackgroundResource(R.drawable.avatar7);
+            viewModel.setCurrentAvatarLiveData("avatar7");
+            dialog.dismiss();
+        });
+
+        avatar8.setOnClickListener((View view) -> {
+            reference.child("User Detail").child("userAvatar").setValue("avatar8");
+            userAvatarSetting.setBackgroundResource(R.drawable.avatar8);
+            viewModel.setCurrentAvatarLiveData("avatar8");
+            dialog.dismiss();
+        });
+
+    }
+
+    private void openAbout(){
+        Dialog aboutDialog = new Dialog(getActivity());
+        aboutDialog.setContentView(R.layout.dialog_about);
+        Window window = aboutDialog.getWindow();
+        if(window == null){
+            return;
+        }else{
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            window.setGravity(Gravity.BOTTOM);
+            window.setWindowAnimations(R.style.anim1);
+            aboutDialog.show();
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -294,8 +415,17 @@ public class SettingFragment extends Fragment {
         editCustomization = view.findViewById(R.id.editCustomization);
         editAbout = view.findViewById(R.id.editAbout);
 
-        // connect to firebase and get user
+        // Initialize viewModel
+
+
+
+        // Connect to firebase and get user
         getUser();
+
+        // imageView set avatar for user
+        userAvatarSetting.setOnClickListener((View viewAvatar)->{
+            openSelectionDialog(Gravity.CENTER, viewModel);
+        });
 
         // set email for setting fragment
         emailUserSetting.setText(email);
@@ -322,12 +452,21 @@ public class SettingFragment extends Fragment {
             openEditPassword(Gravity.BOTTOM);
         });
 
-
         //______________________________________________________________________________________________________________________________________________________________________________________
         // cardCustomization section
+        // todo
+        // Change theme: Light and Dark
+        // Custom icon for user.
+        editCustomization.setOnClickListener((View viewCustomization)->{
+
+        });
+
 
         //______________________________________________________________________________________________________________________________________________________________________________________
         // cardAbout Section
+        editAbout.setOnClickListener((View viewAbout)->{
+            openAbout();
+        });
 
         return view;
     }

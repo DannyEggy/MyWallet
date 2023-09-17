@@ -109,6 +109,7 @@ public class SplashActivity extends AppCompatActivity {
         if (isLoggedIn) {
             // push data to MainActivity
             Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("activity", "splashActivity");
             intent.putExtra("userName", userName);
             intent.putExtra("avatarResID", avatarResID);
             intent.putExtra("userBalance", userBalance);

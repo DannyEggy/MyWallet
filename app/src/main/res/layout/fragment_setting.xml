@@ -16,6 +16,12 @@
         android:layout_height="150dp"
         android:layout_gravity="center"
          />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="*Click to change avatar"/>
+
 
     <TextView
         android:id="@+id/emailUserSetting"
