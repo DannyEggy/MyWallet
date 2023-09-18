@@ -7,7 +7,7 @@
     android:background="@color/green_deep"
 
     android:orientation="vertical"
-    tools:context=".fragment.UserFragment">
+    tools:context=".fragment.BudgetFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

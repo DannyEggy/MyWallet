@@ -8,7 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.tdtu.mywallet.fragment.AnalysisFragment;
 import com.tdtu.mywallet.fragment.HomeFragment;
 import com.tdtu.mywallet.fragment.SettingFragment;
-import com.tdtu.mywallet.fragment.UserFragment;
+import com.tdtu.mywallet.fragment.BudgetFragment;
 
 public class MyViewPage2Adapter extends FragmentStateAdapter {
 
@@ -26,7 +26,7 @@ public class MyViewPage2Adapter extends FragmentStateAdapter {
             case 1:
                 return new AnalysisFragment();
             case 2:
-                return new UserFragment();
+                return new BudgetFragment();
             case 3:
                 return new SettingFragment();
 

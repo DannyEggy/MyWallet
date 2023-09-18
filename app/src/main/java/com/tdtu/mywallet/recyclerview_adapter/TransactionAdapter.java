@@ -52,9 +52,12 @@ import com.tdtu.mywallet.model.Category;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -202,8 +205,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         // This section needs to get data from a transaction and then display it on Tittle View  for the user
         // display name, time-date and place by getting the data above
         holder.item_name_Actitvity.setText(activity.getActivityName());
-        String time_date = activity.getActivityTimeDate();
-        holder.item_time_date_Actitvity.setText(time_date);
+        long time_date = activity.getActivityDateTime();
+        Date dateDisplay = new Date(time_date);
+        SimpleDateFormat dateFormatDisplay = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+        String time_date_display = dateFormatDisplay.format(dateDisplay);
+        holder.item_time_date_Actitvity.setText(String.valueOf(time_date_display));
         String place = activity.getActivityPlace();
         holder.item_place_Activity.setText(place);
 
@@ -242,11 +248,16 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         holder.et_moneyActivity_edit.setText(activity.getActivityMoney());
 
         // split the string of time-date to 2 string of time and date then display it to users
-        String[] time_date_edit = activity.getActivityTimeDate().split(" ");
-        String time = time_date_edit[0];
-        String date = time_date_edit[1];
-        holder.et_timeActivity_edit.setText(time);
+        long time_date_edit = activity.getActivityDateTime();
+        Date date_time = new Date(time_date_edit);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+        String[] formattedDateTime = dateFormat.format(date_time).split(" ");
+
+        String date = formattedDateTime[0];
+        String time = formattedDateTime[1];
         holder.et_dateActivity_edit.setText(date);
+        holder.et_timeActivity_edit.setText(time);
+
 
         // display place
         if (activity.getActivityPlace() == null) {
@@ -369,7 +380,20 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             // Define the edited Transaction after user enter data
             String activityName = holder.et_nameActivity_edit.getText().toString();
             String activityMoney = holder.et_moneyActivity_edit.getText().toString().replaceAll("[^0-9]", "");
-            String activityTimeDate = holder.et_timeActivity_edit.getText().toString() + " " + holder.et_dateActivity_edit.getText().toString();
+
+            long timestampEdit =0;
+            String inputDate = holder.et_dateActivity_edit.getText().toString();
+            String inputTime = holder.et_timeActivity_edit.getText().toString();
+            // Change format
+            SimpleDateFormat dateFormatEdit = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            try {
+                Date dateTime = dateFormatEdit.parse(inputDate + " " + inputTime);
+                timestampEdit = dateTime.getTime();
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+
+            long activityTimeDate =  timestampEdit;
             String activityPlace = holder.et_placeActivity_edit.getText().toString();
             Activity editedActivity = new Activity(id, activityName, activityMoney, activityCategory, type, activityTimeDate, activityPlace);
 
@@ -396,7 +420,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
                         //Update several data for Tittle View after edit the transaction
                         holder.item_place_Activity.setText(activityPlace);
-                        holder.item_time_date_Actitvity.setText(activityTimeDate);
+
+                        Date dateEdit = new Date(activityTimeDate);
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+                        String formattedDateTime = dateFormat.format(dateEdit);
+
+                        holder.item_time_date_Actitvity.setText(formattedDateTime);
                         holder.item_name_Actitvity.setText(activityName);
 
                         BigDecimal amount = new BigDecimal(activityMoney);

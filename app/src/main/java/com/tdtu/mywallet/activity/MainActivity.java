@@ -66,9 +66,12 @@ import com.tdtu.mywallet.transformer.ZoomOutPageTransformer;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -79,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager2 viewPager2;
     private static final int FRAGMENT_HOME = 0;
     private static final int FRAGMENT_ANALYSIS = 1;
-    private static final int FRAGMENT_USER = 2;
+    private static final int FRAGMENT_BUDGET = 2;
     private static final int FRAGMENT_SETTING = 3;
     private int currentFragment = FRAGMENT_HOME;
     private FloatingActionButton floatingActionButton;
@@ -107,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
     private String activityID;
     private String activityName;
     private String activityMoney;
-    private String activityTimeDate;
+    private long activityDateTime;
     private String activityPlace;
     private Category activityCategory;
     private String activityType;
@@ -296,8 +299,7 @@ public class MainActivity extends AppCompatActivity {
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
             window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             window.setGravity(gravity);
-            window.setWindowAnimations(R.style.anim1);
-
+            window.setWindowAnimations(R.style.DialogAnimation);
             dialog.show();
         }
         //  ***DIALOG***
@@ -520,11 +522,28 @@ public class MainActivity extends AppCompatActivity {
                     int count = Integer.parseInt(activityID) + 1;
                     activityName = et_nameActivity.getText().toString();
                     activityMoney = et_moneyActivity.getText().toString().replaceAll("[^0-9]", "");
-                    activityTimeDate = et_timeActivity.getText().toString() + " " + et_dateActivity.getText().toString();
+
+                    // Change format date and time to timestamps
+                    // Get date and time from user
+                    long timestamp =0;
+                    String inputDate = et_dateActivity.getText().toString();
+                    String inputTime = et_timeActivity.getText().toString();
+                    // Change format
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                    try {
+                        Date dateTime = dateFormat.parse(inputDate + " " + inputTime);
+                        timestamp = dateTime.getTime();
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+
+
+
+                    activityDateTime = timestamp;
                     activityPlace = et_placeActivity.getText().toString();
                     activityType = "Spending";
 
-                    Activity activity = new Activity(activityID, activityName, activityMoney, activityCategory, activityType, activityTimeDate, activityPlace);
+                    Activity activity = new Activity(activityID, activityName, activityMoney, activityCategory, activityType, activityDateTime, activityPlace);
 
                     reference.child("User Detail").child("userActivityList").child(activityID).setValue(activity);
                     reference.child("User Detail").child("userActivityCount").setValue(count);
@@ -592,11 +611,26 @@ public class MainActivity extends AppCompatActivity {
                     int count = Integer.parseInt(activityID) + 1;
                     activityName = et_nameActivity.getText().toString();
                     activityMoney = et_moneyActivity.getText().toString().replaceAll("[^0-9]", "");
-                    activityTimeDate = et_timeActivity.getText().toString() + " " + et_dateActivity.getText().toString();
+
+                    // Change format date and time to timestamps
+                    // Get date and time from user
+                    long timestamp =0;
+                    String inputDate = et_dateActivity.getText().toString();
+                    String inputTime = et_timeActivity.getText().toString();
+                    // Change format
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                    try {
+                        Date dateTime = dateFormat.parse(inputDate + " " + inputTime);
+                        timestamp = dateTime.getTime();
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                    activityDateTime = timestamp;
+
                     activityPlace = et_placeActivity.getText().toString();
                     activityType = "Income";
 
-                    Activity activity = new Activity(activityID, activityName, activityMoney, activityCategory, activityType, activityTimeDate, activityPlace);
+                    Activity activity = new Activity(activityID, activityName, activityMoney, activityCategory, activityType, activityDateTime, activityPlace);
 
                     reference.child("User Detail").child("userActivityList").child(activityID).setValue(activity);
                     reference.child("User Detail").child("userActivityCount").setValue(count);
@@ -679,6 +713,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setWindowAnimations(R.style.anim1);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         window.setGravity(gravity);
         dialog.show();

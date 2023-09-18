@@ -7,7 +7,7 @@ public class Activity {
     private String activityID;
     private String activityName;
     private String activityMoney;
-    private String activityTimeDate;
+    private long activityDateTime;
     private String activityPlace;
     private Category activityCategory;
     private String activityType;
@@ -17,11 +17,11 @@ public class Activity {
     public Activity() {
     }
 
-    public Activity(String activityID, String activityName, String activityMoney, Category activityCategory, String activityType, String activityTimeDate, String activityPlace) {
+    public Activity(String activityID, String activityName, String activityMoney, Category activityCategory, String activityType, long activityDateTime, String activityPlace) {
         this.activityID = activityID;
         this.activityName = activityName;
         this.activityMoney = activityMoney;
-        this.activityTimeDate = activityTimeDate;
+        this.activityDateTime = activityDateTime;
         this.activityPlace = activityPlace;
         this.activityCategory = activityCategory;
         this.activityType = activityType;
@@ -49,8 +49,7 @@ public class Activity {
         int minute = calendar.get(Calendar.MINUTE);
         int second = calendar.get(Calendar.SECOND);
         // Display current time and date
-        String currentTimeAndDate = String.format("%02d:%02d:%02d - %02d/%02d/%04d", hour, minute, second, day, month + 1, year);
-        this.activityTimeDate = currentTimeAndDate;
+        this.activityDateTime = System.currentTimeMillis();
     }
 
     public boolean isUndo() {
@@ -87,12 +86,12 @@ public class Activity {
         this.activityMoney = activityMoney;
     }
 
-    public String getActivityTimeDate() {
-        return activityTimeDate;
+    public long getActivityDateTime() {
+        return activityDateTime;
     }
 
-    public void setActivityTimeDate(String activityTimeDate) {
-        this.activityTimeDate = activityTimeDate;
+    public void setActivityDateTime(long activityDateTime) {
+        this.activityDateTime = activityDateTime;
     }
 
     public String getActivityPlace() {

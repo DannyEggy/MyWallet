@@ -125,7 +125,7 @@ public class SettingFragment extends Fragment {
             windowPassword.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
             windowPassword.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             windowPassword.setGravity(gravity);
-            windowPassword.setWindowAnimations(R.style.anim1);
+            windowPassword.setWindowAnimations(R.style.DialogAnimation);
             dialogPassword.show();
         }
 
@@ -301,6 +301,7 @@ public class SettingFragment extends Fragment {
         }
 
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setWindowAnimations(R.style.anim1);
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         window.setGravity(gravity);
         dialog.show();
@@ -396,7 +397,7 @@ public class SettingFragment extends Fragment {
             window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
             window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             window.setGravity(Gravity.BOTTOM);
-            window.setWindowAnimations(R.style.anim1);
+            window.setWindowAnimations(R.style.DialogAnimation);
             aboutDialog.show();
         }
     }

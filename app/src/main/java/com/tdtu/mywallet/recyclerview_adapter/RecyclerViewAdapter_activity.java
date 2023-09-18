@@ -55,8 +55,8 @@ public class RecyclerViewAdapter_activity extends RecyclerView.Adapter<ActivityV
         }
 
         holder.item_name_Actitvity.setText(activity.getActivityName());
-        String time_date = activity.getActivityTimeDate();
-        holder.item_time_date_Actitvity.setText(time_date);
+        long time_date = activity.getActivityDateTime();
+        holder.item_time_date_Actitvity.setText(String.valueOf(time_date));
         String place = activity.getActivityPlace();
         holder.item_place_Activity.setText(place);
         if (type.equals("Spending")) {
