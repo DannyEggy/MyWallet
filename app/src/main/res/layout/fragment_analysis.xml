@@ -8,7 +8,39 @@
     android:background="@color/white"
     tools:context=".fragment.AnalysisFragment">
 
-    <SearchView
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchAnalysis"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" >
+
+    </androidx.appcompat.widget.SearchView>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayoutAnalysis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabSpending"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Spending" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabIncome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Income" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/transactionHistory"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>
