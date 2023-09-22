@@ -5,15 +5,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.tdtu.mywallet.fragment.AnalysisFragment;
-import com.tdtu.mywallet.fragment.HomeFragment;
-import com.tdtu.mywallet.fragment.SettingFragment;
-import com.tdtu.mywallet.fragment.BudgetFragment;
+import com.tdtu.mywallet.main_fragment.AnalysisFragment;
+import com.tdtu.mywallet.main_fragment.HomeFragment;
+import com.tdtu.mywallet.main_fragment.SettingFragment;
+import com.tdtu.mywallet.main_fragment.BudgetFragment;
 
-public class MyViewPage2Adapter extends FragmentStateAdapter {
+public class MainViewPager2Adapter extends FragmentStateAdapter {
 
 
-    public MyViewPage2Adapter(@NonNull FragmentActivity fragmentActivity) {
+    public MainViewPager2Adapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
 

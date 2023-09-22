@@ -1,4 +1,4 @@
-package com.tdtu.mywallet.fragment;
+package com.tdtu.mywallet.main_fragment;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -50,6 +50,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.tdtu.mywallet.AutoCompleteAdapter.AutoCompleteIconAdapter;
 import com.tdtu.mywallet.R;
@@ -273,7 +275,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                         String deActivityID = deleteActivity.getActivityID();
                         String deActivityName = deleteActivity.getActivityName();
 
-                        //delete
+                        // Delete Transaction
                         activityList.remove(deleteActivity);
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -281,7 +283,21 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                         DatabaseReference reference = firebaseDatabase.getReference(uid);
                         reference.child("User Detail").child("userActivityList").child(deActivityID).removeValue();
                         recyclerView.getAdapter().notifyItemRemoved(position);
-//
+
+                        // Update Balance
+                        reference.child("User Detail").child("userBalance").runTransaction(new Transaction.Handler() {
+                            @NonNull
+                            @Override
+                            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+
+                                return Transaction.success(currentData);
+                            }
+
+                            @Override
+                            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+
+                            }
+                        });
 
 
                         // undo
@@ -302,6 +318,21 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                                         recyclerView.getAdapter().notifyItemInserted(position);
                                         recyclerView.scrollToPosition(position);
                                         reference.child("User Detail").child("userActivityList").child(deActivityID).child("undo").setValue(false);
+
+                                        // Update Balance
+                                        reference.child("User Detail").child("userBalance").runTransaction(new Transaction.Handler() {
+                                            @NonNull
+                                            @Override
+                                            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+
+                                                return Transaction.success(currentData);
+                                            }
+
+                                            @Override
+                                            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+
+                                            }
+                                        });
 
                                     }
                                 }).show();
@@ -597,7 +628,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     String categoryID = snapshot.getValue().toString();
                     int count = Integer.parseInt(categoryID) + 1;
-                    Category category = new Category(categoryName, categoryColor, categoryIcon);
+                    Category category = new Category(count, categoryName, categoryColor, categoryIcon);
                     reference.child("User Detail").child("userCategory").child(categoryID).setValue(category);
                     reference.child("User Detail").child("userCategoryCount").setValue(count);
                 }
@@ -623,15 +654,20 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         String uid = user.getUid().toString();
         DatabaseReference reference = firebaseDatabase.getReference(uid);
         Category category = categoryList.get(position);
-        String deleteCategory = category.getCategoryName();
-        reference.child("User Detail").child("userCategory").child(deleteCategory).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+        int deleteCategoryID = category.getCategoryID();
+        reference.child("User Detail").child("userCategory").child(String.valueOf(deleteCategoryID)).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                // Xóa dữ liệu thành công
-                // Thực hiện các hành động khác sau khi xóa dữ liệu
+                // Delete category successfully
+                // Delete category in categoryList and update recyclerView of category
                 categoryList.remove(position);
                 recyclerView_category.getAdapter().notifyItemRemoved(position);
                 Toast.makeText(getActivity(), "Delete Category Successfully", Toast.LENGTH_LONG).show();
+//                // Update category Count
+//                // Delete category -> categoryCount -1sw
+//                int updatedCategoryCount = deleteCategoryID -1;
+//                reference.child("User Detail").child("userCategoryCount").setValue(String.valueOf(updatedCategoryCount));
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

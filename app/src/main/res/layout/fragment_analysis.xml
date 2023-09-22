@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:padding="20dp"
     android:background="@color/white"
-    tools:context=".fragment.AnalysisFragment">
+    tools:context=".main_fragment.AnalysisFragment">
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchAnalysis"

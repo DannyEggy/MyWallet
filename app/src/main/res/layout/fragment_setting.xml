@@ -7,7 +7,7 @@
     android:orientation="vertical"
 
     android:background="@color/white"
-    tools:context=".fragment.SettingFragment">
+    tools:context=".main_fragment.SettingFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <ImageView

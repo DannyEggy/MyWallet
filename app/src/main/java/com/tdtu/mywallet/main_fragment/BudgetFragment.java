@@ -1,4 +1,4 @@
-package com.tdtu.mywallet.fragment;
+package com.tdtu.mywallet.main_fragment;
 
 import android.os.Bundle;
 

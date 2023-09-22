@@ -56,7 +56,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdtu.mywallet.AutoCompleteAdapter.AutoCompleteCategoryAdapter;
 import com.tdtu.mywallet.viewmodel.CurrentAvatarViewModel;
-import com.tdtu.mywallet.viewpager2.MyViewPage2Adapter;
+import com.tdtu.mywallet.viewpager2.MainViewPager2Adapter;
 import com.tdtu.mywallet.R;
 import com.tdtu.mywallet.model.Activity;
 import com.tdtu.mywallet.model.Category;
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
             String userName = "";
             String userAvatar = "avatar0";
 
-            if (intent.hasExtra("userName") && intent.hasExtra("avatarResID")) {
+            if (intent.hasExtra("userName") && intent.hasExtra("avatarResID") && intent.hasExtra("userBalance")) {
                 userName = intent.getStringExtra("userName");
                 Log.d(TAG, "userName " + userName);
                 userAvatar = intent.getStringExtra("avatarResID");
@@ -179,14 +179,17 @@ public class MainActivity extends AppCompatActivity {
             // Use the retrieved data as needed
             tv_name_main_activity.setText(userName);
 
-            int imageResID = getResources().getIdentifier(userAvatar, "drawable", getPackageName());
+            if(userAvatar!= null){
+                int imageResID = getResources().getIdentifier(userAvatar, "drawable", getPackageName());
 
-            // Checking imageResID exist or not.
-            if (imageResID != 0) {
-                selectionAvatar.setBackgroundResource(imageResID);
-            } else {
-                Toast.makeText(this, "Something Wrong!!!", Toast.LENGTH_LONG).show();
+                // Checking imageResID exist or not.
+                if (imageResID != 0) {
+                    selectionAvatar.setBackgroundResource(imageResID);
+                } else {
+                    Toast.makeText(this, "Something Wrong!!!", Toast.LENGTH_LONG).show();
+                }
             }
+
 
 
         } else {
@@ -216,8 +219,8 @@ public class MainActivity extends AppCompatActivity {
         //   ***VIEWPAGER2***
         // Configure for viewpager2
         viewPager2 = findViewById(R.id.content_frame);
-        MyViewPage2Adapter myViewPage2Adapter = new MyViewPage2Adapter(this);
-        viewPager2.setAdapter(myViewPage2Adapter);
+        MainViewPager2Adapter mainViewPager2Adapter = new MainViewPager2Adapter(this);
+        viewPager2.setAdapter(mainViewPager2Adapter);
         viewPager2.setCurrentItem(0);
 
         // _______________________________________________________________________________________________________________________________________________
@@ -251,8 +254,8 @@ public class MainActivity extends AppCompatActivity {
             viewPager2.setPageTransformer(new DepthPageTransformer());
         } else if (id == R.id.normal) {
             // reset to normal
-            MyViewPage2Adapter myViewPage2Adapter = new MyViewPage2Adapter(this);
-            viewPager2.setAdapter(myViewPage2Adapter);
+            MainViewPager2Adapter mainViewPager2Adapter = new MainViewPager2Adapter(this);
+            viewPager2.setAdapter(mainViewPager2Adapter);
             viewPager2.setPageTransformer(null);
         } else if (id == R.id.signOut) {
             // when sign out, clear all the shared preferences and sign out firebase authentication

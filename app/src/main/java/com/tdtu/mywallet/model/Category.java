@@ -4,20 +4,31 @@ public class Category {
     private String categoryName;
     private String categoryColor;
     private String iconResID;
+    private int categoryID;
 
     public Category() {
     }
 
-    public Category(String categoryName, String categoryColor, String iconResID) {
+    public Category(int categoryID,String categoryName, String categoryColor, String iconResID) {
+        this.categoryID = categoryID;
         this.categoryName = categoryName;
         this.categoryColor = categoryColor;
         this.iconResID = iconResID;
     }
 
-    public Category(String categoryName, String iconResID) {
+    public Category(int categoryID,String categoryName, String iconResID) {
+        this.categoryID = categoryID;
         this.categoryName = categoryName;
         this.iconResID = iconResID;
         this.categoryColor = "white";
+    }
+
+    public int getCategoryID() {
+        return categoryID;
+    }
+
+    public void setCategoryID(int categoryID) {
+        this.categoryID = categoryID;
     }
 
     public String getCategoryName() {
