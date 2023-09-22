@@ -2,12 +2,16 @@ package com.tdtu.mywallet.fragment;
 
 import android.os.Bundle;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.tdtu.mywallet.R;
 
 /**
@@ -57,10 +61,35 @@ public class AnalysisFragment extends Fragment {
         }
     }
 
+    private TabLayout tabLayout;
+    private SearchView searchView;
+    private ViewPager2 viewPager2;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_analysis, container, false);
+        View view = inflater.inflate(R.layout.fragment_analysis, container, false);
+
+        tabLayout = view.findViewById(R.id.tabLayoutAnalysis);
+        searchView = view.findViewById(R.id.searchAnalysis);
+        viewPager2 = view.findViewById(R.id.transactionHistory);
+
+        TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout,viewPager2,  (tab, position) -> {
+            switch (position) {
+                case 0:
+                    tab.setText("All");
+                    break;
+                case 1:
+                    tab.setText("Spending");
+                    break;
+                case 2:
+                    tab.setText("Income");
+                    break;
+            }
+        });
+        tabLayoutMediator.attach();
+
+
+            return view;
     }
 }
