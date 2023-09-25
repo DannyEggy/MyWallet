@@ -15,10 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyWallet"
+
         tools:targetApi="31">
-        <activity
-            android:name=".AddingTransaction"
-            android:exported="false" />
+
         <activity
             android:name=".activity.SignUpActivity"
             android:exported="false" />
@@ -27,6 +26,7 @@
             android:exported="false" />
         <activity
             android:name=".activity.MainActivity"
+            android:windowSoftInputMode="adjustPan|adjustNothing"
             android:exported="false" />
         <activity
             android:name=".activity.SplashActivity"

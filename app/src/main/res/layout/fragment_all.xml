@@ -6,9 +6,298 @@
     tools:context=".anaysis_fragment.AllFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="All Page" />
+        android:orientation="vertical">
+
+        <!--RecyclerView for Transaction 1 Month Ago -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellow_deep">
+
+            <TextView
+                android:id="@+id/recent_1_month_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="10dp"
+                android:text="September"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_1_month_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--RecyclerView for Transaction 2 Month Ago -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellow_deep">
+
+            <TextView
+                android:id="@+id/recent_2_month_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="10dp"
+                android:text="August"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_2_month_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--RecyclerView for Transaction 3 Month Ago -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellow_deep">
+
+            <TextView
+                android:id="@+id/recent_3_month_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="10dp"
+                android:text="July"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_3_month_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--RecyclerView for Transaction 4 Month Ago -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellow_deep">
+
+            <TextView
+                android:id="@+id/recent_4_month_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="10dp"
+                android:text="June"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_4_month_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--RecyclerView for Transaction 5 Month Ago -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellow_deep">
+
+            <TextView
+                android:id="@+id/recent_5_month_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="10dp"
+                android:text="May"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_5_month_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--RecyclerView for Transaction 6 Month Ago -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellow_deep">
+
+            <TextView
+                android:id="@+id/recent_6_month_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="10dp"
+                android:text="April"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_6_month_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--RecyclerView for Transaction 7 Month Ago -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellow_deep">
+
+            <TextView
+                android:id="@+id/recent_7_month_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="10dp"
+                android:text="March"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_7_month_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--RecyclerView for Transaction 8 Month Ago -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellow_deep">
+
+            <TextView
+                android:id="@+id/recent_8_month_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="10dp"
+                android:text="February"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_8_month_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--RecyclerView for Transaction 9 Month Ago -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellow_deep">
+
+            <TextView
+                android:id="@+id/recent_9_month_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="10dp"
+                android:text="January"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_9_month_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--RecyclerView for Transaction 10 Month Ago -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellow_deep">
+
+            <TextView
+                android:id="@+id/recent_10_month_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="10dp"
+                android:text="December"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_10_month_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--RecyclerView for Transaction 11 Month Ago -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellow_deep">
+
+            <TextView
+                android:id="@+id/recent_11_month_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="10dp"
+                android:text="November"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_11_month_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--RecyclerView for Transaction 12 Month Ago -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellow_deep">
+
+            <TextView
+                android:id="@+id/recent_12_month_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="10dp"
+                android:text="October"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_12_month_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--RecyclerView for Transaction before 1 year Ago -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellow_deep">
+
+            <TextView
+                android:id="@+id/recent_1_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="10dp"
+                android:text="2022"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_1_year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
 
 </FrameLayout>
