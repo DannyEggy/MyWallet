@@ -74,35 +74,7 @@ public class AnalysisFragment extends Fragment {
     private SearchView searchView;
     private ViewPager2 viewPager2;
 
-    // Tittle for 12 recent months and a previous year
-    private TextView recent_1_month_all;
-    private TextView recent_2_month_all;
-    private TextView recent_3_month_all;
-    private TextView recent_4_month_all;
-    private TextView recent_5_month_all;
-    private TextView recent_6_month_all;
-    private TextView recent_7_month_all;
-    private TextView recent_8_month_all;
-    private TextView recent_9_month_all;
-    private TextView recent_10_month_all;
-    private TextView recent_11_month_all;
-    private TextView recent_12_month_all;
-    private TextView recent_1_year;
 
-    // RecyclerView for recent 12 months and a previous year
-    private RecyclerView rv_1_month_all;
-    private RecyclerView rv_2_month_all;
-    private RecyclerView rv_3_month_all;
-    private RecyclerView rv_4_month_all;
-    private RecyclerView rv_5_month_all;
-    private RecyclerView rv_6_month_all;
-    private RecyclerView rv_7_month_all;
-    private RecyclerView rv_8_month_all;
-    private RecyclerView rv_9_month_all;
-    private RecyclerView rv_10_month_all;
-    private RecyclerView rv_11_month_all;
-    private RecyclerView rv_12_month_all;
-    private RecyclerView rv_1_year;
 
 
     @Override
@@ -113,7 +85,6 @@ public class AnalysisFragment extends Fragment {
 
         // View Binding
         viewBindingAnalysis(view);
-        viewBindingAllPage(view);
 
 
         // Set viewpager2 adapter
@@ -150,39 +121,7 @@ public class AnalysisFragment extends Fragment {
         viewPager2 = view.findViewById(R.id.transactionHistory);
     }
 
-    public void viewBindingAllPage(View view){
-        //TextView view binding
-        recent_1_month_all = view.findViewById(R.id.recent_1_month_all);
-        recent_2_month_all = view.findViewById(R.id.recent_2_month_all);
-        recent_3_month_all = view.findViewById(R.id.recent_3_month_all);
-        recent_4_month_all = view.findViewById(R.id.recent_4_month_all);
-        recent_5_month_all = view.findViewById(R.id.recent_5_month_all);
-        recent_6_month_all = view.findViewById(R.id.recent_6_month_all);
-        recent_7_month_all = view.findViewById(R.id.recent_7_month_all);
-        recent_8_month_all = view.findViewById(R.id.recent_8_month_all);
-        recent_9_month_all = view.findViewById(R.id.recent_9_month_all);
-        recent_10_month_all = view.findViewById(R.id.recent_10_month_all);
-        recent_11_month_all = view.findViewById(R.id.recent_11_month_all);
-        recent_12_month_all = view.findViewById(R.id.recent_12_month_all);
-        recent_1_year = view.findViewById(R.id.recent_1_year);
 
-        // RecyclerView view binding
-        rv_1_month_all = view.findViewById(R.id.rv_1_month_all);
-        rv_2_month_all = view.findViewById(R.id.rv_2_month_all);
-        rv_3_month_all = view.findViewById(R.id.rv_3_month_all);
-        rv_4_month_all = view.findViewById(R.id.rv_4_month_all);
-        rv_5_month_all = view.findViewById(R.id.rv_5_month_all);
-        rv_6_month_all = view.findViewById(R.id.rv_6_month_all);
-        rv_7_month_all = view.findViewById(R.id.rv_7_month_all);
-        rv_8_month_all = view.findViewById(R.id.rv_8_month_all);
-        rv_9_month_all = view.findViewById(R.id.rv_9_month_all);
-        rv_10_month_all = view.findViewById(R.id.rv_10_month_all);
-        rv_11_month_all = view.findViewById(R.id.rv_11_month_all);
-        rv_12_month_all = view.findViewById(R.id.rv_12_month_all);
-        rv_1_year = view.findViewById(R.id.rv_1_year);
-
-
-    }
 
 
 }

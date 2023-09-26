@@ -51,12 +51,19 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        // Handling sign-up function
+
+
+        // View Binding
         btnSignUp = findViewById(R.id.btnSignUp);
         emailUserSignUp = findViewById(R.id.emailUserSignUp);
         passwordUserSignUp = findViewById(R.id.passwordUserSignUp);
         textInputLayoutEmailSignUp = findViewById(R.id.textInputLayoutEmailSignUp);
         textInputLayoutPasswordSignUp = findViewById(R.id.textInputLayoutPasswordSignUp);
 
+        // Event handling Email and Password TextInputLayout
+        // Validate Password:
+        // Password >= 8, contain several special characters
         emailUserSignUp.setOnTouchListener((v, event) -> {
             textInputLayoutEmailSignUp.setError(null);
             return false;
@@ -106,6 +113,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void signUp(String email, String password){
+        // Validate input
         if(TextUtils.isEmpty(email)){
             textInputLayoutEmailSignUp.setError("Please Input Email");
             return;
@@ -120,7 +128,7 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-
+        // Create user in firebase
         mAuth = FirebaseAuth.getInstance();
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
