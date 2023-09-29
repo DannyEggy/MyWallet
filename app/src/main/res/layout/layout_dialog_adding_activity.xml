@@ -236,24 +236,24 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btnSpending"
+                android:id="@+id/btnIncome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="25dp"
                 android:layout_marginBottom="10dp"
                 android:backgroundTint="@color/green_deep"
-                android:text="Spending" />
+                android:text="Income" />
 
             <Button
-                android:id="@+id/btnIncome"
+                android:id="@+id/btnSpending"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/green_deep"
-                android:text="Income" />
+                android:backgroundTint="@color/red"
+                android:text="Spending" />
         </LinearLayout>
 
 
