@@ -41,27 +41,37 @@ public class SignInActitvity extends AppCompatActivity {
     private CheckBox checkBoxRememberMe;
     private String userNameSignIn = "Eggy";
     private String avatarResIDSignIn = "avatar0";
-
     public static final String REMEMBER_ME = "rememberMe";
-//    private String userName ="Eggy";
-//    private int  avatarResID;
+
 
     private FirebaseAuth mAuth;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        // Get Data from Firebase
-        // Then push data from Splash Activity to another Activity
+        // Handling login function
+        // Click text signUp -> move to SignUpActivity
+        // Click Login Button -> Validate input
+        // -> Check if email is registered: (Yes -> signInHandle, No -> Notify user)
+        // -> (Login success -> send several data to MainActivity, Login fail -> notify user)
+        // Handling the back button press event:
+        // Account is not login then press back button -> close app. Prevent user from go back to previous activity.
 
 
+        // View Binding
         emailUser = findViewById(R.id.emailUser);
         passwordUser = findViewById(R.id.passwordUser);
         textInputLayoutEmail = findViewById(R.id.textInputLayoutEmail);
         textInputLayoutPassword = findViewById(R.id.textInputLayoutPassword);
+        signUp = findViewById(R.id.toSignUp);
+        login = findViewById(R.id.btnLogin);
+        checkBoxRememberMe = findViewById(R.id.rememberMe);
 
+
+        // Event handling Email and Password TextInputLayout
         emailUser.setOnTouchListener((v, event) -> {
             textInputLayoutEmail.setError(null);
             return false;
@@ -72,44 +82,43 @@ public class SignInActitvity extends AppCompatActivity {
             return false;
         });
 
-
-
-        signUp = findViewById(R.id.toSignUp);
-        signUp.setOnClickListener((View view) ->{
+        // Button signup and login handling
+        signUp.setOnClickListener((View view) -> {
             Intent intent = new Intent(this, SignUpActivity.class);
             startActivity(intent);
         });
 
-        login = findViewById(R.id.btnLogin);
-        login.setOnClickListener((View view)->{
+        login.setOnClickListener((View view) -> {
             String email = emailUser.getText().toString();
             String password = passwordUser.getText().toString();
+
             login(email, password);
         });
 
-        checkBoxRememberMe = findViewById(R.id.rememberMe);
 
 
 
     }
 
-    private void login(String email, String password){
-        if(TextUtils.isEmpty(email)){
+    private void login(String email, String password) {
+
+        // Validating input
+        if (TextUtils.isEmpty(email)) {
             textInputLayoutEmail.setError("Please Input Email");
             return;
         } else if (!email.contains("@")) {
             textInputLayoutEmail.setError("This is not Email");
             return;
-        } else if (password.length() <= 7 && password.length()>=1)  {
+        } else if (password.length() <= 7 && password.length() >= 1) {
             textInputLayoutPassword.setError("Please Input Enough Password");
             return;
-        } else if(TextUtils.isEmpty(password)){
+        } else if (TextUtils.isEmpty(password)) {
             textInputLayoutPassword.setError("Please Input Password");
             return;
         }
 
+        // Checking if email is registered
         mAuth = FirebaseAuth.getInstance();
-
         mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
             @Override
             public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
@@ -118,12 +127,10 @@ public class SignInActitvity extends AppCompatActivity {
                     List<String> signInMethods = result.getSignInMethods();
                     if (signInMethods != null && !signInMethods.isEmpty()) {
                         // Email is registered
-                        // Xử lí tại đây
-                        signInHandle(email,password);
+                        signInHandle(email, password);
 
                     } else {
                         // Email is not registered
-
                         textInputLayoutEmail.setError("You Haven't Registered Your Account Yet");
                     }
                 } else {
@@ -135,12 +142,14 @@ public class SignInActitvity extends AppCompatActivity {
         });
 
 
-
-
-
     }
 
-    private void signInHandle(String email, String password){
+    private void signInHandle(String email, String password) {
+        // Handling signIn with rememberMe checkbox
+        // Create SharedPreferences to save rememberMe state
+        // Login successfully -> Get userName and userAvatar from this user and then sent to MainActivity
+        // Login failed -> Notify user
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -148,16 +157,16 @@ public class SignInActitvity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             // checking the checkbox
-                            if(checkBoxRememberMe.isChecked()){
+                            if (checkBoxRememberMe.isChecked()) {
                                 // create shared preference when checkbox is checked: true
-                                Toast.makeText(getApplication(),"Save state", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplication(), "Save state", Toast.LENGTH_LONG).show();
                                 SharedPreferences sharedPreferencesRememberMe = getSharedPreferences(REMEMBER_ME, MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferencesRememberMe.edit();
                                 editor.putBoolean("isLoggedIn", true);
                                 editor.apply();
-                            }else{
+                            } else {
                                 // create shared preference when checkbox is not checked: false
-                                Toast.makeText(getApplication(),"Don't Save", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplication(), "Don't Save", Toast.LENGTH_LONG).show();
                                 SharedPreferences sharedPreferencesRememberMe = getSharedPreferences(REMEMBER_ME, MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferencesRememberMe.edit();
                                 editor.putBoolean("isLoggedIn", false);
@@ -186,39 +195,32 @@ public class SignInActitvity extends AppCompatActivity {
                                             intentMove.putExtra("avatarResIDSignIn", avatarResIDSignIn);
                                             startActivity(intentMove);
                                         }
+
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError error) {
 
                                         }
                                     });
                                 }
+
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
 
                                 }
                             });
-                        }
-                        else{
+                        } else {
                             Toast.makeText(getApplicationContext(), "Sign In Failed !!!", Toast.LENGTH_LONG).show();
                             textInputLayoutPassword.setError("Wrong Password !!!");
                         }
-//                        } else {
-//                            // If sign in fails, displ  ay a message to the user.
-//                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-////
-//
-//
-//                        }
                     }
                 });
     }
 
 
-
     @Override
     public void onBackPressed() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(firebaseUser == null){
+        if (firebaseUser == null) {
             finishAffinity();
             super.onBackPressed();
         }
