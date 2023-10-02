@@ -2,7 +2,12 @@ package com.tdtu.mywallet.anaysis_fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -10,7 +15,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.tdtu.mywallet.R;
+import com.tdtu.mywallet.main_fragment.HomeFragment;
+import com.tdtu.mywallet.model.Activity;
+import com.tdtu.mywallet.recyclerview_adapter.TransactionAdapter;
+import com.tdtu.mywallet.viewmodel.TransactionListViewModel;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -89,6 +111,7 @@ public class AllFragment extends Fragment {
     private RecyclerView rv_12_month_all;
     private RecyclerView rv_1_year;
 
+    private TransactionListViewModel transactionModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,12 +121,60 @@ public class AllFragment extends Fragment {
 
         // View Binding
         viewBindingAllPage(view);
-
+        getTransactionList();
 
         return view;
     }
 
-    public void viewBindingAllPage(View view){
+    public void connectFirebase() {
+        // Firebase connection
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference reference = db.getReference(currentUser.getUid());
+    }
+
+    public void getTransactionList() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, 2023);
+        calendar.set(Calendar.MONTH, Calendar.SEPTEMBER);
+        long startTime = calendar.getTimeInMillis();
+        calendar.set(Calendar.MONTH, Calendar.OCTOBER);
+        long endTime = calendar.getTimeInMillis();
+
+        // Firebase connection
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference reference = db.getReference(currentUser.getUid());
+        Query query = reference.child("User Detail").child("userActivityList")
+                .orderByChild("activityDateTime").startAt(startTime).endAt(endTime);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Activity> activityList = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Activity transaction = snapshot.getValue(Activity.class);
+                    activityList.add(transaction);
+
+                    TransactionAdapter transactionAdapter = new TransactionAdapter(activityList, getActivity());
+                    rv_1_month_all.setAdapter(transactionAdapter);
+                    LinearLayoutManager linearLayoutManager_1month = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+                    rv_1_month_all.setLayoutManager(linearLayoutManager_1month);
+                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv_1_month_all.getContext()
+                            , linearLayoutManager_1month.getOrientation());
+                    rv_1_month_all.addItemDecoration(dividerItemDecoration);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+    }
+
+    public void viewBindingAllPage(View view) {
         //TextView view binding
         recent_1_month_all = view.findViewById(R.id.recent_1_month_all);
         recent_2_month_all = view.findViewById(R.id.recent_2_month_all);
@@ -133,6 +204,8 @@ public class AllFragment extends Fragment {
         rv_11_month_all = view.findViewById(R.id.rv_11_month_all);
         rv_12_month_all = view.findViewById(R.id.rv_12_month_all);
         rv_1_year = view.findViewById(R.id.rv_1_year);
+
+
 
 
     }

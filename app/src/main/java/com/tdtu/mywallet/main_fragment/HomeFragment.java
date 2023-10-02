@@ -252,6 +252,8 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         DividerItemDecoration mDividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 linearLayoutManager_recent_activity.getOrientation());
         recyclerView.addItemDecoration(mDividerItemDecoration);
+
+
         swipeDelete();
 
 
@@ -438,14 +440,19 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
                         activityList.add(0, activity);
                     }
 
-
+                    //
                 }
                 recyclerView.getAdapter().notifyDataSetChanged();
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Activity activity = snapshot.getValue(Activity.class);
 
+                // Using LiveData transmit position when edit transaction from transactionAdapter
+
+                activityList.set(position)
+                recyclerView.getAdapter().notifyDataSetChanged();
             }
 
             @Override
