@@ -27,6 +27,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -48,6 +51,7 @@ import com.tdtu.mywallet.AutoCompleteAdapter.AutoCompleteCategoryAdapter;
 import com.tdtu.mywallet.R;
 import com.tdtu.mywallet.model.Activity;
 import com.tdtu.mywallet.model.Category;
+import com.tdtu.mywallet.viewmodel.TransactionListViewModel;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -66,6 +70,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private List<Activity> transactionList;
     private Context context;
     private LayoutInflater layoutInflater;
+
+    private FragmentActivity fActivity;
     private ArrayAdapter<Category> adapterCategory;
     private final List<Category> categoryList = new ArrayList<Category>();
     private Category activityCategory;
@@ -77,6 +83,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private String type;
 
     private Category category;
+
+    private TransactionListViewModel model;
 
 
     private void connectFirebase() {
@@ -156,10 +164,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         }
     }
 
-    public TransactionAdapter(List<Activity> transactionList, Context context) {
+    public TransactionAdapter(List<Activity> transactionList, Context context, FragmentActivity fActivity) {
         this.transactionList = transactionList;
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
+        this.fActivity = fActivity;
 
     }
 
@@ -173,6 +182,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
+
+        // ViewModel
+        model = new ViewModelProvider(fActivity).get(TransactionListViewModel.class);
+        model.addPositionTransaction(position);
+
         // Get default data including activity, id, category, money and type of this transaction
         activity = transactionList.get(position);
         id = activity.getActivityID();

@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -61,6 +63,7 @@ import com.tdtu.mywallet.recyclerview_adapter.TransactionAdapter;
 import com.tdtu.mywallet.model.Activity;
 import com.tdtu.mywallet.model.Category;
 import com.tdtu.mywallet.model.Icon;
+import com.tdtu.mywallet.viewmodel.TransactionListViewModel;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -139,6 +142,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     private List<Activity> activityList = new ArrayList<Activity>();
     private ImageView info_category;
     private ImageView info_transaction;
+    private TransactionListViewModel model;
 
     private List<Icon> getIconList() {
         List<Icon> iconList = new ArrayList<Icon>();
@@ -244,7 +248,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
 
 
         //  **RECYCLER_VIEW_RECENT_ACTIVITY**
-        recyclerView.setAdapter(new TransactionAdapter(activityList, getActivity()));
+        recyclerView.setAdapter(new TransactionAdapter(activityList, getActivity(), getActivity()));
 //        recyclerView.setAdapter(new RecyclerViewAdapter_activity(activityList, getActivity()));
 
         LinearLayoutManager linearLayoutManager_recent_activity = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -449,10 +453,40 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Activity activity = snapshot.getValue(Activity.class);
 
-                // Using LiveData transmit position when edit transaction from transactionAdapter
 
-                activityList.set(position)
-                recyclerView.getAdapter().notifyDataSetChanged();
+                // Using LiveData transmit position when edit transaction from transactionAdapter
+//                 Get data from Transaction Adapter
+                model = new ViewModelProvider(getActivity()).get(TransactionListViewModel.class);
+                final Observer<Integer> positionObserver = new Observer<Integer>() {
+                    @Override
+                    public void onChanged(Integer position) {
+                        activityList.set(position, activity);
+                        recyclerView.post(new Runnable()
+                        {
+                            @Override
+                            public void run() {
+                                recyclerView.getAdapter().notifyItemChanged(position);
+                            }
+                        });
+
+                    }
+                };
+                model.getPositionTransaction().observe(getActivity(), positionObserver);
+
+//                activityList.clear();
+//                if (activity != null) {
+//                    //todo
+//                    // if undo is false then you add the activity to recyclerview
+//                    if (!activity.isUndo()) {
+//                        activityList.add(0, activity);
+//                    }
+//
+//                    //
+//                }
+//                recyclerView.getAdapter().notifyDataSetChanged();
+
+//                activityList.set(position)
+//                recyclerView.getAdapter().notifyDataSetChanged();
             }
 
             @Override

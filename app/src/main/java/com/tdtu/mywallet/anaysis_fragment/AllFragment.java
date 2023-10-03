@@ -155,7 +155,7 @@ public class AllFragment extends Fragment {
                     Activity transaction = snapshot.getValue(Activity.class);
                     activityList.add(transaction);
 
-                    TransactionAdapter transactionAdapter = new TransactionAdapter(activityList, getActivity());
+                    TransactionAdapter transactionAdapter = new TransactionAdapter(activityList, getActivity(), getActivity());
                     rv_1_month_all.setAdapter(transactionAdapter);
                     LinearLayoutManager linearLayoutManager_1month = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
                     rv_1_month_all.setLayoutManager(linearLayoutManager_1month);
