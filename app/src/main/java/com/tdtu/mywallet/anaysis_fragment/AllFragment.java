@@ -27,6 +27,7 @@ import com.tdtu.mywallet.R;
 import com.tdtu.mywallet.main_fragment.HomeFragment;
 import com.tdtu.mywallet.model.Activity;
 import com.tdtu.mywallet.recyclerview_adapter.TransactionAdapter;
+import com.tdtu.mywallet.recyclerview_adapter.TransactionAnalysisAdapter;
 import com.tdtu.mywallet.viewmodel.TransactionListViewModel;
 
 import java.util.ArrayList;
@@ -82,6 +83,7 @@ public class AllFragment extends Fragment {
     }
 
     // Tittle for 12 recent months and a previous year
+    private TextView recent_current_month_all;
     private TextView recent_1_month_all;
     private TextView recent_2_month_all;
     private TextView recent_3_month_all;
@@ -97,6 +99,7 @@ public class AllFragment extends Fragment {
     private TextView recent_1_year;
 
     // RecyclerView for recent 12 months and a previous year
+    private RecyclerView rv_current_month_all;
     private RecyclerView rv_1_month_all;
     private RecyclerView rv_2_month_all;
     private RecyclerView rv_3_month_all;
@@ -112,6 +115,7 @@ public class AllFragment extends Fragment {
     private RecyclerView rv_1_year;
 
     private TransactionListViewModel transactionModel;
+    private DatabaseReference reference;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -119,9 +123,59 @@ public class AllFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_all, container, false);
 
+        // Firebase connection
+        connectFirebase();
+
         // View Binding
         viewBindingAllPage(view);
-        getTransactionList();
+
+        // Get current time
+        Calendar calendar = Calendar.getInstance();
+        long currentTime = System.currentTimeMillis();
+        calendar.setTimeInMillis(currentTime);
+
+        int year = calendar.get(Calendar.YEAR);
+        int currentMonth = calendar.get(Calendar.MONTH);
+
+        // Get transaction at current month
+        getTransactionListByMonth(year, currentMonth, rv_current_month_all, recent_current_month_all);
+
+        // Get transaction at 1 month ago
+        getTransactionListByMonth(year, currentMonth-1, rv_1_month_all, recent_1_month_all);
+
+        // Get transaction at 2 month ago
+        getTransactionListByMonth(year, currentMonth-2, rv_2_month_all, recent_2_month_all);
+
+        // Get transaction at 3 month ago
+        getTransactionListByMonth(year, currentMonth-3, rv_3_month_all, recent_3_month_all);
+
+        // Get transaction at 4 month ago
+        getTransactionListByMonth(year, currentMonth-4, rv_4_month_all, recent_4_month_all);
+
+        // Get transaction at 5 month ago
+        getTransactionListByMonth(year, currentMonth-5, rv_5_month_all, recent_5_month_all);
+
+        // Get transaction at 6 month ago
+        getTransactionListByMonth(year, currentMonth-6, rv_6_month_all, recent_6_month_all);
+
+        // Get transaction at 7 month ago
+        getTransactionListByMonth(year, currentMonth-7, rv_7_month_all, recent_7_month_all);
+
+        // Get transaction at 8 month ago
+        getTransactionListByMonth(year, currentMonth-8, rv_8_month_all, recent_8_month_all);
+
+        // Get transaction at 9 month ago
+        getTransactionListByMonth(year, currentMonth-9, rv_9_month_all, recent_9_month_all);
+
+        // Get transaction at 10 month ago
+        getTransactionListByMonth(year, currentMonth-10, rv_10_month_all, recent_10_month_all);
+
+        // Get transaction at 11 month ago
+        getTransactionListByMonth(year, currentMonth-11, rv_11_month_all, recent_11_month_all);
+
+        // Get transaction at 12 month ago
+        getTransactionListByMonth(year, currentMonth-12, rv_12_month_all, recent_12_month_all);
+
 
         return view;
     }
@@ -130,38 +184,57 @@ public class AllFragment extends Fragment {
         // Firebase connection
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference reference = db.getReference(currentUser.getUid());
+        reference = db.getReference(currentUser.getUid());
     }
 
-    public void getTransactionList() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, 2023);
-        calendar.set(Calendar.MONTH, Calendar.SEPTEMBER);
-        long startTime = calendar.getTimeInMillis();
-        calendar.set(Calendar.MONTH, Calendar.OCTOBER);
-        long endTime = calendar.getTimeInMillis();
+    public void getTransactionListByMonth(int year, int month, RecyclerView rv_month_all, TextView recent_month_all) {
 
-        // Firebase connection
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference reference = db.getReference(currentUser.getUid());
+
+        String tittleTransactionList = String.valueOf(month+1)+"/"+String.valueOf(year);
+        recent_month_all.setText(tittleTransactionList);
+
+        // Set the first day of the month
+        Calendar firstDay = Calendar.getInstance();
+        firstDay.set(year, month,1); // Set to the 1st day of the month.
+
+        // Set the last day of the month
+        Calendar lastDay = Calendar.getInstance();
+        lastDay.set(year,month, 1); // Set to the 1st day of the current month.
+        lastDay.add(Calendar.MONTH, 1); // Move to the 1st day of the next month.
+        lastDay.add(Calendar.DAY_OF_MONTH, -1); // Move back one day to the last day of the month.
+
+        long startTime = firstDay.getTimeInMillis();
+        long endTime = lastDay.getTimeInMillis();
+
+//        calendar.set(Calendar.MONTH, Calendar.SEPTEMBER);
+//        long startTime = calendar.getTimeInMillis();
+//        calendar.set(Calendar.MONTH, Calendar.OCTOBER);
+//        long endTime = calendar.getTimeInMillis();
+
+
         Query query = reference.child("User Detail").child("userActivityList")
                 .orderByChild("activityDateTime").startAt(startTime).endAt(endTime);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<Activity> activityList = new ArrayList<>();
+                List<Activity> transactionList = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Activity transaction = snapshot.getValue(Activity.class);
-                    activityList.add(transaction);
+                    transactionList.add(0,transaction);
 
-                    TransactionAdapter transactionAdapter = new TransactionAdapter(activityList, getActivity(), getActivity());
-                    rv_1_month_all.setAdapter(transactionAdapter);
+                    TransactionAnalysisAdapter transactionAdapter = new TransactionAnalysisAdapter(transactionList, getActivity());
+                    rv_month_all.setAdapter(transactionAdapter);
                     LinearLayoutManager linearLayoutManager_1month = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-                    rv_1_month_all.setLayoutManager(linearLayoutManager_1month);
-                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv_1_month_all.getContext()
+                    rv_month_all.setLayoutManager(linearLayoutManager_1month);
+                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv_month_all.getContext()
                             , linearLayoutManager_1month.getOrientation());
-                    rv_1_month_all.addItemDecoration(dividerItemDecoration);
+                    rv_month_all.addItemDecoration(dividerItemDecoration);
+
+
+                }
+                if(transactionList.size() ==0){
+                    rv_month_all.setVisibility(View.GONE);
+                    recent_month_all.setVisibility(View.GONE);
                 }
             }
 
@@ -176,6 +249,7 @@ public class AllFragment extends Fragment {
 
     public void viewBindingAllPage(View view) {
         //TextView view binding
+        recent_current_month_all = view.findViewById(R.id.recent_current_month_all);
         recent_1_month_all = view.findViewById(R.id.recent_1_month_all);
         recent_2_month_all = view.findViewById(R.id.recent_2_month_all);
         recent_3_month_all = view.findViewById(R.id.recent_3_month_all);
@@ -191,6 +265,7 @@ public class AllFragment extends Fragment {
         recent_1_year = view.findViewById(R.id.recent_1_year);
 
         // RecyclerView view binding
+        rv_current_month_all = view.findViewById(R.id.rv_current_month_all);
         rv_1_month_all = view.findViewById(R.id.rv_1_month_all);
         rv_2_month_all = view.findViewById(R.id.rv_2_month_all);
         rv_3_month_all = view.findViewById(R.id.rv_3_month_all);
