@@ -49,6 +49,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.ramotion.foldingcell.FoldingCell;
 import com.tdtu.mywallet.AutoCompleteAdapter.AutoCompleteCategoryAdapter;
 import com.tdtu.mywallet.R;
+import com.tdtu.mywallet.RecyclerViewInterface;
 import com.tdtu.mywallet.model.Activity;
 import com.tdtu.mywallet.model.Category;
 import com.tdtu.mywallet.viewmodel.TransactionListViewModel;
@@ -85,6 +86,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private Category category;
 
     private TransactionListViewModel model;
+    private RecyclerViewInterface listener;
 
 
     private void connectFirebase() {
@@ -182,10 +184,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
-
-        // ViewModel
-        model = new ViewModelProvider(fActivity).get(TransactionListViewModel.class);
-        model.addPositionTransaction(position);
 
         // Get default data including activity, id, category, money and type of this transaction
         activity = transactionList.get(position);

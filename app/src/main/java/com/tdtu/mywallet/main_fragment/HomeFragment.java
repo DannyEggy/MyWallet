@@ -121,6 +121,8 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         }
     }
 
+
+
     private RecyclerView recyclerView;
     public RecyclerView recyclerView_category;
     private String categoryColor;
