@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -176,6 +177,9 @@ public class AllFragment extends Fragment {
         // Get transaction at 12 month ago
         getTransactionListByMonth(year, currentMonth-12, rv_12_month_all, recent_12_month_all);
 
+        //get transaction at 1 year ago
+        getTransactionListLastYear(year, rv_1_year, recent_1_year);
+
 
         return view;
     }
@@ -188,10 +192,21 @@ public class AllFragment extends Fragment {
     }
 
     public void getTransactionListByMonth(int year, int month, RecyclerView rv_month_all, TextView recent_month_all) {
+        int currentMonth = month +1;
+        if(currentMonth <0){
+            currentMonth = currentMonth+12;
+            String tittleTransactionList = String.valueOf(currentMonth)+"/"+String.valueOf(year -1);
+            recent_month_all.setText(tittleTransactionList);
+        }else if(currentMonth == 0){
+            Calendar calendar = Calendar.getInstance();
+            currentMonth = calendar.get(Calendar.MONTH);
+            String tittleTransactionList = String.valueOf(currentMonth)+"/"+String.valueOf(year -1);
+            recent_month_all.setText(tittleTransactionList);
+        }else{
+            String tittleTransactionList = String.valueOf(currentMonth)+"/"+String.valueOf(year);
+            recent_month_all.setText(tittleTransactionList);
+        }
 
-
-        String tittleTransactionList = String.valueOf(month+1)+"/"+String.valueOf(year);
-        recent_month_all.setText(tittleTransactionList);
 
         // Set the first day of the month
         Calendar firstDay = Calendar.getInstance();
@@ -246,6 +261,110 @@ public class AllFragment extends Fragment {
 
 
     }
+
+    public void getTransactionListLastYear(int year, RecyclerView rv_month_all, TextView recent_month_all) {
+
+        // Lấy ngày hiện tại
+        Calendar currentDate = Calendar.getInstance();
+
+        // Trừ đi một năm để lấy năm trước đó
+        currentDate.add(Calendar.YEAR, -1);
+
+        // Đặt ngày cuối của tháng là ngày 30 hoặc 31 (tùy tháng)
+        int lastDayOfMonth = currentDate.getActualMaximum(Calendar.DAY_OF_MONTH);
+        currentDate.set(Calendar.DAY_OF_MONTH, lastDayOfMonth);
+
+        // Lấy tháng và năm của tháng trước đó
+        int lastYear = currentDate.get(Calendar.YEAR);
+        int lastMonth = currentDate.get(Calendar.MONTH) -1;
+
+        // Tính startTime (đầu năm) và endTime (cuối tháng)
+        Calendar firstDay = Calendar.getInstance();
+        firstDay.set(lastYear, Calendar.JANUARY, 1); // Đầu năm
+        Calendar lastDay = Calendar.getInstance();
+        lastDay.set(lastYear, lastMonth, lastDayOfMonth); // Cuối tháng
+
+
+        long startTime = firstDay.getTimeInMillis();
+        long endTime = lastDay.getTimeInMillis();
+
+        String tittleTransactionList = String.valueOf(lastYear);
+//        Toast.makeText(getActivity(), tittleTransactionList, Toast.LENGTH_LONG).show();
+        recent_month_all.setText(tittleTransactionList);
+
+        Toast.makeText(getActivity(), String.valueOf(year)+" "+String.valueOf(startTime)+" " + String.valueOf(endTime), Toast.LENGTH_LONG).show();
+        Query query = reference.child("User Detail").child("userActivityList")
+                .orderByChild("activityDateTime").startAt(startTime).endAt(endTime);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Activity> transactionList = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Activity transaction = snapshot.getValue(Activity.class);
+                    transactionList.add(0,transaction);
+
+                    TransactionAnalysisAdapter transactionAdapter = new TransactionAnalysisAdapter(transactionList, getActivity());
+                    rv_month_all.setAdapter(transactionAdapter);
+                    LinearLayoutManager linearLayoutManager_1month = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+                    rv_month_all.setLayoutManager(linearLayoutManager_1month);
+                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv_month_all.getContext()
+                            , linearLayoutManager_1month.getOrientation());
+                    rv_month_all.addItemDecoration(dividerItemDecoration);
+
+
+                }
+                if(transactionList.size() ==0){
+                    rv_month_all.setVisibility(View.GONE);
+                    recent_month_all.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
+
+//        Query query = reference.child("User Detail").child("userActivityList")
+//                .orderByChild("activityDateTime").startAt(startTime).endAt(endTime);
+//        query.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+////                Toast.makeText(getActivity(), "test 1 year ago", Toast.LENGTH_LONG).show();
+//                List<Activity> transactionList = new ArrayList<>();
+//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                    Activity transaction = snapshot.getValue(Activity.class);
+//                    transactionList.add(0,transaction);
+//
+//                    Toast.makeText(getActivity(), String.valueOf(transactionList.size()), Toast.LENGTH_LONG ).show();
+//
+//                    TransactionAnalysisAdapter transactionAdapter = new TransactionAnalysisAdapter(transactionList, getActivity());
+//                    rv_month_all.setAdapter(transactionAdapter);
+//                    LinearLayoutManager linearLayoutManager_1month = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+//                    rv_month_all.setLayoutManager(linearLayoutManager_1month);
+//                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rv_month_all.getContext()
+//                            , linearLayoutManager_1month.getOrientation());
+//                    rv_month_all.addItemDecoration(dividerItemDecoration);
+//
+//
+//                }
+//                if(transactionList.size() ==0){
+//                    rv_month_all.setVisibility(View.GONE);
+//                    recent_month_all.setVisibility(View.GONE);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+    }
+
+
 
     public void viewBindingAllPage(View view) {
         //TextView view binding
