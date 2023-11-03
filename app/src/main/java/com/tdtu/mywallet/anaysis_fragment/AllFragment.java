@@ -3,6 +3,7 @@ package com.tdtu.mywallet.anaysis_fragment;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -118,6 +120,61 @@ public class AllFragment extends Fragment {
     private TransactionListViewModel transactionModel;
     private DatabaseReference reference;
 
+
+    public void addingData() {
+        Toast.makeText(getActivity(), "Resume", Toast.LENGTH_SHORT).show();
+        // Get current time
+        Calendar calendar = Calendar.getInstance();
+        long currentTime = System.currentTimeMillis();
+        calendar.setTimeInMillis(currentTime);
+
+        int year = calendar.get(Calendar.YEAR);
+        int currentMonth = calendar.get(Calendar.MONTH);
+
+        // Get transaction at current month
+        getTransactionListByMonth(year, currentMonth, rv_current_month_all, recent_current_month_all);
+
+        // Get transaction at 1 month ago
+        getTransactionListByMonth(year, currentMonth-1, rv_1_month_all, recent_1_month_all);
+
+        // Get transaction at 2 month ago
+        getTransactionListByMonth(year, currentMonth-2, rv_2_month_all, recent_2_month_all);
+
+        // Get transaction at 3 month ago
+        getTransactionListByMonth(year, currentMonth-3, rv_3_month_all, recent_3_month_all);
+
+        // Get transaction at 4 month ago
+        getTransactionListByMonth(year, currentMonth-4, rv_4_month_all, recent_4_month_all);
+
+        // Get transaction at 5 month ago
+        getTransactionListByMonth(year, currentMonth-5, rv_5_month_all, recent_5_month_all);
+
+        // Get transaction at 6 month ago
+        getTransactionListByMonth(year, currentMonth-6, rv_6_month_all, recent_6_month_all);
+
+        // Get transaction at 7 month ago
+        getTransactionListByMonth(year, currentMonth-7, rv_7_month_all, recent_7_month_all);
+
+        // Get transaction at 8 month ago
+        getTransactionListByMonth(year, currentMonth-8, rv_8_month_all, recent_8_month_all);
+
+        // Get transaction at 9 month ago
+        getTransactionListByMonth(year, currentMonth-9, rv_9_month_all, recent_9_month_all);
+
+        // Get transaction at 10 month ago
+        getTransactionListByMonth(year, currentMonth-10, rv_10_month_all, recent_10_month_all);
+
+        // Get transaction at 11 month ago
+        getTransactionListByMonth(year, currentMonth-11, rv_11_month_all, recent_11_month_all);
+
+        // Get transaction at 12 month ago
+        getTransactionListByMonth(year, currentMonth-12, rv_12_month_all, recent_12_month_all);
+
+        //get transaction at 1 year ago
+        getTransactionListLastYear(year, rv_1_year, recent_1_year);
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -179,6 +236,38 @@ public class AllFragment extends Fragment {
 
         //get transaction at 1 year ago
         getTransactionListLastYear(year, rv_1_year, recent_1_year);
+
+        // Update data when firebase database has a change.
+        reference.child("User Detail").child("userActivityList").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Toast.makeText(getActivity(), "Adding new data", Toast.LENGTH_SHORT).show();
+
+
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
 
         return view;
@@ -246,6 +335,7 @@ public class AllFragment extends Fragment {
                     rv_month_all.addItemDecoration(dividerItemDecoration);
 
 
+
                 }
                 if(transactionList.size() ==0){
                     rv_month_all.setVisibility(View.GONE);
@@ -269,20 +359,23 @@ public class AllFragment extends Fragment {
 
         // Trừ đi một năm để lấy năm trước đó
         currentDate.add(Calendar.YEAR, -1);
+        currentDate.add(Calendar.MONTH, -1);
 
-        // Đặt ngày cuối của tháng là ngày 30 hoặc 31 (tùy tháng)
-        int lastDayOfMonth = currentDate.getActualMaximum(Calendar.DAY_OF_MONTH);
-        currentDate.set(Calendar.DAY_OF_MONTH, lastDayOfMonth);
+//        currentDate.add(Calendar.MONTH, -1);
+//        Toast.makeText(getActivity(), String.valueOf(currentDate.get(Calendar.MONTH)), Toast.LENGTH_LONG).show();
 
         // Lấy tháng và năm của tháng trước đó
         int lastYear = currentDate.get(Calendar.YEAR);
-        int lastMonth = currentDate.get(Calendar.MONTH) -1;
+        int lastMonth = currentDate.get(Calendar.MONTH) + 1 ; // Đảm bảo tháng trước đó là 0-11.
 
         // Tính startTime (đầu năm) và endTime (cuối tháng)
         Calendar firstDay = Calendar.getInstance();
         firstDay.set(lastYear, Calendar.JANUARY, 1); // Đầu năm
         Calendar lastDay = Calendar.getInstance();
-        lastDay.set(lastYear, lastMonth, lastDayOfMonth); // Cuối tháng
+        lastDay.add(Calendar.MONTH, -1);
+        lastDay.set(lastYear, lastMonth, lastDay.getActualMaximum(Calendar.MONTH)); // Cuối tháng
+
+//        Toast.makeText(getActivity(), String.valueOf(lastYear)+" "+String.valueOf(lastMonth)+" " + String.valueOf(lastDay.getActualMaximum(Calendar.DAY_OF_MONTH)), Toast.LENGTH_LONG).show();
 
 
         long startTime = firstDay.getTimeInMillis();
@@ -292,7 +385,7 @@ public class AllFragment extends Fragment {
 //        Toast.makeText(getActivity(), tittleTransactionList, Toast.LENGTH_LONG).show();
         recent_month_all.setText(tittleTransactionList);
 
-        Toast.makeText(getActivity(), String.valueOf(year)+" "+String.valueOf(startTime)+" " + String.valueOf(endTime), Toast.LENGTH_LONG).show();
+//        Toast.makeText(getActivity(), String.valueOf(year)+" "+String.valueOf(startTime)+" " + String.valueOf(endTime), Toast.LENGTH_LONG).show();
         Query query = reference.child("User Detail").child("userActivityList")
                 .orderByChild("activityDateTime").startAt(startTime).endAt(endTime);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
