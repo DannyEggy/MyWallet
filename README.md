@@ -11,13 +11,15 @@ Folding Cell for opening an item in RecyclerView.
 Slide animation when open an dialog.
 Several functions of this app:
 There is a login, registration.
-![home](https://github.com/DannyEggy/MyWallet/assets/125853072/726c4d2d-4ff3-44a2-a8e9-059f054d6ebb)
+![image](https://github.com/DannyEggy/MyWallet/assets/125853072/4de5980b-1b6c-4b04-ac55-1acc2bfed907)
+
 
 HomeScreen: Allow user to check their expense, balance, add more categories and daily transactions.
 ![screenhome](https://github.com/DannyEggy/MyWallet/assets/125853072/eca338e7-98e9-4904-8175-16bd3673f053)
 
 Analysis: Help user find the transaction, see history in months, year, ...
-![image](https://github.com/DannyEggy/MyWallet/assets/125853072/d8b52489-36c2-4158-b98b-3621ee9f6efd)
+![analysis](https://github.com/DannyEggy/MyWallet/assets/125853072/3fb200b8-f538-42df-91e9-5ad24e5206d9)
+
 
 
 Setting: User can change the avatar, password, customize icon color (Updating...)
