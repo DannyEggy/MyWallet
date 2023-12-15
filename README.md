@@ -9,7 +9,7 @@ This app uses
 Folding Cell for opening an item in RecyclerView.
 3 transformer animations of ViewPager2: Depth, Slide, Zoom.
 Slide animation when open an dialog.
-Several functions of this app:
+/n Several functions of this app:
 There is a login, registration.
 ![image](https://github.com/DannyEggy/MyWallet/assets/125853072/4de5980b-1b6c-4b04-ac55-1acc2bfed907)
 
