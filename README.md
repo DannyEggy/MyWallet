@@ -12,7 +12,7 @@ Slide animation when open an dialog.
 
 Several functions of this app:
 
-There is a login, registration.
+There is a login, registration an account using Firebase. 
 ![image](https://github.com/DannyEggy/MyWallet/assets/125853072/4de5980b-1b6c-4b04-ac55-1acc2bfed907)
 
 HomeScreen: Allow user to check their expense, balance, add more categories and daily transactions.
