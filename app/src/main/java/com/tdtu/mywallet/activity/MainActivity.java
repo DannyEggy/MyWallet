@@ -76,6 +76,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 import nl.joery.animatedbottombar.AnimatedBottomBar;
 
 public class MainActivity extends AppCompatActivity {
@@ -222,12 +224,20 @@ public class MainActivity extends AppCompatActivity {
         MainViewPager2Adapter mainViewPager2Adapter = new MainViewPager2Adapter(this);
         viewPager2.setAdapter(mainViewPager2Adapter);
         viewPager2.setCurrentItem(0);
+        // Disable slide animation
 
         // _______________________________________________________________________________________________________________________________________________
         //  ***BOTTOM_NAVIGATION_VIEW***
         // Bottom navigation including bottom bar and floating action button: for adding Transaction
         AnimatedBottomBar bottomBar = findViewById(R.id.bottom_bar);
         bottomBar.setupWithViewPager2(viewPager2);
+
+
+
+
+
+
+
 
         FloatingActionButton fab = findViewById(R.id.fab_adding);
         fab.setOnClickListener((View view) -> {

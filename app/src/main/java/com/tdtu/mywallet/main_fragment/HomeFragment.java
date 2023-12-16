@@ -145,6 +145,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
     private ImageView info_category;
     private ImageView info_transaction;
     private TransactionListViewModel model;
+    private RecyclerView.RecycledViewPool recycledViewPool = new RecyclerView.RecycledViewPool();
 
     private List<Icon> getIconList() {
         List<Icon> iconList = new ArrayList<Icon>();
@@ -168,7 +169,9 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         home_totalBalance = view.findViewById(R.id.home_totalBalance);
         card_category_addMore = view.findViewById(R.id.card_category_addMore);
         recyclerView_category = view.findViewById(R.id.recyclerView_category);
+        recyclerView_category.setRecycledViewPool(recycledViewPool);
         recyclerView = view.findViewById(R.id.recyclerView_recent_activity);
+        recyclerView.setRecycledViewPool(recycledViewPool);
         info_category = view.findViewById(R.id.info_category);
         info_transaction = view.findViewById(R.id.info_transaction);
 
@@ -244,6 +247,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
 //        CategoryListHolder.getInstance().updateUserList();
 //        categoryList = CategoryListHolder.getInstance().getCategoryList();
         RecyclerViewAdapter_category categoryAdapter = new RecyclerViewAdapter_category(categoryList, getActivity(), this);
+
         recyclerView_category.setAdapter(categoryAdapter);
         LinearLayoutManager linearLayoutManager_category = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView_category.setLayoutManager(linearLayoutManager_category);

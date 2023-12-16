@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import com.tdtu.mywallet.main_fragment.HomeFragment;
 import com.tdtu.mywallet.model.Activity;
 import com.tdtu.mywallet.recyclerview_adapter.TransactionAdapter;
 import com.tdtu.mywallet.recyclerview_adapter.TransactionAnalysisAdapter;
+import com.tdtu.mywallet.viewmodel.SearchTextViewModel;
 import com.tdtu.mywallet.viewmodel.TransactionListViewModel;
 
 import java.util.ArrayList;
@@ -85,6 +87,8 @@ public class AllFragment extends Fragment {
         }
     }
 
+    private boolean firstOpen = true;
+
     // Tittle for 12 recent months and a previous year
     private TextView recent_current_month_all;
     private TextView recent_1_month_all;
@@ -119,61 +123,10 @@ public class AllFragment extends Fragment {
 
     private TransactionListViewModel transactionModel;
     private DatabaseReference reference;
+    private LinearLayout linearLayout;
 
 
-    public void addingData() {
-        Toast.makeText(getActivity(), "Resume", Toast.LENGTH_SHORT).show();
-        // Get current time
-        Calendar calendar = Calendar.getInstance();
-        long currentTime = System.currentTimeMillis();
-        calendar.setTimeInMillis(currentTime);
 
-        int year = calendar.get(Calendar.YEAR);
-        int currentMonth = calendar.get(Calendar.MONTH);
-
-        // Get transaction at current month
-        getTransactionListByMonth(year, currentMonth, rv_current_month_all, recent_current_month_all);
-
-        // Get transaction at 1 month ago
-        getTransactionListByMonth(year, currentMonth-1, rv_1_month_all, recent_1_month_all);
-
-        // Get transaction at 2 month ago
-        getTransactionListByMonth(year, currentMonth-2, rv_2_month_all, recent_2_month_all);
-
-        // Get transaction at 3 month ago
-        getTransactionListByMonth(year, currentMonth-3, rv_3_month_all, recent_3_month_all);
-
-        // Get transaction at 4 month ago
-        getTransactionListByMonth(year, currentMonth-4, rv_4_month_all, recent_4_month_all);
-
-        // Get transaction at 5 month ago
-        getTransactionListByMonth(year, currentMonth-5, rv_5_month_all, recent_5_month_all);
-
-        // Get transaction at 6 month ago
-        getTransactionListByMonth(year, currentMonth-6, rv_6_month_all, recent_6_month_all);
-
-        // Get transaction at 7 month ago
-        getTransactionListByMonth(year, currentMonth-7, rv_7_month_all, recent_7_month_all);
-
-        // Get transaction at 8 month ago
-        getTransactionListByMonth(year, currentMonth-8, rv_8_month_all, recent_8_month_all);
-
-        // Get transaction at 9 month ago
-        getTransactionListByMonth(year, currentMonth-9, rv_9_month_all, recent_9_month_all);
-
-        // Get transaction at 10 month ago
-        getTransactionListByMonth(year, currentMonth-10, rv_10_month_all, recent_10_month_all);
-
-        // Get transaction at 11 month ago
-        getTransactionListByMonth(year, currentMonth-11, rv_11_month_all, recent_11_month_all);
-
-        // Get transaction at 12 month ago
-        getTransactionListByMonth(year, currentMonth-12, rv_12_month_all, recent_12_month_all);
-
-        //get transaction at 1 year ago
-        getTransactionListLastYear(year, rv_1_year, recent_1_year);
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -187,6 +140,120 @@ public class AllFragment extends Fragment {
         // View Binding
         viewBindingAllPage(view);
 
+        getDataRecyclerView();
+        firstOpen= false;
+        reference.child("User Detail").child("userActivityList").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Toast.makeText(getActivity(), "Adding new data", Toast.LENGTH_SHORT).show();
+                if(firstOpen){
+
+                }else{
+                    Activity activity = snapshot.getValue(Activity.class);
+                    long timestamp = activity.getActivityDateTime();
+                    Date date = new Date(timestamp);
+
+                    Calendar currentCalendar = Calendar.getInstance();
+                    long currentTime = System.currentTimeMillis();
+                    currentCalendar.setTimeInMillis(currentTime);
+
+                    int currentYear = currentCalendar.get(Calendar.YEAR);
+                    int currentMonth = currentCalendar.get(Calendar.MONTH);
+
+                    // Sử dụng Calendar để lấy tháng và năm
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+
+                    // Lấy tháng và năm
+                    int month = calendar.get(Calendar.MONTH) + 1; // Tháng bắt đầu từ 0, nên cộng thêm 1
+                    int year = calendar.get(Calendar.YEAR);
+
+//                    getDataRecyclerView();
+                    if(currentYear - year == 0){
+                        //months apart
+                        int monthDiff = currentMonth - month;
+                        if(monthDiff == 0){
+                            getTransactionListByMonth(year, monthDiff, rv_current_month_all, recent_current_month_all);
+                        }else if(monthDiff == 1){
+                            getTransactionListByMonth(year, monthDiff, rv_1_month_all, recent_1_month_all);
+                        }else if(monthDiff == 2){
+                            getTransactionListByMonth(year, monthDiff, rv_2_month_all, recent_2_month_all);
+                        }else if(monthDiff == 3){
+                            getTransactionListByMonth(year, monthDiff, rv_3_month_all, recent_3_month_all);
+                        }else if(monthDiff ==4){
+                            getTransactionListByMonth(year, monthDiff, rv_4_month_all, recent_4_month_all);
+                        }else if(monthDiff == 5){
+                            getTransactionListByMonth(year, monthDiff, rv_5_month_all, recent_5_month_all);
+                        }else if(monthDiff == 6){
+                            getTransactionListByMonth(year, monthDiff, rv_6_month_all, recent_6_month_all);
+                        }else if(monthDiff == 7){
+                            getTransactionListByMonth(year, monthDiff, rv_7_month_all, recent_7_month_all);
+                        }else if(monthDiff == 8){
+                            getTransactionListByMonth(year, monthDiff, rv_8_month_all, recent_8_month_all);
+                        }else if(monthDiff == 9){
+                            getTransactionListByMonth(year, monthDiff, rv_9_month_all, recent_9_month_all);
+                        }else if(monthDiff == 10){
+                            getTransactionListByMonth(year, monthDiff, rv_10_month_all, recent_10_month_all);
+                        }else if(monthDiff == 11){
+                            getTransactionListByMonth(year, monthDiff, rv_11_month_all, recent_11_month_all);
+                        }
+
+                    }
+                    if(currentYear - year ==1){
+                        getTransactionListLastYear(year, rv_1_year, recent_1_year);
+                    }
+
+                }
+
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+//        firstOpen = false;
+        SearchTextViewModel viewModel = new ViewModelProvider(requireActivity()).get(SearchTextViewModel.class);
+        viewModel.getTitleQuery().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+
+                if(s != null && !s.isEmpty()){
+                    // case: search query is not null
+                    linearLayout.setVisibility(View.INVISIBLE);
+
+                }else{
+                    // case: search query is null
+                    linearLayout.setVisibility(View.VISIBLE);
+
+                }
+
+
+            }
+        });
+
+        return view;
+    }
+
+    public void getDataRecyclerView(){
         // Get current time
         Calendar calendar = Calendar.getInstance();
         long currentTime = System.currentTimeMillis();
@@ -238,39 +305,11 @@ public class AllFragment extends Fragment {
         getTransactionListLastYear(year, rv_1_year, recent_1_year);
 
         // Update data when firebase database has a change.
-        reference.child("User Detail").child("userActivityList").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                Toast.makeText(getActivity(), "Adding new data", Toast.LENGTH_SHORT).show();
 
 
 
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
 
 
-
-        return view;
     }
 
     public void connectFirebase() {
@@ -281,6 +320,10 @@ public class AllFragment extends Fragment {
     }
 
     public void getTransactionListByMonth(int year, int month, RecyclerView rv_month_all, TextView recent_month_all) {
+        // show recyclerview and text.
+        rv_month_all.setVisibility(View.VISIBLE);
+        recent_month_all.setVisibility(View.VISIBLE);
+
         int currentMonth = month +1;
         if(currentMonth <0){
             currentMonth = currentMonth+12;
@@ -353,7 +396,8 @@ public class AllFragment extends Fragment {
     }
 
     public void getTransactionListLastYear(int year, RecyclerView rv_month_all, TextView recent_month_all) {
-
+        rv_month_all.setVisibility(View.VISIBLE);
+        recent_month_all.setVisibility(View.VISIBLE);
         // Lấy ngày hiện tại
         Calendar currentDate = Calendar.getInstance();
 
@@ -475,6 +519,7 @@ public class AllFragment extends Fragment {
         recent_11_month_all = view.findViewById(R.id.recent_11_month_all);
         recent_12_month_all = view.findViewById(R.id.recent_12_month_all);
         recent_1_year = view.findViewById(R.id.recent_1_year);
+        linearLayout = view.findViewById(R.id.layoutLinear);
 
         // RecyclerView view binding
         rv_current_month_all = view.findViewById(R.id.rv_current_month_all);

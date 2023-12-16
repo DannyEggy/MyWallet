@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -21,7 +22,14 @@ import android.widget.TextView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.tdtu.mywallet.R;
+import com.tdtu.mywallet.model.Activity;
+import com.tdtu.mywallet.model.Category;
+import com.tdtu.mywallet.viewmodel.SearchTextViewModel;
 import com.tdtu.mywallet.viewpager2.HistoryViewPager2Adapter;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,6 +82,8 @@ public class AnalysisFragment extends Fragment {
     private SearchView searchView;
     private ViewPager2 viewPager2;
 
+    private List<Activity> activityList = new ArrayList<Activity>();
+    private List<Activity> filterList = new ArrayList<Activity>();
 
 
 
@@ -92,6 +102,8 @@ public class AnalysisFragment extends Fragment {
         HistoryViewPager2Adapter historyViewPager2Adapter = new HistoryViewPager2Adapter(getActivity());
         viewPager2.setAdapter(historyViewPager2Adapter);
 
+
+
         TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout,viewPager2,false,false,  (tab, position) -> {
             switch (position) {
                 case 0:
@@ -109,7 +121,20 @@ public class AnalysisFragment extends Fragment {
         TabLayout.Tab defaultTab = tabLayout.getTabAt(0);
         defaultTab.select();
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                SearchTextViewModel viewModel = new ViewModelProvider(requireActivity()).get(SearchTextViewModel.class);
+                viewModel.setTitleQuery(newText);
+
+                return false;
+            }
+        });
 
 
         return view;
@@ -120,6 +145,7 @@ public class AnalysisFragment extends Fragment {
         tabLayout = view.findViewById(R.id.tabLayoutAnalysis);
         viewPager2 = view.findViewById(R.id.transactionHistory);
     }
+
 
 
 

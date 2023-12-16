@@ -7,11 +7,17 @@
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
+        android:id="@+id/layoutLinear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <!--RecyclerView for Transaction current Month -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchTransaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -318,6 +324,7 @@
             android:id="@+id/rv_1_year"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
         <Space
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize" />
