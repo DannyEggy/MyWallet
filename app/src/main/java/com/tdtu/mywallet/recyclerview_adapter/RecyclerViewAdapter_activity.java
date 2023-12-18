@@ -1,6 +1,7 @@
 package com.tdtu.mywallet.recyclerview_adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,8 @@ public class RecyclerViewAdapter_activity extends RecyclerView.Adapter<ActivityV
             String displayMoney = "-" + String.valueOf(formattedAmount);
 
             holder.item_money_Activity.setText(displayMoney);
+            holder.item_money_Activity.setTextColor(Color.RED);
+
         } else {
             // change format to 2,000 ₫
             BigDecimal amount = new BigDecimal(activity.getActivityMoney());
@@ -76,6 +79,8 @@ public class RecyclerViewAdapter_activity extends RecyclerView.Adapter<ActivityV
             String formattedAmount = decimalFormat.format(amount);
             String displayMoney = "+" + String.valueOf(formattedAmount);
             holder.item_money_Activity.setText(displayMoney);
+            holder.item_money_Activity.setTextColor(Color.GREEN);
+
         }
 
 

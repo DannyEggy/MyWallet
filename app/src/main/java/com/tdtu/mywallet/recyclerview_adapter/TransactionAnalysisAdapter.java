@@ -1,6 +1,7 @@
 package com.tdtu.mywallet.recyclerview_adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,10 +86,15 @@ public class TransactionAnalysisAdapter extends RecyclerView.Adapter<Transaction
         String displayMoney = null;
         if (transaction.getActivityType().equals("Spending")) {
             displayMoney = "-" + String.valueOf(formattedAmount);
+            holder.item_money_Activity_anal.setText(displayMoney);
+            holder.item_money_Activity_anal.setTextColor(Color.RED);
         } else {
             displayMoney = "+" + String.valueOf(formattedAmount);
+            holder.item_money_Activity_anal.setText(displayMoney);
+            holder.item_money_Activity_anal.setTextColor(Color.GREEN);
         }
-        holder.item_money_Activity_anal.setText(displayMoney);
+
+
 
         // get color and then set the icon and background for category
         String color = category.getCategoryColor();

@@ -273,6 +273,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+
                 return false;
             }
 
@@ -280,77 +281,72 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 final int position = viewHolder.getAdapterPosition();
 
-                switch (direction) {
-                    case ItemTouchHelper.LEFT:
-                        //todo
-                        Activity deleteActivity = activityList.get(position);
-                        String deActivityID = deleteActivity.getActivityID();
-                        String deActivityName = deleteActivity.getActivityName();
+                if (direction == ItemTouchHelper.RIGHT) {//todo
+                    Activity deleteActivity = activityList.get(position);
+                    String deActivityID = deleteActivity.getActivityID();
+                    String deActivityName = deleteActivity.getActivityName();
 
-                        // Delete Transaction
-                        activityList.remove(deleteActivity);
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                        String uid = user.getUid().toString();
-                        DatabaseReference reference = firebaseDatabase.getReference(uid);
-                        reference.child("User Detail").child("userActivityList").child(deActivityID).removeValue();
-                        recyclerView.getAdapter().notifyItemRemoved(position);
+                    // Delete Transaction
+                    activityList.remove(deleteActivity);
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                    String uid = user.getUid().toString();
+                    DatabaseReference reference = firebaseDatabase.getReference(uid);
+                    reference.child("User Detail").child("userActivityList").child(deActivityID).removeValue();
+                    recyclerView.getAdapter().notifyItemRemoved(position);
 
-                        // Update Balance
-                        reference.child("User Detail").child("userBalance").runTransaction(new Transaction.Handler() {
-                            @NonNull
-                            @Override
-                            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                    // Update Balance
+                    reference.child("User Detail").child("userBalance").runTransaction(new Transaction.Handler() {
+                        @NonNull
+                        @Override
+                        public Transaction.Result doTransaction(@NonNull MutableData currentData) {
 
-                                return Transaction.success(currentData);
-                            }
+                            return Transaction.success(currentData);
+                        }
 
-                            @Override
-                            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
 
-                            }
-                        });
+                        }
+                    });
 
 
-                        // undo
-                        Snackbar.make(recyclerView, deActivityName, Snackbar.LENGTH_LONG)
-                                .setAction("Undo", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
+                    // undo
+                    Snackbar.make(recyclerView, deActivityName, Snackbar.LENGTH_LONG)
+                            .setAction("Undo", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
 //
-                                        //todo
-                                        // set undo to true then add the activity back to firebase and recyclerview
-                                        // then update the key undo of activity to false to avoid duplicate when adding the activity to recyclerview
-                                        deleteActivity.setUndo(true);
-                                        activityList.add(position, deleteActivity);
+                                    //todo
+                                    // set undo to true then add the activity back to firebase and recyclerview
+                                    // then update the key undo of activity to false to avoid duplicate when adding the activity to recyclerview
+                                    deleteActivity.setUndo(true);
+                                    activityList.add(position, deleteActivity);
 
 //
-                                        reference.child("User Detail").child("userActivityList").child(deActivityID).setValue(deleteActivity);
+                                    reference.child("User Detail").child("userActivityList").child(deActivityID).setValue(deleteActivity);
 
-                                        recyclerView.getAdapter().notifyItemInserted(position);
-                                        recyclerView.scrollToPosition(position);
-                                        reference.child("User Detail").child("userActivityList").child(deActivityID).child("undo").setValue(false);
+                                    recyclerView.getAdapter().notifyItemInserted(position);
+                                    recyclerView.scrollToPosition(position);
+                                    reference.child("User Detail").child("userActivityList").child(deActivityID).child("undo").setValue(false);
 
-                                        // Update Balance
-                                        reference.child("User Detail").child("userBalance").runTransaction(new Transaction.Handler() {
-                                            @NonNull
-                                            @Override
-                                            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                                    // Update Balance
+                                    reference.child("User Detail").child("userBalance").runTransaction(new Transaction.Handler() {
+                                        @NonNull
+                                        @Override
+                                        public Transaction.Result doTransaction(@NonNull MutableData currentData) {
 
-                                                return Transaction.success(currentData);
-                                            }
+                                            return Transaction.success(currentData);
+                                        }
 
-                                            @Override
-                                            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                                        @Override
+                                        public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
 
-                                            }
-                                        });
+                                        }
+                                    });
 
-                                    }
-                                }).show();
-
-                        break;
-
+                                }
+                            }).show();
                 }
 
             }
@@ -358,7 +354,7 @@ public class HomeFragment extends Fragment implements RecyclerViewInterface {
             @Override
             public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-                        .addSwipeRightBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red))
+                        .addSwipeRightBackgroundColor(ContextCompat.getColor(requireActivity(), R.color.red))
                         .addSwipeRightActionIcon(R.drawable.baseline_delete_24)
 
 

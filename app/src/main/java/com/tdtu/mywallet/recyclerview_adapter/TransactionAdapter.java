@@ -235,10 +235,17 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         String displayMoney = null;
         if (activity.getActivityType().equals("Spending")) {
             displayMoney = "-" + String.valueOf(formattedAmount);
+            holder.item_money_Activity.setTextColor(Color.RED);
+            holder.item_money_Activity.setText(displayMoney);
+
+
         } else {
             displayMoney = "+" + String.valueOf(formattedAmount);
+            holder.item_money_Activity.setTextColor(Color.GREEN);
+            holder.item_money_Activity.setText(displayMoney);
+
+
         }
-        holder.item_money_Activity.setText(displayMoney);
 
         // get color and then set the icon and background for category
         String color = category.getCategoryColor();
@@ -447,10 +454,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                         String displayMoney = "";
                         if (type.equals("Spending")) {
                             displayMoney = "-" + String.valueOf(formattedAmount);
+                            holder.item_money_Activity.setText(displayMoney);
+                            holder.item_money_Activity.setTextColor(Color.RED);
                         } else {
                             displayMoney = "+" + String.valueOf(formattedAmount);
+                            holder.item_money_Activity.setText(displayMoney);
+                            holder.item_money_Activity.setTextColor(Color.GREEN);
                         }
-                        holder.item_money_Activity.setText(displayMoney);
+
 
                         // Close the folding cell after save the data
                         // Create a dialog to notify user

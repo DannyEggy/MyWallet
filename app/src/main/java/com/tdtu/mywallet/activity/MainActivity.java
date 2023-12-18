@@ -7,8 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
@@ -55,6 +58,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdtu.mywallet.AutoCompleteAdapter.AutoCompleteCategoryAdapter;
+import com.tdtu.mywallet.main_fragment.HomeFragment;
 import com.tdtu.mywallet.viewmodel.CurrentAvatarViewModel;
 import com.tdtu.mywallet.viewpager2.MainViewPager2Adapter;
 import com.tdtu.mywallet.R;
@@ -587,6 +591,14 @@ public class MainActivity extends AppCompatActivity {
             });
 
             dialog.dismiss();
+
+            // Trong fragment nơi bạn thêm transaction và muốn chuyển về HomeFragment
+            viewPager2.setCurrentItem(0);
+
+// Đặt tất cả các fragment còn lại về trạng thái ban đầu
+            FragmentManager fragmentManager = this.getSupportFragmentManager();
+            fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
         });
 
         // Handling button Income
@@ -673,8 +685,16 @@ public class MainActivity extends AppCompatActivity {
 
 
             dialog.dismiss();
+
         });
     }
+
+    private void broadcastReloadData() {
+        // Gửi broadcast tới tất cả các Fragment để reload dữ liệu
+        Intent intent = new Intent("ReloadDataAction");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
 
     private void getCategoryList() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

@@ -28,9 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.tdtu.mywallet.R;
-import com.tdtu.mywallet.main_fragment.HomeFragment;
 import com.tdtu.mywallet.model.Activity;
-import com.tdtu.mywallet.recyclerview_adapter.TransactionAdapter;
 import com.tdtu.mywallet.recyclerview_adapter.TransactionAnalysisAdapter;
 import com.tdtu.mywallet.viewmodel.SearchTextViewModel;
 import com.tdtu.mywallet.viewmodel.TransactionListViewModel;
@@ -89,6 +87,22 @@ public class AllFragment extends Fragment {
 
     private boolean firstOpen = true;
 
+    private List<Activity> activityList0 = new ArrayList<Activity>();
+    private List<Activity> activityList1 = new ArrayList<Activity>();
+    private List<Activity> activityList2 = new ArrayList<Activity>();
+    private List<Activity> activityList3 = new ArrayList<Activity>();
+    private List<Activity> activityList4 = new ArrayList<Activity>();
+    private List<Activity> activityList5 = new ArrayList<Activity>();
+    private List<Activity> activityList6 = new ArrayList<Activity>();
+    private List<Activity> activityList7 = new ArrayList<Activity>();
+    private List<Activity> activityList8 = new ArrayList<Activity>();
+    private List<Activity> activityList9 = new ArrayList<Activity>();
+    private List<Activity> activityList10 = new ArrayList<Activity>();
+    private List<Activity> activityList11 = new ArrayList<Activity>();
+    private List<Activity> activityList12 = new ArrayList<Activity>();
+    private List<Activity> activityListPreviousYear = new ArrayList<Activity>();
+
+
     // Tittle for 12 recent months and a previous year
     private TextView recent_current_month_all;
     private TextView recent_1_month_all;
@@ -124,6 +138,7 @@ public class AllFragment extends Fragment {
     private TransactionListViewModel transactionModel;
     private DatabaseReference reference;
     private LinearLayout linearLayout;
+    private RecyclerView searchTransaction;
 
 
 
@@ -140,94 +155,199 @@ public class AllFragment extends Fragment {
         // View Binding
         viewBindingAllPage(view);
 
-        getDataRecyclerView();
-        firstOpen= false;
+        setRecyclerView();
+
+//        getDataRecyclerView();
+//        firstOpen= false;
         reference.child("User Detail").child("userActivityList").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                Toast.makeText(getActivity(), "Adding new data", Toast.LENGTH_SHORT).show();
-                if(firstOpen){
+            Activity activity = snapshot.getValue(Activity.class);
+            Toast.makeText(getActivity(), activity.getActivityName(), Toast.LENGTH_SHORT).show();
+            long timestamp = activity.getActivityDateTime();
+            Date date = new Date(timestamp);
 
-                }else{
-                    Activity activity = snapshot.getValue(Activity.class);
-                    long timestamp = activity.getActivityDateTime();
-                    Date date = new Date(timestamp);
+            Calendar currentCalendar = Calendar.getInstance();
+            long currentTime = System.currentTimeMillis();
+            currentCalendar.setTimeInMillis(currentTime);
 
-                    Calendar currentCalendar = Calendar.getInstance();
-                    long currentTime = System.currentTimeMillis();
-                    currentCalendar.setTimeInMillis(currentTime);
+            int currentYear = currentCalendar.get(Calendar.YEAR);
+            int currentMonth = currentCalendar.get(Calendar.MONTH);
 
-                    int currentYear = currentCalendar.get(Calendar.YEAR);
-                    int currentMonth = currentCalendar.get(Calendar.MONTH);
+            // Sử dụng Calendar để lấy tháng và năm
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
 
-                    // Sử dụng Calendar để lấy tháng và năm
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(date);
-
-                    // Lấy tháng và năm
-                    int month = calendar.get(Calendar.MONTH) + 1; // Tháng bắt đầu từ 0, nên cộng thêm 1
-                    int year = calendar.get(Calendar.YEAR);
+            // Lấy tháng và năm
+            int month = calendar.get(Calendar.MONTH); // Tháng bắt đầu từ 0, nên cộng thêm 1
+            int year = calendar.get(Calendar.YEAR);
 
 //                    getDataRecyclerView();
-                    if(currentYear - year == 0){
-                        //months apart
-                        int monthDiff = currentMonth - month;
-                        if(monthDiff == 0){
-                            getTransactionListByMonth(year, monthDiff, rv_current_month_all, recent_current_month_all);
-                        }else if(monthDiff == 1){
-                            getTransactionListByMonth(year, monthDiff, rv_1_month_all, recent_1_month_all);
-                        }else if(monthDiff == 2){
-                            getTransactionListByMonth(year, monthDiff, rv_2_month_all, recent_2_month_all);
-                        }else if(monthDiff == 3){
-                            getTransactionListByMonth(year, monthDiff, rv_3_month_all, recent_3_month_all);
-                        }else if(monthDiff ==4){
-                            getTransactionListByMonth(year, monthDiff, rv_4_month_all, recent_4_month_all);
-                        }else if(monthDiff == 5){
-                            getTransactionListByMonth(year, monthDiff, rv_5_month_all, recent_5_month_all);
-                        }else if(monthDiff == 6){
-                            getTransactionListByMonth(year, monthDiff, rv_6_month_all, recent_6_month_all);
-                        }else if(monthDiff == 7){
-                            getTransactionListByMonth(year, monthDiff, rv_7_month_all, recent_7_month_all);
-                        }else if(monthDiff == 8){
-                            getTransactionListByMonth(year, monthDiff, rv_8_month_all, recent_8_month_all);
-                        }else if(monthDiff == 9){
-                            getTransactionListByMonth(year, monthDiff, rv_9_month_all, recent_9_month_all);
-                        }else if(monthDiff == 10){
-                            getTransactionListByMonth(year, monthDiff, rv_10_month_all, recent_10_month_all);
-                        }else if(monthDiff == 11){
-                            getTransactionListByMonth(year, monthDiff, rv_11_month_all, recent_11_month_all);
-                        }
-
+            Toast.makeText(requireActivity(), String.valueOf(currentYear - year), Toast.LENGTH_SHORT).show();
+            if(currentYear - year == 0){
+                //months apart
+                int monthDiff = currentMonth - month;
+                month+=1;
+                if(monthDiff == 0){
+                    monthDiff+=12;
+                    activityList0.add(0, activity);
+                    rv_current_month_all.getAdapter().notifyDataSetChanged();
+                    String tittleTransactionList = String.valueOf(month)+"/"+String.valueOf(year);
+                    recent_current_month_all.setText(tittleTransactionList);
+                    if(activityList0.size()==0){
+                        recent_current_month_all.setVisibility(View.GONE);
+                        rv_current_month_all.setVisibility(View.GONE);
                     }
-                    if(currentYear - year ==1){
-                        getTransactionListLastYear(year, rv_1_year, recent_1_year);
+//                    getTransactionListByMonth(year, monthDiff, rv_current_month_all, recent_current_month_all);
+                }else if(monthDiff == 1){
+                    activityList1.add(0, activity);
+                    rv_1_month_all.getAdapter().notifyDataSetChanged();
+                    String tittleTransactionList = String.valueOf(month)+"/"+String.valueOf(year);
+                    recent_1_month_all.setText(tittleTransactionList);
+                    if(activityList1.size()==0){
+                        recent_1_month_all.setVisibility(View.GONE);
+                        rv_1_month_all.setVisibility(View.GONE);
                     }
-
+//                    getTransactionListByMonth(year, monthDiff, rv_1_month_all, recent_1_month_all);
+                }else if(monthDiff == 2){
+                    activityList2.add(0, activity);
+                    rv_2_month_all.getAdapter().notifyDataSetChanged();
+                    String tittleTransactionList = String.valueOf(month)+"/"+String.valueOf(year);
+                    recent_2_month_all.setText(tittleTransactionList);
+                    if(activityList2.size()==0){
+                        recent_2_month_all.setVisibility(View.GONE);
+                        rv_2_month_all.setVisibility(View.GONE);
+                    }
+//                    getTransactionListByMonth(year, monthDiff, rv_2_month_all, recent_2_month_all);
+                }else if(monthDiff == 3){
+                    activityList3.add(0, activity);
+                    rv_3_month_all.getAdapter().notifyDataSetChanged();
+                    String tittleTransactionList = String.valueOf(month)+"/"+String.valueOf(year);
+                    recent_3_month_all.setText(tittleTransactionList);
+                    if(activityList3.size()==0){
+                        recent_3_month_all.setVisibility(View.GONE);
+                        rv_3_month_all.setVisibility(View.GONE);
+                    }
+//                    getTransactionListByMonth(year, monthDiff, rv_3_month_all, recent_3_month_all);
+                }else if(monthDiff ==4){
+                    activityList4.add(0, activity);
+                    rv_4_month_all.getAdapter().notifyDataSetChanged();
+                    String tittleTransactionList = String.valueOf(month)+"/"+String.valueOf(year);
+                    recent_4_month_all.setText(tittleTransactionList);
+                    if(activityList4.size()==0){
+                        recent_4_month_all.setVisibility(View.GONE);
+                        rv_4_month_all.setVisibility(View.GONE);
+                    }
+//                    getTransactionListByMonth(year, monthDiff, rv_4_month_all, recent_4_month_all);
+                }else if(monthDiff == 5){
+                    activityList5.add(0, activity);
+                    rv_5_month_all.getAdapter().notifyDataSetChanged();
+                    String tittleTransactionList = String.valueOf(month)+"/"+String.valueOf(year);
+                    recent_5_month_all.setText(tittleTransactionList);
+                    if(activityList5.size()==0){
+                        recent_5_month_all.setVisibility(View.GONE);
+                        rv_5_month_all.setVisibility(View.GONE);
+                    }
+//                    getTransactionListByMonth(year, monthDiff, rv_5_month_all, recent_5_month_all);
+                }else if(monthDiff == 6){
+                    activityList6.add(0, activity);
+                    rv_6_month_all.getAdapter().notifyDataSetChanged();
+                    String tittleTransactionList = String.valueOf(month)+"/"+String.valueOf(year);
+                    recent_6_month_all.setText(tittleTransactionList);
+                    if(activityList6.size()==0){
+                        recent_6_month_all.setVisibility(View.GONE);
+                        rv_6_month_all.setVisibility(View.GONE);
+                    }
+//                    getTransactionListByMonth(year, monthDiff, rv_6_month_all, recent_6_month_all);
+                }else if(monthDiff == 7){
+                    activityList7.add(0, activity);
+                    rv_7_month_all.getAdapter().notifyDataSetChanged();
+                    String tittleTransactionList = String.valueOf(month)+"/"+String.valueOf(year);
+                    recent_7_month_all.setText(tittleTransactionList);
+                    if(activityList7.size()==0){
+                        recent_7_month_all.setVisibility(View.GONE);
+                        rv_7_month_all.setVisibility(View.GONE);
+                    }
+//                    getTransactionListByMonth(year, monthDiff, rv_7_month_all, recent_7_month_all);
+                }else if(monthDiff == 8){
+                    activityList8.add(0, activity);
+                    rv_8_month_all.getAdapter().notifyDataSetChanged();
+                    String tittleTransactionList = String.valueOf(month)+"/"+String.valueOf(year);
+                    recent_8_month_all.setText(tittleTransactionList);
+                    if(activityList8.size()==0){
+                        recent_8_month_all.setVisibility(View.GONE);
+                        rv_8_month_all.setVisibility(View.GONE);
+                    }
+//                    getTransactionListByMonth(year, monthDiff, rv_8_month_all, recent_8_month_all);
+                }else if(monthDiff == 9){
+                    activityList9.add(0, activity);
+                    rv_9_month_all.getAdapter().notifyDataSetChanged();
+                    String tittleTransactionList = String.valueOf(month)+"/"+String.valueOf(year);
+                    recent_9_month_all.setText(tittleTransactionList);
+                    if(activityList9.size()==0){
+                        recent_9_month_all.setVisibility(View.GONE);
+                        rv_9_month_all.setVisibility(View.GONE);
+                    }
+//                    getTransactionListByMonth(year, monthDiff, rv_9_month_all, recent_9_month_all);
+                }else if(monthDiff == 10){
+                    activityList10.add(0, activity);
+                    rv_10_month_all.getAdapter().notifyDataSetChanged();
+                    String tittleTransactionList = String.valueOf(month)+"/"+String.valueOf(year);
+                    recent_10_month_all.setText(tittleTransactionList);
+                    if(activityList10.size()==0){
+                        recent_10_month_all.setVisibility(View.GONE);
+                        rv_10_month_all.setVisibility(View.GONE);
+                    }
+//                    getTransactionListByMonth(year, monthDiff, rv_10_month_all, recent_10_month_all);
+                }else if(monthDiff == 11){
+                    activityList11.add(0, activity);
+                    rv_11_month_all.getAdapter().notifyDataSetChanged();
+                    String tittleTransactionList = String.valueOf(month)+"/"+String.valueOf(year);
+                    recent_11_month_all.setText(tittleTransactionList);
+                    if(activityList11.size()==0){
+                        recent_11_month_all.setVisibility(View.GONE);
+                        rv_11_month_all.setVisibility(View.GONE);
+                    }
+//                    getTransactionListByMonth(year, monthDiff, rv_11_month_all, recent_11_month_all);
                 }
 
-
+            }
+            if(currentYear - year ==1){
+                activityListPreviousYear.add(0, activity);
+                rv_1_year.getAdapter().notifyDataSetChanged();
+                String tittleTransactionList = String.valueOf(year);
+                recent_1_year.setText(tittleTransactionList);
+                if(activityList11.size()==0){
+                    recent_1_year.setVisibility(View.GONE);
+                    rv_1_year.setVisibility(View.GONE);
+                }
             }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+        }
 
-            }
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
 
-            }
 
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+        @Override
+        public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-            }
+        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+        @Override
+        public void onChildRemoved(@NonNull DataSnapshot snapshot) {
 
-            }
-        });
+        }
+
+        @Override
+        public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    });
 
 
 //        firstOpen = false;
@@ -238,10 +358,48 @@ public class AllFragment extends Fragment {
 
                 if(s != null && !s.isEmpty()){
                     // case: search query is not null
-                    linearLayout.setVisibility(View.INVISIBLE);
+                    List<Activity> searchList = new ArrayList<>();
+                    reference.child("User Detail").child("userActivityList").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            searchList.clear();
+
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                Activity activity = snapshot.getValue(Activity.class);
+
+                                // Kiểm tra xem title của transaction có chứa searchTitle không
+                                if (activity.getActivityName().toLowerCase().contains(s.toLowerCase())) {
+                                    searchList.add(0, activity);
+                                }
+                            }
+
+                            linearLayout.setVisibility(View.GONE);
+
+                            TransactionAnalysisAdapter searchAdapter = new TransactionAnalysisAdapter(searchList, getActivity());
+                            searchTransaction.setAdapter(searchAdapter);
+
+//                            searchTransaction.removeItemDecorationAt(0);
+
+                            searchTransaction.setVisibility(View.VISIBLE);
+
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            // Xử lý lỗi nếu cần
+                        }
+                    });
+
+
+
+
+
+
+
+
 
                 }else{
                     // case: search query is null
+                    searchTransaction.setVisibility(View.GONE);
                     linearLayout.setVisibility(View.VISIBLE);
 
                 }
@@ -253,64 +411,205 @@ public class AllFragment extends Fragment {
         return view;
     }
 
-    public void getDataRecyclerView(){
-        // Get current time
-        Calendar calendar = Calendar.getInstance();
-        long currentTime = System.currentTimeMillis();
-        calendar.setTimeInMillis(currentTime);
+    public void setRecyclerView(){
 
-        int year = calendar.get(Calendar.YEAR);
-        int currentMonth = calendar.get(Calendar.MONTH);
+//         current month
+        TransactionAnalysisAdapter currentTransactionAdapter = new TransactionAnalysisAdapter(activityList0, getActivity());
+        rv_current_month_all.setAdapter(currentTransactionAdapter);
+        LinearLayoutManager linearLayoutManagerCurrentMonth= new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rv_current_month_all.setLayoutManager(linearLayoutManagerCurrentMonth);
+        DividerItemDecoration dividerItemDecorationCurrentMonth = new DividerItemDecoration(rv_current_month_all.getContext()
+                , linearLayoutManagerCurrentMonth.getOrientation());
+        rv_current_month_all.addItemDecoration(dividerItemDecorationCurrentMonth);
 
-        // Get transaction at current month
-        getTransactionListByMonth(year, currentMonth, rv_current_month_all, recent_current_month_all);
+        TransactionAnalysisAdapter month1TransactionAdapter = new TransactionAnalysisAdapter(activityList1, getActivity());
+        rv_1_month_all.setAdapter(month1TransactionAdapter);
+        LinearLayoutManager linearLayoutManagerMonth1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rv_1_month_all.setLayoutManager(linearLayoutManagerMonth1);
+        DividerItemDecoration dividerItemDecorationMonth1 = new DividerItemDecoration(rv_1_month_all.getContext()
+                , linearLayoutManagerMonth1.getOrientation());
+        rv_1_month_all.addItemDecoration(dividerItemDecorationMonth1);
 
-        // Get transaction at 1 month ago
-        getTransactionListByMonth(year, currentMonth-1, rv_1_month_all, recent_1_month_all);
+        TransactionAnalysisAdapter month2TransactionAdapter = new TransactionAnalysisAdapter(activityList2, getActivity());
+        rv_2_month_all.setAdapter(month2TransactionAdapter);
+        LinearLayoutManager linearLayoutManagerMonth2= new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rv_2_month_all.setLayoutManager(linearLayoutManagerMonth2);
+        DividerItemDecoration dividerItemDecorationMonth2 = new DividerItemDecoration(rv_2_month_all.getContext()
+                , linearLayoutManagerMonth2.getOrientation());
+        rv_2_month_all.addItemDecoration(dividerItemDecorationMonth2);
 
-        // Get transaction at 2 month ago
-        getTransactionListByMonth(year, currentMonth-2, rv_2_month_all, recent_2_month_all);
+        TransactionAnalysisAdapter month3TransactionAdapter = new TransactionAnalysisAdapter(activityList3, getActivity());
+        rv_3_month_all.setAdapter(month3TransactionAdapter);
+        LinearLayoutManager linearLayoutManagerMonth3= new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rv_3_month_all.setLayoutManager(linearLayoutManagerMonth3);
+        DividerItemDecoration dividerItemDecorationMonth3 = new DividerItemDecoration(rv_3_month_all.getContext()
+                , linearLayoutManagerMonth3.getOrientation());
+        rv_3_month_all.addItemDecoration(dividerItemDecorationMonth3);
 
-        // Get transaction at 3 month ago
-        getTransactionListByMonth(year, currentMonth-3, rv_3_month_all, recent_3_month_all);
+        TransactionAnalysisAdapter month4TransactionAdapter = new TransactionAnalysisAdapter(activityList4, getActivity());
+        rv_4_month_all.setAdapter(month4TransactionAdapter);
+        LinearLayoutManager linearLayoutManagerMonth4= new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rv_4_month_all.setLayoutManager(linearLayoutManagerMonth4);
+        DividerItemDecoration dividerItemDecorationMonth4 = new DividerItemDecoration(rv_4_month_all.getContext()
+                , linearLayoutManagerMonth4.getOrientation());
+        rv_4_month_all.addItemDecoration(dividerItemDecorationMonth4);
 
-        // Get transaction at 4 month ago
-        getTransactionListByMonth(year, currentMonth-4, rv_4_month_all, recent_4_month_all);
+        TransactionAnalysisAdapter month5TransactionAdapter = new TransactionAnalysisAdapter(activityList5, getActivity());
+        rv_5_month_all.setAdapter(month5TransactionAdapter);
+        LinearLayoutManager linearLayoutManagerMonth5= new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rv_5_month_all.setLayoutManager(linearLayoutManagerMonth5);
+        DividerItemDecoration dividerItemDecorationMonth5 = new DividerItemDecoration(rv_5_month_all.getContext()
+                , linearLayoutManagerMonth5.getOrientation());
+        rv_5_month_all.addItemDecoration(dividerItemDecorationMonth5);
 
-        // Get transaction at 5 month ago
-        getTransactionListByMonth(year, currentMonth-5, rv_5_month_all, recent_5_month_all);
+        TransactionAnalysisAdapter month6TransactionAdapter = new TransactionAnalysisAdapter(activityList6, getActivity());
+        rv_6_month_all.setAdapter(month6TransactionAdapter);
+        LinearLayoutManager linearLayoutManagerMonth6= new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rv_6_month_all.setLayoutManager(linearLayoutManagerMonth6);
+        DividerItemDecoration dividerItemDecorationMonth6 = new DividerItemDecoration(rv_6_month_all.getContext()
+                , linearLayoutManagerMonth6.getOrientation());
+        rv_6_month_all.addItemDecoration(dividerItemDecorationMonth6);
 
-        // Get transaction at 6 month ago
-        getTransactionListByMonth(year, currentMonth-6, rv_6_month_all, recent_6_month_all);
+        TransactionAnalysisAdapter month7TransactionAdapter = new TransactionAnalysisAdapter(activityList7, getActivity());
+        rv_7_month_all.setAdapter(month7TransactionAdapter);
+        LinearLayoutManager linearLayoutManagerMonth7= new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rv_7_month_all.setLayoutManager(linearLayoutManagerMonth7);
+        DividerItemDecoration dividerItemDecorationMonth7 = new DividerItemDecoration(rv_7_month_all.getContext()
+                , linearLayoutManagerMonth7.getOrientation());
+        rv_7_month_all.addItemDecoration(dividerItemDecorationMonth7);
 
-        // Get transaction at 7 month ago
-        getTransactionListByMonth(year, currentMonth-7, rv_7_month_all, recent_7_month_all);
+        TransactionAnalysisAdapter month8TransactionAdapter = new TransactionAnalysisAdapter(activityList8, getActivity());
+        rv_8_month_all.setAdapter(month8TransactionAdapter);
+        LinearLayoutManager linearLayoutManagerMonth8= new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rv_8_month_all.setLayoutManager(linearLayoutManagerMonth8);
+        DividerItemDecoration dividerItemDecorationMonth8 = new DividerItemDecoration(rv_8_month_all.getContext()
+                , linearLayoutManagerMonth8.getOrientation());
+        rv_8_month_all.addItemDecoration(dividerItemDecorationMonth8);
 
-        // Get transaction at 8 month ago
-        getTransactionListByMonth(year, currentMonth-8, rv_8_month_all, recent_8_month_all);
+        TransactionAnalysisAdapter month9TransactionAdapter = new TransactionAnalysisAdapter(activityList9, getActivity());
+        rv_9_month_all.setAdapter(month9TransactionAdapter);
+        LinearLayoutManager linearLayoutManagerMonth9= new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rv_9_month_all.setLayoutManager(linearLayoutManagerMonth9);
+        DividerItemDecoration dividerItemDecorationMonth9 = new DividerItemDecoration(rv_9_month_all.getContext()
+                , linearLayoutManagerMonth9.getOrientation());
+        rv_9_month_all.addItemDecoration(dividerItemDecorationMonth9);
 
-        // Get transaction at 9 month ago
-        getTransactionListByMonth(year, currentMonth-9, rv_9_month_all, recent_9_month_all);
+        TransactionAnalysisAdapter month10TransactionAdapter = new TransactionAnalysisAdapter(activityList10, getActivity());
+        rv_10_month_all.setAdapter(month10TransactionAdapter);
+        LinearLayoutManager linearLayoutManagerMonth10= new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rv_10_month_all.setLayoutManager(linearLayoutManagerMonth10);
+        DividerItemDecoration dividerItemDecorationMonth10 = new DividerItemDecoration(rv_10_month_all.getContext()
+                , linearLayoutManagerMonth10.getOrientation());
+        rv_10_month_all.addItemDecoration(dividerItemDecorationMonth10);
 
-        // Get transaction at 10 month ago
-        getTransactionListByMonth(year, currentMonth-10, rv_10_month_all, recent_10_month_all);
+        TransactionAnalysisAdapter month11TransactionAdapter = new TransactionAnalysisAdapter(activityList11, getActivity());
+        rv_11_month_all.setAdapter(month11TransactionAdapter);
+        LinearLayoutManager linearLayoutManagerMonth11= new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rv_11_month_all.setLayoutManager(linearLayoutManagerMonth11);
+        DividerItemDecoration dividerItemDecorationMonth11 = new DividerItemDecoration(rv_11_month_all.getContext()
+                , linearLayoutManagerMonth11.getOrientation());
+        rv_11_month_all.addItemDecoration(dividerItemDecorationMonth11);
 
-        // Get transaction at 11 month ago
-        getTransactionListByMonth(year, currentMonth-11, rv_11_month_all, recent_11_month_all);
+        TransactionAnalysisAdapter month12TransactionAdapter = new TransactionAnalysisAdapter(activityList12, getActivity());
+        rv_12_month_all.setAdapter(month12TransactionAdapter);
+        LinearLayoutManager linearLayoutManagerMonth12= new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rv_12_month_all.setLayoutManager(linearLayoutManagerMonth12);
+        DividerItemDecoration dividerItemDecorationMonth12 = new DividerItemDecoration(rv_12_month_all.getContext()
+                , linearLayoutManagerMonth12.getOrientation());
+        rv_12_month_all.addItemDecoration(dividerItemDecorationMonth12);
 
-        // Get transaction at 12 month ago
-        getTransactionListByMonth(year, currentMonth-12, rv_12_month_all, recent_12_month_all);
+        TransactionAnalysisAdapter previousYearTransactionAdapter = new TransactionAnalysisAdapter(activityListPreviousYear, getActivity());
+        rv_1_year.setAdapter(previousYearTransactionAdapter);
+        LinearLayoutManager linearLayoutManagerPreviousYear= new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rv_1_year.setLayoutManager(linearLayoutManagerPreviousYear);
+        DividerItemDecoration dividerItemDecorationPreviousYear = new DividerItemDecoration( rv_1_year.getContext()
+                , linearLayoutManagerPreviousYear.getOrientation());
+        rv_1_year.addItemDecoration(dividerItemDecorationPreviousYear);
 
-        //get transaction at 1 year ago
-        getTransactionListLastYear(year, rv_1_year, recent_1_year);
 
-        // Update data when firebase database has a change.
-
-
-
+//        for (int i = 0; i <= 12; i++) {
+//            // Tạo danh sách activity và adapter
+//            List<Activity> activityList = new ArrayList<>();
+//            TransactionAnalysisAdapter transactionAdapter = new TransactionAnalysisAdapter(activityList, getActivity());
+//
+//            // Tạo RecyclerView và thiết lập adapter, layout manager và item decoration
+//
+//
+//            RecyclerView recyclerView = getRecyclerViewByMonth(i); // Phương thức này trả về RecyclerView tương ứng với tháng i
+//
+//
+//
+//            recyclerView.setAdapter(transactionAdapter);
+//            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+//            recyclerView.setLayoutManager(linearLayoutManager);
+//            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), linearLayoutManager.getOrientation());
+//            recyclerView.addItemDecoration(dividerItemDecoration);
+//        }
 
 
     }
+
+
+
+
+//    public void getDataRecyclerView(){
+//        // Get current time
+//        Calendar calendar = Calendar.getInstance();
+//        long currentTime = System.currentTimeMillis();
+//        calendar.setTimeInMillis(currentTime);
+//
+//        int year = calendar.get(Calendar.YEAR);
+//        int currentMonth = calendar.get(Calendar.MONTH);
+//
+//        // Get transaction at current month
+//        getTransactionListByMonth(year, currentMonth, rv_current_month_all, recent_current_month_all);
+//
+//        // Get transaction at 1 month ago
+//        getTransactionListByMonth(year, currentMonth-1, rv_1_month_all, recent_1_month_all);
+//
+//        // Get transaction at 2 month ago
+//        getTransactionListByMonth(year, currentMonth-2, rv_2_month_all, recent_2_month_all);
+//
+//        // Get transaction at 3 month ago
+//        getTransactionListByMonth(year, currentMonth-3, rv_3_month_all, recent_3_month_all);
+//
+//        // Get transaction at 4 month ago
+//        getTransactionListByMonth(year, currentMonth-4, rv_4_month_all, recent_4_month_all);
+//
+//        // Get transaction at 5 month ago
+//        getTransactionListByMonth(year, currentMonth-5, rv_5_month_all, recent_5_month_all);
+//
+//        // Get transaction at 6 month ago
+//        getTransactionListByMonth(year, currentMonth-6, rv_6_month_all, recent_6_month_all);
+//
+//        // Get transaction at 7 month ago
+//        getTransactionListByMonth(year, currentMonth-7, rv_7_month_all, recent_7_month_all);
+//
+//        // Get transaction at 8 month ago
+//        getTransactionListByMonth(year, currentMonth-8, rv_8_month_all, recent_8_month_all);
+//
+//        // Get transaction at 9 month ago
+//        getTransactionListByMonth(year, currentMonth-9, rv_9_month_all, recent_9_month_all);
+//
+//        // Get transaction at 10 month ago
+//        getTransactionListByMonth(year, currentMonth-10, rv_10_month_all, recent_10_month_all);
+//
+//        // Get transaction at 11 month ago
+//        getTransactionListByMonth(year, currentMonth-11, rv_11_month_all, recent_11_month_all);
+//
+//        // Get transaction at 12 month ago
+//        getTransactionListByMonth(year, currentMonth-12, rv_12_month_all, recent_12_month_all);
+//
+//        //get transaction at 1 year ago
+//        getTransactionListLastYear(year, rv_1_year, recent_1_year);
+//
+//        // Update data when firebase database has a change.
+//
+//
+//
+//
+//
+//    }
 
     public void connectFirebase() {
         // Firebase connection
@@ -505,7 +804,7 @@ public class AllFragment extends Fragment {
 
     public void viewBindingAllPage(View view) {
         //TextView view binding
-        recent_current_month_all = view.findViewById(R.id.recent_current_month_all);
+        recent_current_month_all = view.findViewById(R.id.spendingText);
         recent_1_month_all = view.findViewById(R.id.recent_1_month_all);
         recent_2_month_all = view.findViewById(R.id.recent_2_month_all);
         recent_3_month_all = view.findViewById(R.id.recent_3_month_all);
@@ -537,8 +836,12 @@ public class AllFragment extends Fragment {
         rv_12_month_all = view.findViewById(R.id.rv_12_month_all);
         rv_1_year = view.findViewById(R.id.rv_1_year);
 
-
-
+        searchTransaction = view.findViewById(R.id.searchTransactionIncome);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        searchTransaction.setLayoutManager(linearLayoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(searchTransaction.getContext()
+                , linearLayoutManager.getOrientation());
+        searchTransaction.addItemDecoration(dividerItemDecoration);
 
     }
 }
